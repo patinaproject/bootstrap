@@ -66,10 +66,17 @@ jobs:
             fi
             echo
           }
-          probe "A: draft, branch-head" "${{ github.sha }}" "true" "v0.0.0-probe-a-${{ github.run_id }}"
-          probe "B: draft, PR#9 merge" "$RP_MERGE_SHA" "true" "v0.0.0-probe-b-${{ github.run_id }}"
-          probe "C: published, branch-head" "${{ github.sha }}" "false" "v0.0.0-probe-c-${{ github.run_id }}"
-          probe "D: published, PR#9 merge" "$RP_MERGE_SHA" "false" "v0.0.0-probe-d-${{ github.run_id }}"
+          MAIN_HEAD=$(gh api /repos/${{ github.repository }}/branches/main --jq .commit.sha)
+          echo "Current main HEAD: $MAIN_HEAD"
+          echo
+          probe "A: draft, branch-head (not on main)" "${{ github.sha }}" "true" "v0.0.0-probe-a-${{ github.run_id }}"
+          probe "B: draft, PR#9 merge on main" "$RP_MERGE_SHA" "true" "v0.0.0-probe-b-${{ github.run_id }}"
+          probe "C: published, branch-head (not on main)" "${{ github.sha }}" "false" "v0.0.0-probe-c-${{ github.run_id }}"
+          probe "D: published, PR#9 merge on main" "$RP_MERGE_SHA" "false" "v0.0.0-probe-d-${{ github.run_id }}"
+          probe "E: draft, current main HEAD" "$MAIN_HEAD" "true" "v0.0.0-probe-e-${{ github.run_id }}"
+          probe "F: published, current main HEAD" "$MAIN_HEAD" "false" "v0.0.0-probe-f-${{ github.run_id }}"
+          # Probe G: does removing autorelease:pending unstick it?
+          # Skipped — would mutate PR #9 state
           set -e
       - id: release
         # googleapis/release-please-action@v4.4.1
