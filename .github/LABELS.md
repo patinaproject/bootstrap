@@ -13,7 +13,13 @@ This file is the source of truth for when to apply each issue and pull-request l
 - `invalid`: Apply when the report is not actionable as filed (wrong repo, not reproducible, out of scope) and cannot be salvaged by editing.
 - `question`: Apply when the issue is a support request or clarification rather than a change request.
 - `wontfix`: Apply when the behavior described is intentional or the maintainers have decided not to act on it; leave a short rationale before closing.
-- `autorelease: pending`: Tool-managed by release-please; do not apply manually. Its GitHub description is currently empty, which is a known gap tracked for follow-up.
+
+### Release-please (tool-managed)
+
+release-please creates/applies these automatically on the release PR; do not apply manually; labels are created on demand so may not appear in `gh label list` until the first release cycle runs.
+
+- `autorelease: pending`: Applied to the release PR while a release is in progress. Its GitHub description is currently empty, which is a known gap tracked for follow-up.
+- `autorelease: tagged`: Applied to the release PR once the release has been tagged.
 
 ## Adding or changing labels
 

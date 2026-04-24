@@ -23,6 +23,8 @@ This title rule applies to pull requests only. GitHub issue titles should stay p
 
 ## Acceptance criteria
 
+<!-- One heading per relevant AC. AC IDs follow the convention in docs/ac-traceability.md. -->
+
 ### AC-<issue>-<n>
 
 Short outcome summary.

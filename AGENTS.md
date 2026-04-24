@@ -24,7 +24,7 @@ Use human-readable H1 titles inside those files:
 - Design docs: `# Design: <exact issue title> [#<issue>](<issue-url>)`
 - Plan docs: `# Plan: <exact issue title> [#<issue>](<issue-url>)`
 
-Format acceptance criteria IDs as `AC-<issue-number>-<integer>`, for example `AC-1-1`.
+Format acceptance criteria IDs as `AC-<issue-number>-<integer>`, for example `AC-1-1`. See [`docs/ac-traceability.md`](docs/ac-traceability.md) for the full convention (Given/When/Then phrasing, outcome-not-artifact, and the flow from issue to PR body).
 
 ## Build, Test, and Development Commands
 
@@ -63,7 +63,7 @@ If you add executable tooling later, document the exact verification command in 
 
 ## Issue and PR labels
 
-Use `gh label list` to see the repository's canonical label set. Each label's `description` documents when to apply it. Rely on those descriptions when selecting labels for issues and PRs — do not invent new labels without updating the repository's label set first.
+[.github/LABELS.md](.github/LABELS.md) is the source of truth for when to apply each label. Use `gh label list` for the authoritative runtime inventory and rely on each label's `description` when picking one. Do not invent new labels without updating the repository's label set and `.github/LABELS.md` first.
 
 Verify every label has a non-empty description:
 
