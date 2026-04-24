@@ -23,8 +23,12 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `commitlint.config.js` | yes | present; extends `@commitlint/config-conventional`; has `ticket-required` rule |
 | `.husky/commit-msg` | yes | present; runs `pnpm exec commitlint --edit "$1"` |
 | `.husky/pre-commit` | yes | present; runs `pnpm exec lint-staged` |
-| `package.json` | yes | present; `packageManager: pnpm@9.x`; `engines.node >= 20`; `scripts.lint:md` present; `lint-staged` block for `*.md` |
+| `package.json` | yes | present; has `version`; `packageManager: pnpm@9.x`; `engines.node >= 20`; scripts include `lint:md`, `check:versions`, `sync:versions`; `lint-staged` block for `*.md` |
 | `pnpm-lock.yaml` | yes | present |
+| `scripts/check-plugin-versions.mjs` | yes | present; fails with non-zero exit on version drift |
+| `scripts/sync-plugin-versions.mjs` | yes | present; rewrites plugin manifests from `package.json` |
+| `CHANGELOG.md` | yes | present; compatible with release-please (no hand-edits to released sections) |
+| `RELEASING.md` | yes | present; documents the release-please flow |
 
 ## Area 2 — GitHub metadata
 
@@ -34,6 +38,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `.github/ISSUE_TEMPLATE/bug_report.md` | yes | present with frontmatter |
 | `.github/ISSUE_TEMPLATE/feature_request.md` | yes | present with frontmatter |
 | `.github/CODEOWNERS` | yes | present; at least one non-comment rule |
+| `.github/workflows/lint-pr.yml` | yes | present; validates PR title format, breaking-change marker consistency, closing keyword |
 
 ## Area 3 — Agent + repo docs
 
@@ -62,10 +67,13 @@ When detected, the following surfaces should all be present. Missing platforms a
 
 | File | Required (agent plugin) | Check |
 |---|---|---|
-| `.claude-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills` |
-| `.codex-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`, `interface` |
+| `.claude-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`; `version` matches `package.json` |
+| `.codex-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`, `interface`; `version` matches `package.json` |
 | `.opencode/` | yes | directory exists; `README.md` or equivalent present |
 | `.github/copilot-instructions.md` | yes | present; references `AGENTS.md` |
+| `.github/workflows/release.yml` | yes | present; runs `release-please` on push to default branch |
+| `release-please-config.json` | yes | valid JSON; lists both plugin manifests under `extra-files` for version sync |
+| `.release-please-manifest.json` | yes | valid JSON; `.` version matches `package.json.version` |
 | `.cursor/rules/patina.mdc` | yes | present with frontmatter |
 | `.windsurfrules` | yes | present |
 | `skills/` | yes | directory exists with at least a `.gitkeep` or a skill subdirectory |

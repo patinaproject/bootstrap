@@ -71,6 +71,7 @@ Emitted for every target repo:
 .github/ISSUE_TEMPLATE/bug_report.md
 .github/ISSUE_TEMPLATE/feature_request.md
 .github/pull_request_template.md
+.github/workflows/lint-pr.yml
 .gitattributes
 .gitignore
 .husky/commit-msg
@@ -79,13 +80,17 @@ Emitted for every target repo:
 .markdownlintignore
 .nvmrc
 AGENTS.md
+CHANGELOG.md
 CLAUDE.md
 CONTRIBUTING.md
 README.md
+RELEASING.md
 SECURITY.md                 (public repos only)
 commitlint.config.js
 docs/file-structure.md
 package.json
+scripts/check-plugin-versions.mjs
+scripts/sync-plugin-versions.mjs
 ```
 
 ## Agent plugin surfaces
@@ -95,11 +100,13 @@ Emitted only when `<is-agent-plugin>` is yes:
 ```text
 .claude-plugin/plugin.json          (Claude Code)
 .codex-plugin/plugin.json           (Codex)
-.codex-plugin/.opencode             (Opencode is covered by .opencode/ at root)
 .opencode/README.md                 (Opencode presence marker; reads AGENTS.md)
 .github/copilot-instructions.md     (GitHub Copilot)
+.github/workflows/release.yml       (release-please)
 .cursor/rules/patina.mdc            (Cursor)
 .windsurfrules                      (Windsurf)
+release-please-config.json
+.release-please-manifest.json
 skills/.gitkeep
 ```
 
@@ -129,6 +136,9 @@ The skill does not recommend running any commands postinstall. Plugin enablement
 - **Markdown**: `markdownlint-cli2` with `.markdownlint.jsonc` + `.markdownlintignore`. `lint-staged` runs it from `pre-commit`. The lint script uses a glob that excludes `node_modules/`.
 - **PNPM**: `"packageManager": "pnpm@9.15.4"` pin, `engines.node >=20`, `prepare: "husky"`, `lint:md` script.
 - **Line endings**: `.gitattributes` with `* text=auto eol=lf`.
+- **PR title hygiene**: `.github/workflows/lint-pr.yml` validates that every PR title is ASCII-only, follows conventional commits (no scopes), starts with a `#<issue>` ref, keeps breaking-change markers consistent (`!` in title ⇔ `BREAKING CHANGE:` footer), and that the body contains a GitHub closing keyword.
+- **Releases (agent-plugin mode)**: [`release-please`](https://github.com/googleapis/release-please) reads conventional commits since the last tag, opens a standing release PR that bumps `package.json` + both plugin manifests + `CHANGELOG.md`, and publishes a GitHub Release on merge. Semver level is derived from commit types; there is no manual patch/minor/major choice.
+- **Version canonicalization**: `package.json` is the single source of truth for the plugin version. `scripts/sync-plugin-versions.mjs` rewrites `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` to match; `scripts/check-plugin-versions.mjs` enforces the lockstep via husky `pre-commit`.
 
 ## Verification self-test
 
