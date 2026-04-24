@@ -27,7 +27,7 @@ This title rule applies to pull requests only. GitHub issue titles should stay p
 
 Short outcome summary.
 
-- [ ] `verification command`
+- [ ] Manual test: `verification command`
 
 ### AC-<issue>-<n>
 
