@@ -107,8 +107,7 @@ Writes always go through the UI (or `gh api -X PATCH`). Deep-link: `https://gith
 | `squash_merge_commit_title` | `PR_TITLE` |
 | `squash_merge_commit_message` | `COMMIT_MESSAGES` |
 | `delete_branch_on_merge` | true |
-| `allow_auto_merge` | true |
-| `allow_update_branch` | true |
+| Release immutability (UI-only) | enabled |
 
 ## Area 8 — Commit / PR title hygiene
 
