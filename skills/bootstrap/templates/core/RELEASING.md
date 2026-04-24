@@ -14,13 +14,72 @@ Releases are driven by [release-please](https://github.com/googleapis/release-pl
 
 ## Prerequisites (one-time settings)
 
-### Allow Actions to create pull requests
+### Workflow permissions: read and write
+
+`release-please` writes to the repo — it creates tags and publishes GitHub Releases via `POST /repos/.../releases`. That call requires the workflow's `GITHUB_TOKEN` to carry `contents: write`. The repo-level default of `read` causes `release-please-action` to fail with `Resource not accessible by integration` on the release step, even when the workflow file declares `permissions: contents: write` — workflow-level declarations are capped by the repo default.
+
+Enable the read + write default:
+
+- **Settings → Actions → General → Workflow permissions → Read and write permissions** (save).
+
+Verify from the CLI:
+
+```bash
+gh api repos/<owner>/<repo>/actions/permissions/workflow \
+  --jq .default_workflow_permissions
+```
+
+Expected output: `write`. If it prints `read`, the toggle did not stick (see "Recognizing an org-policy cap" below).
+
+### Allow Actions to create and approve pull requests
 
 `release-please` opens its standing release PR using `secrets.GITHUB_TOKEN`. This requires:
 
 - **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
 
-If the repo-level checkbox is greyed out, the setting is controlled by the organization. Enable it once at the org level: **organization Settings → Actions → General → Workflow permissions**, then toggle the same option. Without it, the workflow fails with `GitHub Actions is not permitted to create or approve pull requests.`
+Without it, the workflow fails with `GitHub Actions is not permitted to create or approve pull requests.`
+
+### Recognizing an org-policy cap
+
+If either of the two checkboxes above is greyed out, or if the `gh api` verification above still returns `read` after you saved the UI toggle, the setting is being overridden by an organization-level policy. Org-level `Settings → Actions → General → Workflow permissions` takes precedence over repo-level defaults: when the org policy caps repo defaults at `read`, no repo-level change will take effect. Escalate to an org admin, or fall back to a PAT/App token (next section).
+
+### PAT / GitHub App token fallback
+
+Use this path when org policy caps repo-level workflow permissions below read + write, and raising the org policy is not possible.
+
+Required token scopes:
+
+- `contents: write` — to create tags and publish releases.
+- `pull-requests: write` — to open and update the standing release PR.
+
+A fine-grained PAT or a GitHub App installation token both work. Store it as an **org-level secret** (preferred, so every plugin repo inherits it) or a **repo-level secret**. Suggested name: `RELEASE_PLEASE_TOKEN`.
+
+Wire it into `.github/workflows/release.yml` by replacing the `token:` input on the `release-please-action` step:
+
+```yaml
+# Before (default path, works when repo/org allows read + write):
+          token: ${{ secrets.GITHUB_TOKEN }}
+# After (fallback when org policy caps the default):
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN }}
+```
+
+The default code path stays `secrets.GITHUB_TOKEN` in the emitted template so forks outside Patina don't need to provision a Patina-specific secret.
+
+### Tag ruleset caution
+
+`release-please-action` creates **unsigned** tags. It has no signing path. If a repository or organization adds a tag-scoped ruleset that requires signatures on release tags, the release step will fail the moment release-please tries to push `vX.Y.Z`.
+
+If signature enforcement is desired:
+
+- Scope the signature rule to **branches only** (most common).
+- Or scope to specific **non-release tag refs** (e.g. a pattern that excludes `v*`).
+
+Verify no release-tag-scoped signature rule is in place:
+
+```bash
+gh api repos/<owner>/<repo>/rulesets \
+  --jq '.[] | select(.target=="tag")'
+```
 
 ### Require SHA-pinned actions
 
