@@ -107,10 +107,13 @@ Emitted only when `<is-agent-plugin>` is yes:
 .github/workflows/release.yml       (release-please)
 .cursor/rules/{{repo}}.mdc          (Cursor)
 .windsurfrules                      (Windsurf)
+README.md                           (replaces core README with installation instructions)
 release-please-config.json
 .release-please-manifest.json
 skills/.gitkeep
 ```
+
+The agent-plugin `README.md.tmpl` is richer than the core one: it includes install steps for Claude Code, Codex CLI, and Codex App, plus usage examples. The core `README.md.tmpl` is emitted only for non-plugin repos.
 
 Aider, Zed, Cline, Codex CLI, and Opencode read `AGENTS.md` natively and are covered by the core baseline — no dedicated surface needed. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
 
