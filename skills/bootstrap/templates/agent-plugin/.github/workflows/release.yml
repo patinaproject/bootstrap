@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
   pull-requests: write
 
 jobs:
@@ -19,9 +20,13 @@ jobs:
     # presents to GitHub when release-please calls POST /repos/.../releases.
     # Some org policies cap the workflow default below the workflow-level
     # declaration, so setting job-level permissions explicitly removes the
-    # ambiguity that caused issue #18.
+    # ambiguity that caused issue #18. `issues: write` is required because PR
+    # labels are on the Issues API: release-please relabels the release PR from
+    # `autorelease: pending` to `autorelease: tagged` as part of release
+    # creation, and without this scope the whole step 403s.
     permissions:
       contents: write
+      issues: write
       pull-requests: write
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
