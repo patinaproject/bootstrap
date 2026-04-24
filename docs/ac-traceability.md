@@ -21,3 +21,5 @@ ACs describe observable behavior, not implementation steps. Prefer "the template
 ## From issue to PR
 
 The PR body mirrors the issue's ACs using the `### AC-<issue>-<n>` heading-per-AC format specified in [`AGENTS.md`](../AGENTS.md). One heading per relevant AC, a short outcome summary, and checkboxes only for verification steps. Do not restate those rules here — extend `AGENTS.md` if they need to change.
+
+Per-AC verification rows — inline per-platform evidence rows (`- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>`) and a `- [ ] ⚠️ E2E gap: ...` row that is included only when automated coverage has a real gap (and, when present, placed directly above `- [ ] Manual test: ...`) — are defined by the canonical PR template at [`.github/pull_request_template.md`](../.github/pull_request_template.md). The template comments are the source of truth for the slim-evidence grammar and the gap-acknowledgement rule; do not duplicate that grammar here.
