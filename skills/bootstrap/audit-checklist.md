@@ -39,6 +39,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `.github/ISSUE_TEMPLATE/feature_request.md` | yes | present with frontmatter |
 | `.github/CODEOWNERS` | yes | present; at least one non-comment rule |
 | `.github/workflows/lint-pr.yml` | yes | present; validates PR title format, breaking-change marker consistency, closing keyword |
+| `.github/workflows/lint-md.yml` | yes | present; runs `DavidAnson/markdownlint-cli2-action` on PRs |
 
 ## Area 3 — Agent + repo docs
 

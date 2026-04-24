@@ -71,6 +71,7 @@ Emitted for every target repo:
 .github/ISSUE_TEMPLATE/bug_report.md
 .github/ISSUE_TEMPLATE/feature_request.md
 .github/pull_request_template.md
+.github/workflows/lint-md.yml
 .github/workflows/lint-pr.yml
 .gitattributes
 .gitignore
@@ -137,6 +138,7 @@ The skill does not recommend running any commands postinstall. Plugin enablement
 - **PNPM**: `"packageManager": "pnpm@9.15.4"` pin, `engines.node >=20`, `prepare: "husky"`, `lint:md` script.
 - **Line endings**: `.gitattributes` with `* text=auto eol=lf`.
 - **PR title hygiene**: `.github/workflows/lint-pr.yml` validates that every PR title is ASCII-only, follows conventional commits (no scopes), starts with a `#<issue>` ref, keeps breaking-change markers consistent (`!` in title ⇔ `BREAKING CHANGE:` footer), and that the body contains a GitHub closing keyword.
+- **Markdown CI**: `.github/workflows/lint-md.yml` runs `DavidAnson/markdownlint-cli2-action` on every PR as a backstop to the husky `pre-commit` hook (which can be bypassed with `--no-verify`).
 - **Releases (agent-plugin mode)**: [`release-please`](https://github.com/googleapis/release-please) reads conventional commits since the last tag, opens a standing release PR that bumps `package.json` + both plugin manifests + `CHANGELOG.md`, and publishes a GitHub Release on merge. Semver level is derived from commit types; there is no manual patch/minor/major choice.
 - **Distribution via `patinaproject/skills` (agent-plugin mode, auto-detected)**: when the repo owner is `patinaproject`, the emitted release workflow also dispatches `bump-plugin-tags.yml` on `patinaproject/skills` immediately after a release, so the marketplace surfaces the new tag without manual steps. Forks outside the org skip the step automatically. Requires a one-time org-level `PATINA_SKILLS_DISPATCH_TOKEN` secret on `patinaproject` (documented in the emitted `RELEASING.md`).
 - **Version canonicalization**: `package.json` is the single source of truth for the plugin version. `scripts/sync-plugin-versions.mjs` rewrites `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` to match; `scripts/check-plugin-versions.mjs` enforces the lockstep via husky `pre-commit`.
