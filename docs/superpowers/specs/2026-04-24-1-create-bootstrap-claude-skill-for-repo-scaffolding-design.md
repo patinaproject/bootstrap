@@ -127,7 +127,7 @@ The emitted `.claude/settings.json` declares the canonical Patina plugins as ena
 {
   "enabledPlugins": {
     "superteam@patinaproject": true,
-    "superpowers@anthropics": true
+    "superpowers@claude-plugins-official": true
   }
 }
 ```
