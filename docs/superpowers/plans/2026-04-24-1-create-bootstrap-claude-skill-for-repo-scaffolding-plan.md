@@ -21,10 +21,10 @@ Files to emit into this repo root:
 - `.gitignore` — `node_modules/` (add `pnpm-debug.log*`, `.DS_Store`)
 - `.gitattributes` — `* text=auto eol=lf`
 - `.editorconfig` — 2-space indent, LF, utf-8, trim trailing ws, final newline
-- `.nvmrc` — Node LTS (e.g. `20`)
+- `.nvmrc` — Node 24 (current LTS)
 - `package.json`:
-  - `"packageManager": "pnpm@9.15.4"`, `"private": true`
-  - `"engines": { "node": ">=20", "pnpm": ">=9" }`
+  - `"packageManager": "pnpm@10.33.2"`, `"private": true`, `"version": "0.1.0"`
+  - `"engines": { "node": ">=24", "pnpm": ">=10" }`
   - `author` derived from `git config user.name <git-email>`
   - scripts: `prepare: "husky"`, `commitlint: "commitlint"`, `lint:md: "markdownlint-cli2"`
   - devDeps: `@commitlint/cli@^19`, `@commitlint/config-conventional@^19`, `husky@^9`, `markdownlint-cli2@^0.13`, `lint-staged@^15`

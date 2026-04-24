@@ -20,7 +20,7 @@ When the repo is itself an AI agent plugin, `bootstrap` also emits plugin/config
 
 - Claude Code (`.claude-plugin/plugin.json`)
 - Codex (`.codex-plugin/plugin.json`)
-- Opencode (`.opencode/`)
+- Opencode (reads `AGENTS.md` natively)
 - GitHub Copilot (`.github/copilot-instructions.md`)
 - Cursor (`.cursor/rules/<repo>.mdc`)
 - Windsurf (`.windsurfrules`)

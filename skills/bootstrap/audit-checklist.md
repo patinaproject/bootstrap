@@ -64,7 +64,7 @@ For agent plugins, `enabledPlugins` should include `superteam@patinaproject` and
 
 ## Area 5 — AI agent plugin surfaces
 
-Detection: this repo is an AI agent plugin if **any** of these exist: `.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`, `skills/`.
+Detection: this repo is an AI agent plugin if **any** of these exist: `.claude-plugin/`, `.codex-plugin/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`, `skills/`.
 
 When detected, the following surfaces should all be present. Missing platforms are recommended as additions so existing plugins stay aligned with the current supported set.
 
@@ -72,7 +72,6 @@ When detected, the following surfaces should all be present. Missing platforms a
 |---|---|---|
 | `.claude-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`; `version` matches `package.json` |
 | `.codex-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`, `interface`; `version` matches `package.json` |
-| `.opencode/` | yes | directory exists; `README.md` or equivalent present |
 | `.github/copilot-instructions.md` | yes | present; references `AGENTS.md` |
 | `.github/workflows/release.yml` | yes | present; runs `release-please` on push to default branch |
 | `release-please-config.json` | yes | valid JSON; lists both plugin manifests under `extra-files` for version sync |

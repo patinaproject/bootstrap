@@ -5,7 +5,7 @@
 This repository follows the Patina Project baseline. It is organized around root-level plugin metadata (when applicable), a self-contained skills directory, and supporting documentation.
 
 - `skills/`: installable skill directories. Each skill lives in its own folder.
-- `.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`: AI editor plugin/config surfaces (present only when this repo is an AI agent plugin).
+- `.claude-plugin/`, `.codex-plugin/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`: AI editor plugin/config surfaces (present only when this repo is an AI agent plugin).
 - `.claude/settings.json`: project-level Claude Code configuration, including `enabledPlugins`.
 - `docs/`: contributor-facing docs and planning artifacts.
 - Root config: `package.json`, `commitlint.config.js`, `.husky/`, `.markdownlint.jsonc` define local tooling, commit enforcement, and markdown linting.
@@ -37,7 +37,7 @@ Format acceptance criteria IDs as `AC-<issue-number>-<integer>`, for example `AC
 Use Markdown for skill and docs content. Keep sections short, imperative, and repository-specific.
 
 - Skill directories: lowercase, concise names under `skills/`
-- Root plugin metadata directories: `.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.cursor/`
+- Root plugin metadata directories: `.claude-plugin/`, `.codex-plugin/`, `.cursor/`
 - Main skill file: `SKILL.md`
 - Support files: descriptive kebab-case or clear template names
 - Prefer ASCII unless an existing file already relies on Unicode

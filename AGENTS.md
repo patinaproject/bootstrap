@@ -7,7 +7,7 @@ This repository is a reference implementation of the `bootstrap` skill it ships.
 - `skills/`: installable skill directories. Each skill lives in its own folder, for example `skills/bootstrap/`.
 - `.claude-plugin/`: Claude Code plugin manifest for the repository root.
 - `.codex-plugin/`: Codex plugin manifest for the repository root.
-- `.opencode/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`: additional AI editor surfaces the `bootstrap` skill emits for agent plugins.
+- `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`: additional AI editor surfaces the `bootstrap` skill emits for agent plugins.
 - `.claude/settings.json`: project-level Claude Code configuration, including `enabledPlugins`.
 - `docs/`: contributor-facing docs plus planning artifacts such as `docs/file-structure.md` and `docs/superpowers/plans/`.
 - Root config: `package.json`, `commitlint.config.js`, `.husky/`, `.markdownlint.jsonc` define local tooling, commit enforcement, and markdown linting.
@@ -42,7 +42,7 @@ There is no application build pipeline. Changes are Markdown, repo-tooling, and 
 Use Markdown for skill and docs content. Keep sections short, imperative, and repository-specific.
 
 - Skill directories: lowercase, concise names such as `skills/bootstrap/`
-- Root plugin metadata directories: `.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.cursor/`
+- Root plugin metadata directories: `.claude-plugin/`, `.codex-plugin/`, `.cursor/`
 - Main skill file: `SKILL.md`
 - Support files: descriptive kebab-case or clear template names
 - Prefer ASCII unless an existing file already relies on Unicode

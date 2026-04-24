@@ -103,7 +103,6 @@ Emitted only when `<is-agent-plugin>` is yes:
 ```text
 .claude-plugin/plugin.json          (Claude Code)
 .codex-plugin/plugin.json           (Codex)
-.opencode/README.md                 (Opencode presence marker; reads AGENTS.md)
 .github/copilot-instructions.md     (GitHub Copilot)
 .github/workflows/release.yml       (release-please)
 .cursor/rules/{{repo}}.mdc          (Cursor)
@@ -113,7 +112,13 @@ release-please-config.json
 skills/.gitkeep
 ```
 
-Aider, Zed, Cline, and Codex CLI read `AGENTS.md` natively and are covered by the core baseline. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
+Aider, Zed, Cline, Codex CLI, and Opencode read `AGENTS.md` natively and are covered by the core baseline — no dedicated surface needed. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
+
+### Patina organization supplement
+
+When the target repo's owner is `patinaproject`, the skill replaces the agent-plugin `.github/workflows/release.yml` with the supplement at `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`. The supplement adds a `notify-patinaproject-skills` job that dispatches `bump-plugin-tags.yml` on `patinaproject/skills` after each release. Non-Patina repos get the clean base workflow without any Patina-specific plumbing.
+
+Detection is done at scaffold time from `git remote get-url origin` (or the configured `<owner>` prompt). The base workflow does not carry dead `if:` gates.
 
 ## Plugin enablement
 

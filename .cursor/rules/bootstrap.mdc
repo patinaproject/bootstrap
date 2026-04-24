@@ -1,5 +1,5 @@
 ---
-description: Patina Project repository conventions
+description: bootstrap repository conventions
 globs:
   - "**/*"
 alwaysApply: true
@@ -13,4 +13,4 @@ Key rules:
 - PR titles match the commit format.
 - Markdown must pass `markdownlint-cli2` with `.markdownlint.jsonc` rules.
 - Skills live under `skills/`, one directory per skill, `SKILL.md` as the main contract.
-- Agent plugin surfaces at the repo root: `.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`.
+- Agent plugin surfaces at the repo root: `.claude-plugin/`, `.codex-plugin/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`.

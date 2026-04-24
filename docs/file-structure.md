@@ -7,7 +7,7 @@ Contributor reference for the repository layout. For user-facing install and usa
 - `.claude/`: project-level Claude Code configuration (`settings.json` with `enabledPlugins`)
 - `.claude-plugin/`: Claude Code plugin manifest for the repository root
 - `.codex-plugin/`: Codex plugin manifest for the repository root
-- `.cursor/`, `.opencode/`, `.windsurfrules`, `.github/copilot-instructions.md`: additional AI editor surfaces emitted when the repo is an AI agent plugin
+- `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`: additional AI editor surfaces emitted when the repo is an AI agent plugin
 - `.github/`: PR + issue templates and `CODEOWNERS`
 - `.husky/`: Git hooks (`commit-msg`, `pre-commit`)
 - `skills/`: installable skill packages (one directory per skill)
@@ -45,13 +45,12 @@ The repository root is the install surface for every supported AI coding tool th
 ```text
 .claude-plugin/plugin.json
 .codex-plugin/plugin.json
-.opencode/
 .cursor/rules/<repo>.mdc
 .windsurfrules
 .github/copilot-instructions.md
 ```
 
-`AGENTS.md` at the repo root is the portable surface consumed by Aider, Zed, Cline, Codex CLI, and others.
+`AGENTS.md` at the repo root is the portable surface consumed by Aider, Zed, Cline, Codex CLI, Opencode, and others.
 
 ## Docs
 

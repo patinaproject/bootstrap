@@ -65,7 +65,6 @@ docs/file-structure.md
 ```text
 .claude-plugin/plugin.json          (Claude Code)
 .codex-plugin/plugin.json           (Codex)
-.opencode/                          (Opencode — exact layout verified by Planner)
 .github/copilot-instructions.md     (GitHub Copilot)
 .cursor/rules/<repo>.mdc            (Cursor)
 .windsurfrules                      (Windsurf)
@@ -97,7 +96,7 @@ docs/superpowers/plans/.gitkeep
 - **Issue titles**: plain-language, no conventional-commit prefix.
 - **Issue templates**: minimal bug report + feature request.
 - **Contributor docs**: `AGENTS.md` as the shared workflow contract, `CLAUDE.md` that imports `AGENTS.md` via `@AGENTS.md` and adds Claude-only guidance.
-- **PNPM**: `"packageManager": "pnpm@9.15.4"` pin, `prepare: "husky"` script, commitlint + markdownlint-cli2 devDeps, `.npmrc` with `engine-strict=true`, Node engines field, `.nvmrc` matching.
+- **PNPM**: `"packageManager": "pnpm@10.33.2"` pin, `engines.node >=24`, `prepare: "husky"` script, commitlint + markdownlint-cli2 + lint-staged devDeps, `.nvmrc` matching.
 - **Markdown linting**: `markdownlint-cli2` with `.markdownlint.jsonc` and a `.markdownlintignore` that excludes `node_modules/`, `pnpm-lock.yaml`, and any other generated content. The `pnpm lint:md` script uses a glob that does not traverse `node_modules/`. Husky `pre-commit` runs linting on staged `*.md` via `lint-staged` or equivalent so the hook is scoped to changed files and never walks `node_modules/`.
 - **Line endings**: `.gitattributes` with `* text=auto eol=lf`.
 - **Claude Code / Codex plugin surfaces**: both manifests at the repo root pointing at `./skills`.
@@ -166,7 +165,7 @@ Preconditions:
 Behavior:
 
 - Inspect the repo and produce a **realignment report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure, AI editor surfaces.
-- Detect whether the repo is an AI agent plugin by presence of any agent-plugin manifest (`.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.github/copilot-instructions.md`, `.cursor/`, `.windsurfrules`, etc.). When detected, realignment includes AI editor coverage: any currently-supported platform that is missing is recommended as an addition, bringing existing plugins up to the latest supported-platform set.
+- Detect whether the repo is an AI agent plugin by presence of any agent-plugin manifest (`.claude-plugin/`, `.codex-plugin/`, `.github/copilot-instructions.md`, `.cursor/`, `.windsurfrules`, etc.). When detected, realignment includes AI editor coverage: any currently-supported platform that is missing is recommended as an addition, bringing existing plugins up to the latest supported-platform set.
 - For each gap, classify as `missing`, `stale`, or `divergent` and produce a concrete recommendation on how to realign with the latest bootstrap baseline.
 - Never overwrite existing files without explicit confirmation. For each recommendation, show a diff preview and ask the user to accept, skip, or defer — always interactive, no flags.
 - Group recommendations into ordered batches that can be applied independently (e.g. "manifests first, then commitlint, then docs, then new-platform manifests").
@@ -198,7 +197,7 @@ Behavior:
 - **AC-1-9** — Public vs. private selection produces the documented README shape differences; `SECURITY.md` is emitted only for public.
 - **AC-1-10** — Scaffolded `markdownlint-cli2` config lints all emitted `*.md` files without errors; `pnpm lint:md` script exits 0 on a fresh scaffold.
 - **AC-1-11** — Husky `pre-commit` hook runs markdown linting on staged `*.md` files and blocks commits with markdownlint violations.
-- **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject` and `superpowers@patinaproject`; emitted `README.md` records the one-time marketplace-add command. The skill does not print its own post-install step.
+- **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject` and `superpowers@claude-plugins-official`. The skill does not print a post-install step or marketplace-add prompt.
 - **AC-1-13** — When `<is-agent-plugin>` is yes, the skill emits plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. When no, none of those surfaces are emitted.
 - **AC-1-14** — Realignment mode, run against an existing agent plugin that is missing one or more currently-supported platform surfaces, reports the missing platforms and recommends adding them, bringing the plugin up to the current supported-platform set.
 - **AC-1-15** — Realignment mode, run against an existing agent plugin that already covers every currently-supported platform, reports zero platform-coverage gaps.
@@ -225,7 +224,7 @@ Behavior:
 13. Emit `.github/CODEOWNERS` (with a prompted default owner) for all repos.
 14. Emit `SECURITY.md` for public repos only.
 15. Wire `markdownlint-cli2` into PNPM devDeps, expose a `pnpm lint:md` script, and block commits with markdown violations via a husky `pre-commit` hook.
-16. Enable `superteam@patinaproject` and `superpowers@patinaproject` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Record the one-time `/plugin marketplace add patinaproject/skills` prerequisite in the emitted `README.md` and `CLAUDE.md`. Do not gate scaffold success on marketplace registration.
+16. Enable `superteam@patinaproject` and `superpowers@claude-plugins-official` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Do not print or document a marketplace-add command — enablement is declarative.
 17. Do not emit `.github/workflows/` files or a Dependabot config.
 18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
 19. Provide an `<is-agent-plugin>` prompt (default no). When yes, emit plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. Cover Aider, Zed, and Cline through the baseline `AGENTS.md` rather than dedicated rule files.
