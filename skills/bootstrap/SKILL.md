@@ -153,6 +153,90 @@ The skill does not recommend running any commands postinstall. Plugin enablement
 - **Distribution via `patinaproject/skills` (agent-plugin mode, auto-detected)**: when the repo owner is `patinaproject`, the emitted release workflow also dispatches `bump-plugin-tags.yml` on `patinaproject/skills` immediately after a release, so the marketplace surfaces the new tag without manual steps. Forks outside the org skip the step automatically. Requires a one-time org-level `PATINA_SKILLS_DISPATCH_TOKEN` secret on `patinaproject` (documented in the emitted `RELEASING.md`).
 - **Version canonicalization**: `package.json` is the single source of truth for the plugin version. `scripts/sync-plugin-versions.mjs` rewrites `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` to match; `scripts/check-plugin-versions.mjs` enforces the lockstep via husky `pre-commit`.
 
+## GitHub repository settings
+
+Every bootstrap-managed repo should carry these merge settings:
+
+| Setting | Value | Reason |
+|---|---|---|
+| `allow_squash_merge` | true | Release flow assumes squash; lint-pr enforces a PR title ready to become the squash commit. |
+| `allow_merge_commit` | false | Merge commits break linear history and release-please commit parsing. |
+| `allow_rebase_merge` | false | Rebase-merge drops the PR-title context that release-please reads. |
+| `squash_merge_commit_title` | `PR_TITLE` | Carries the lint-pr-validated title straight through to `main`. |
+| `squash_merge_commit_message` | `COMMIT_MESSAGES` | Preserves commit-level context (useful for review and git blame) in the squash body. |
+| `delete_branch_on_merge` | true | Keeps the branch list tidy after each squash. |
+| `allow_auto_merge` | true | Lets release-please PRs auto-merge when checks pass. |
+| `allow_update_branch` | true | Reduces stale-branch friction without manual intervention. |
+
+### Checking current settings
+
+The skill picks the check path based on what the user has installed and whether the repo is public. Never apply changes without explicit user confirmation.
+
+**Path 1 — `gh` CLI (preferred, covers public + private uniformly):**
+
+```bash
+gh api "repos/<owner>/<repo>" --jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_auto_merge, allow_update_branch}'
+```
+
+**Path 2 — `curl` + public REST API (no install, no auth, public repos only):**
+
+```bash
+curl -s "https://api.github.com/repos/<owner>/<repo>" \
+  | jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_auto_merge, allow_update_branch}'
+```
+
+Rate limit is 60 req/hr per IP unauthenticated — fine for a one-shot realignment check. If the response is a 404 on what should be a visible repo, the repo is private and this path cannot be used.
+
+**Path 3 — no CLI available, or private repo without auth:** skip the check and proceed straight to the UI walkthrough below; list expected values next to the checkboxes the user should see.
+
+Skill picks the first path that will succeed: `gh` if installed → `curl` if the repo is public → UI-only if neither.
+
+### Applying: UI walkthrough
+
+Writes always require auth. Rather than scripting tokens, the skill directs the user through the GitHub UI. Deep-links and precise click-paths:
+
+1. Open **[Pull Requests settings](https://github.com/<owner>/<repo>/settings#pull-requests-heading)** (`https://github.com/<owner>/<repo>/settings#pull-requests-heading`). On that page, adjust:
+   - **Allow merge commits** → **unchecked** (currently `allow_merge_commit` should read `false`).
+   - **Allow squash merging** → **checked**. Default commit message → **"Pull request title and commit details"** (maps to `squash_merge_commit_title=PR_TITLE`, `squash_merge_commit_message=COMMIT_MESSAGES`).
+   - **Allow rebase merging** → **unchecked**.
+   - **Always suggest updating pull request branches** → **checked** (`allow_update_branch=true`).
+   - **Allow auto-merge** → **checked** (`allow_auto_merge=true`).
+   - **Automatically delete head branches** → **checked** (`delete_branch_on_merge=true`).
+2. Click **Save** under each changed control that has one; the checkboxes save inline.
+
+Faster for `gh`-equipped users — the equivalent single PATCH:
+
+```bash
+gh api -X PATCH "repos/<owner>/<repo>" \
+  -F allow_squash_merge=true \
+  -F allow_merge_commit=false \
+  -F allow_rebase_merge=false \
+  -F squash_merge_commit_title=PR_TITLE \
+  -F squash_merge_commit_message=COMMIT_MESSAGES \
+  -F delete_branch_on_merge=true \
+  -F allow_auto_merge=true \
+  -F allow_update_branch=true
+```
+
+### Realignment-mode prompt format
+
+When the check shows drift, present a numbered list to the user with current → target and a deep-link, one setting per row:
+
+```text
+Repository settings drift detected. Open:
+  https://github.com/<owner>/<repo>/settings#pull-requests-heading
+
+  1. Allow merge commits: currently ON, should be OFF.
+  2. Allow rebase merging: currently ON, should be OFF.
+  3. Default squash commit message: currently "Default to pull request title",
+     should be "Pull request title and commit details".
+  4. Automatically delete head branches: currently OFF, should be ON.
+
+Proceed to apply via `gh api` (if available), or confirm after applying via UI?
+```
+
+In realignment mode, report which check path was used (`gh`, `curl`, or `skipped`) and the full list of diverging fields. Never modify settings without explicit user confirmation.
+
 ## Verification self-test
 
 After a scaffold or realignment run on this repo, all of the following must succeed:

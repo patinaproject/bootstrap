@@ -89,7 +89,28 @@ Detection: look for `docs/superpowers/`. When present, verify both subdirectorie
 | `docs/superpowers/specs/` | yes | directory exists (may contain only `.gitkeep`) |
 | `docs/superpowers/plans/` | yes | directory exists (may contain only `.gitkeep`) |
 
-## Area 7 — Commit / PR title hygiene
+## Area 7 — GitHub repository merge settings
+
+Check path priority (see `SKILL.md` → "GitHub repository settings" for full guidance):
+
+1. `gh api "repos/<owner>/<repo>"` when `gh` is installed (covers public + private).
+2. `curl -s "https://api.github.com/repos/<owner>/<repo>"` for public repos when `gh` is absent.
+3. If neither applies (private repo, no `gh`), skip the check and proceed directly to the UI walkthrough.
+
+Writes always go through the UI (or `gh api -X PATCH`). Deep-link: `https://github.com/<owner>/<repo>/settings#pull-requests-heading`. Report the check path used and every diverging field; never apply changes without explicit confirmation.
+
+| Field | Expected |
+|---|---|
+| `allow_squash_merge` | true |
+| `allow_merge_commit` | false |
+| `allow_rebase_merge` | false |
+| `squash_merge_commit_title` | `PR_TITLE` |
+| `squash_merge_commit_message` | `COMMIT_MESSAGES` |
+| `delete_branch_on_merge` | true |
+| `allow_auto_merge` | true |
+| `allow_update_branch` | true |
+
+## Area 8 — Commit / PR title hygiene
 
 Sampled, not exhaustive:
 
