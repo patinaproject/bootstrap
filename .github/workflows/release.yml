@@ -1,6 +1,10 @@
 name: Release
 
+# release-please requires a run on push to main to cut the tag after
+# the release PR merges. workflow_dispatch is kept as a manual escape hatch.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
