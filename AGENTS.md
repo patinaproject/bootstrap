@@ -14,6 +14,41 @@ This repository is a reference implementation of the `bootstrap` skill it ships.
 
 Keep each skill self-contained. Prefer adjacent support files like `audit-checklist.md` or `pr-body-template.md` over hidden tool-specific wrappers unless a runtime requires them.
 
+## Source of truth for repo baseline
+
+`skills/bootstrap/templates/**` is the authoritative source for this repository's own baseline config. Every file in the list below is shipped from a template and must be edited in the template first, then mirrored into the repo root via the local `bootstrap` skill in realignment mode. Hand-editing a root file without a matching template change regresses the next bootstrapped repo.
+
+Covered files (any change here must round-trip through a template edit):
+
+- `.github/workflows/*`
+- `.github/ISSUE_TEMPLATE/*`
+- `.github/pull_request_template.md`
+- `.github/copilot-instructions.md`
+- `RELEASING.md`
+- `README.md`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `CONTRIBUTING.md`
+- `package.json`
+- `.husky/*`
+- `commitlint.config.js`
+- `.markdownlint.jsonc`
+- `release-please-config.json`
+- `.release-please-manifest.json`
+- `.claude-plugin/`
+- `.codex-plugin/`
+- `.cursor/`
+- `.windsurfrules`
+- `scripts/check-plugin-versions.mjs`
+- `scripts/sync-plugin-versions.mjs`
+
+Workflow for baseline-config changes on this repo:
+
+1. Edit the template under `skills/bootstrap/templates/**`.
+2. Run the local `bootstrap` skill against this repo in realignment mode; accept the proposed root diff.
+3. Commit the template change and the mirrored root change together.
+4. Reference the loop in the PR body so reviewers see both sides of the change.
+
 For Superpowers-generated design and planning artifacts, use the issue number and issue title as the topic slug. Name files as:
 
 - `docs/superpowers/specs/YYYY-MM-DD-<issue-number>-<issue-title>-design.md`
