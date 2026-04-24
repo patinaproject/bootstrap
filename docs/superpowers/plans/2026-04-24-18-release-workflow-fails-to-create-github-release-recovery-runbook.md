@@ -19,14 +19,20 @@
 
 2. **Merge this PR.** Standard squash merge lands the template + root workflow changes on `main`.
 
-3. **Manually create the `v1.0.0` tag and GitHub Release.** The merge commit of PR #9 is `270d51a`. Extract the `## [1.0.0]` section of `CHANGELOG.md` into a release-notes file first, then:
+3. **Manually create the `v1.0.0` tag and GitHub Release.** The merge commit of PR #9 is `270d51a`. Main has since advanced past `270d51a` (e.g. `fb1f7c1`); tagging at the release-PR merge commit is the release-please convention and correctly pins `v1.0.0` to the state that set `package.json` version = 1.0.0. Extract the `## [1.0.0]` section of `CHANGELOG.md` into a release-notes file first — you can extract the notes with:
+
+   ```bash
+   awk '/^## \[1\.0\.0\]/{p=1} p; /^## \[0/{p=0}' CHANGELOG.md > /tmp/v1.0.0-notes.md
+   ```
+
+   Then:
 
    ```bash
    gh release create v1.0.0 \
      --repo patinaproject/bootstrap \
      --target 270d51a \
      --title "v1.0.0" \
-     --notes-file <release-notes-extracted-from-CHANGELOG.md>
+     --notes-file /tmp/v1.0.0-notes.md
    ```
 
    Then relabel PR #9:
