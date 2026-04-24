@@ -36,6 +36,7 @@ Files to emit into this repo root:
 - `.markdownlintignore` — `node_modules/`, `pnpm-lock.yaml`, `dist/`, `build/`
 
 Verification (T1.1):
+
 - `pnpm install` succeeds, writes `pnpm-lock.yaml`, initializes `.husky/_/`.
 - `pnpm exec commitlint --help` exits 0.
 - `pnpm lint:md` exits 0 against current repo content.
@@ -66,6 +67,7 @@ Verification (T1.3): `ls AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md README.
 - `.claude-plugin/plugin.json` — based on `superteam`'s, but `name: bootstrap`, `description: ...`, `skills: ./skills`.
 - `.codex-plugin/plugin.json` — based on `superteam`'s, with Codex interface block for bootstrap.
 - `.claude/settings.json`:
+
   ```jsonc
   {
     "enabledPlugins": {
@@ -74,6 +76,7 @@ Verification (T1.3): `ls AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md README.
     }
   }
   ```
+
   Planner verification task: confirm `enabledPlugins` is the current Claude Code field name. If the schema has changed, fall back to documenting manual install in `README.md` and note the mismatch in the Executor's done report.
 - Additional agent-plugin surfaces (since this repo is itself an agent plugin):
   - `.opencode/` — Planner: check `sst/opencode` docs for current plugin-manifest layout; use minimal correct form.

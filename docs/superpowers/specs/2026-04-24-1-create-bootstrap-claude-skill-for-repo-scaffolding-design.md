@@ -141,15 +141,18 @@ The Patina marketplace itself is typically user-level. The emitted `README.md` a
 So the first-time-on-machine flow is one command; cloning a bootstrap-scaffolded repo afterward requires no further action. The marketplace id is `patinaproject` (from `patinaproject/skills`).
 
 Planner task: verify the exact `enabledPlugins` schema and whether Claude Code supports project-level marketplace declaration (e.g. `extraKnownMarketplaces`) against current Claude Code docs before templating.
+
 ## Modes
 
 ### New-repo mode
 
 Preconditions:
+
 - Target is a git repository (initialized or empty).
 - No prior `.claude-plugin/` or `.codex-plugin/` manifests.
 
 Behavior:
+
 - Emit the full tree above.
 - Run `pnpm install` to generate `pnpm-lock.yaml` and wire Husky.
 - Leave a single commit staged (not committed) so the user owns the first commit.
@@ -157,9 +160,11 @@ Behavior:
 ### Existing-repo realignment mode
 
 Preconditions:
+
 - Target is a git repository with existing content.
 
 Behavior:
+
 - Inspect the repo and produce a **realignment report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure, AI editor surfaces.
 - Detect whether the repo is an AI agent plugin by presence of any agent-plugin manifest (`.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.github/copilot-instructions.md`, `.cursor/`, `.windsurfrules`, etc.). When detected, realignment includes AI editor coverage: any currently-supported platform that is missing is recommended as an addition, bringing existing plugins up to the latest supported-platform set.
 - For each gap, classify as `missing`, `stale`, or `divergent` and produce a concrete recommendation on how to realign with the latest bootstrap baseline.
