@@ -36,10 +36,12 @@ Short outcome summary.
 -->
 - [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>
 <!--
-  E2E gap row is REQUIRED on every AC and must sit directly above the Manual test row.
-  If automated coverage is comprehensive, state that explicitly as `no known gap: <reason>`.
-  Stand-ins are rejected: `none required`, `n/a`, `not applicable`,
-  `automated coverage is sufficient`. Reviewer MUST check this box before merging.
+  E2E gap row: INCLUDE ONLY when automated coverage has a real gap that a reviewer
+  must consciously accept. When present, the row must sit directly above the
+  Manual test row and Reviewer MUST check it before merging.
+  If automated coverage is comprehensive, OMIT this row entirely — do not use
+  placeholder phrases like `no known gap`, `none required`, `n/a`,
+  `not applicable`, or `automated coverage is sufficient`.
 -->
 - [ ] ⚠️ E2E gap: <what automated coverage does not verify>
 <!--
