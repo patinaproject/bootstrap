@@ -91,6 +91,39 @@ gh api repos/<owner>/<repo>/rulesets \
   --jq '.[] | select(.target=="tag")'
 ```
 
+### Branch-ruleset bypass for the GitHub Actions app
+
+Even with all three `GITHUB_TOKEN` scopes granted and `default_workflow_permissions` set to `write`, `POST /repos/<owner>/<repo>/releases` returns `Resource not accessible by integration` when **the `target_commitish` points at a commit on a branch covered by a protective ruleset** and the `github-actions[bot]` app is not in that ruleset's `bypass_actors`. Release-please always targets the release-PR merge commit — which is on your default branch — so any default-branch ruleset (for example, one with `required_signatures`, `pull_request`, or `non_fast_forward`) will block release creation from the built-in token.
+
+This is easy to miss because the 403's docs URL points at the `create-a-release` endpoint, making it look like a permission-scope bug rather than a ruleset denial. It also only reproduces on the *first* release of a repo whose default branch already has an active ruleset.
+
+There are two pure-repo-config paths forward:
+
+1. **Add the GitHub Actions app to `bypass_actors`** on every ruleset that covers the default branch. In the ruleset UI: **Bypass list → Add bypass → Apps → GitHub Actions**, bypass mode `Always`. Via the REST API the payload is:
+
+   ```json
+   {
+     "bypass_actors": [
+       { "actor_id": 15368, "actor_type": "Integration", "bypass_mode": "always" }
+     ]
+   }
+   ```
+
+   `15368` is the global app ID for `github-actions` (same across all GitHub). Once added, release-please can target default-branch commits without triggering the ruleset.
+
+2. **Narrow the ruleset scope.** If you don't want the bot bypassing every rule, split the ruleset: keep `pull_request` / `non_fast_forward` rules on the default branch, and move rules that interact with release creation (notably `required_signatures`) to a separate ruleset that excludes the release-PR merge-commit pattern. This is more effort but preserves the full rule surface for human changes.
+
+Path 1 is what most OSS community members will do and is the recommendation. Path 2 is for orgs with stricter security postures.
+
+Verify the GitHub Actions app has bypass on every default-branch ruleset:
+
+```bash
+gh api "repos/<owner>/<repo>/rulesets?includes_parents=true" \
+  --jq '.[] | select(.target=="branch" and (.conditions.ref_name.include | index("~DEFAULT_BRANCH"))) | {id, name, bypass_actors}'
+```
+
+Each ruleset should list an `Integration` bypass with `actor_id: 15368`. If any lacks it, add it via the UI or a `PATCH` to `repos/<owner>/<repo>/rulesets/<id>`.
+
 ### Require SHA-pinned actions
 
 Also recommended (defense-in-depth, aligns with the SHA-pin convention in [`AGENTS.md`](AGENTS.md)):
