@@ -4,7 +4,7 @@ Releases are driven by [release-please](https://github.com/googleapis/release-pl
 
 ## How it works
 
-1. A maintainer manually triggers the `Release` workflow from **Actions → Release → Run workflow** on `main`. The workflow does not run on pushes.
+1. On every push to `main`, the `Release` workflow runs `release-please`. The same workflow can also be triggered manually from **Actions → Release → Run workflow** as an escape hatch — use it to seed the very first release PR before any push to `main`, or to re-run after a transient failure.
 2. `release-please` scans Conventional Commits since the last tag.
 3. It opens (or updates) a standing **"chore: release X.Y.Z"** PR that:
    - Bumps `package.json` version.
@@ -46,6 +46,8 @@ Determined from commit types — no human choice:
 - `scripts/sync-plugin-versions.mjs` force-rewrites the plugin manifests from `package.json` if needed.
 
 `CHANGELOG.md` is owned by release-please. Do not hand-edit released sections.
+
+`CHANGELOG.md` is excluded from `pnpm lint:md` (see the `#CHANGELOG.md` glob in `package.json`). release-please emits double blank lines between sections, which violates `MD012/no-multiple-blanks`, and its generator has no knob to change that. Fighting the generator is not worth the churn — the released sections are machine-written and not meant to be hand-edited, so linting them adds no value.
 
 ## Distribution via `patinaproject/skills`
 
