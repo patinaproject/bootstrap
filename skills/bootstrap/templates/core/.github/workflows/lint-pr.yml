@@ -79,8 +79,8 @@ jobs:
           echo "::error::PR body must contain a GitHub closing keyword (e.g. \`Closes #123\`) outside code blocks, HTML comments, strikethrough, and blockquotes."
           exit 1
 
-  indicate-breaking-change:
-    name: Indicate breaking change
+  mark-breaking-change:
+    name: Mark breaking change
     runs-on: ubuntu-latest
     steps:
       - name: Compare title `!` with body BREAKING CHANGE footer
