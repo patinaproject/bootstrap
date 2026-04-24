@@ -2,25 +2,12 @@
 
 {{repo-description}}
 
-## Install
+## Conventions
 
-```bash
-pnpm install
-```
-
-First-time Claude Code marketplace registration on a new machine:
-
-```text
-/plugin marketplace add patinaproject/skills
-```
-
-The plugins this repo depends on are declared in `.claude/settings.json` under `enabledPlugins` and will be picked up automatically once the marketplace is registered.
-
-## Development
-
-- `pnpm lint:md` — lint all Markdown.
-- Commits must follow `type: #<issue> short description` (enforced by husky).
-- PR titles follow the same format.
+- Commits: `type: #<issue> short description` (enforced by husky + commitlint).
+- PR titles: same format.
+- Markdown lints with `markdownlint-cli2` via the husky `pre-commit` hook.
+- Plugin enablement for Claude Code is declarative in `.claude/settings.json`.
 
 ## Contributing
 

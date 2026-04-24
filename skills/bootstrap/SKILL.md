@@ -118,13 +118,7 @@ The emitted `.claude/settings.json` enables the canonical Patina plugins at the 
 }
 ```
 
-Because marketplace registration is user-level, the emitted `README.md` and `CLAUDE.md` record the one-time prerequisite:
-
-```text
-/plugin marketplace add patinaproject/skills
-```
-
-The skill does not print a separate post-install step. Everything users need is in the emitted files.
+The skill does not recommend running any commands postinstall. Plugin enablement is declarative in the emitted settings; nothing else is printed or documented as a required follow-up.
 
 ## Conventions encoded
 

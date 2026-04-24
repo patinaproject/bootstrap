@@ -43,7 +43,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `CLAUDE.md` | yes | present; imports `@AGENTS.md`; Claude-only guidance below |
 | `CONTRIBUTING.md` | yes | present; pointer to `AGENTS.md` |
 | `SECURITY.md` | public only | public repo → present; private → absent |
-| `README.md` | yes | present; mentions install, usage, marketplace prerequisite if agent plugin |
+| `README.md` | yes | present; includes repo name, description, and conventions summary |
 | `docs/file-structure.md` | yes | present |
 
 ## Area 4 — Claude Code configuration

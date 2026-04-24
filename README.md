@@ -11,7 +11,7 @@ The baseline mirrors [`patinaproject/superteam`](https://github.com/patinaprojec
 - **Conventions**: Conventional Commits with a required `#<issue>` tag, matching PR titles, GitHub issue templates, PR template with `Closes #<issue>` and `AC-<issue>-<n>` sections.
 - **Tooling**: PNPM with `packageManager` pin, Husky `commit-msg` + `pre-commit` hooks, commitlint, `markdownlint-cli2` + `lint-staged`, `.editorconfig`, `.gitattributes`, `.nvmrc`.
 - **Agent docs**: `AGENTS.md` as the portable workflow contract, `CLAUDE.md` that imports it, `CONTRIBUTING.md`, `SECURITY.md` (public repos).
-- **Claude Code**: `.claude/settings.json` with `enabledPlugins` for the Patina marketplace, plus a repo-level README note about the one-time `/plugin marketplace add patinaproject/skills` prerequisite.
+- **Claude Code**: `.claude/settings.json` with `enabledPlugins` declaring the Patina plugins at the project level.
 - **Docs**: `docs/file-structure.md` as the contributor layout reference; optional `docs/superpowers/` skeleton for issue-driven workflows.
 
 ## AI agent plugin mode
@@ -28,16 +28,6 @@ When the repo is itself an AI agent plugin, `bootstrap` also emits plugin/config
 Aider, Zed, and Cline read `AGENTS.md` natively, so they are covered by the core baseline without dedicated rule files. Continue.dev support is available as an opt-in prompt.
 
 Re-running `bootstrap` on an existing agent plugin realigns it with the current supported-platform set, recommending any newly supported platform that is missing.
-
-## Install
-
-First-time marketplace registration on a new machine:
-
-```text
-/plugin marketplace add patinaproject/skills
-```
-
-The plugins this repo depends on (`superteam@patinaproject`, `superpowers@patinaproject`) are already declared in `.claude/settings.json`, so they are enabled automatically once the marketplace is registered.
 
 ## Usage
 
