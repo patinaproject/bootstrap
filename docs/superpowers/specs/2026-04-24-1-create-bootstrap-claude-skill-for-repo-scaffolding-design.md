@@ -46,11 +46,9 @@ The skill scaffolds the following tree (paths relative to the target repo root):
 AGENTS.md
 CLAUDE.md
 CONTRIBUTING.md
-LICENSE            (only if missing; skill does not overwrite)
 README.md
 commitlint.config.js
 package.json
-pnpm-workspace.yaml (optional, only when user opts into a workspace)
 docs/file-structure.md
 skills/.gitkeep
 ```
@@ -73,7 +71,6 @@ The skill prompts for (or infers) these values and templates them into emitted f
 - `<owner>`, `<repo>`, `<repo-description>`
 - `<visibility>` (public | private) — affects README badges and license default
 - `<primary-skill-name>` (optional; if set, scaffolds `skills/<name>/SKILL.md` starter)
-- `<license>` (default MIT for public, "UNLICENSED" for private)
 
 ## Modes
 
@@ -88,21 +85,21 @@ Behavior:
 - Run `pnpm install` to generate `pnpm-lock.yaml` and wire Husky.
 - Leave a single commit staged (not committed) so the user owns the first commit.
 
-### Existing-repo audit mode
+### Existing-repo realignment mode
 
 Preconditions:
 - Target is a git repository with existing content.
 
 Behavior:
-- Inspect the repo and produce a **compliance report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure.
-- For each gap, classify as `missing`, `stale`, or `divergent` and propose a concrete change.
-- Never overwrite existing files without explicit confirmation. For each proposed change, show a diff preview and ask the user to accept, skip, or defer.
-- Group changes into ordered batches that can be applied independently (e.g. "manifests first, then commitlint, then docs").
+- Inspect the repo and produce a **realignment report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure.
+- For each gap, classify as `missing`, `stale`, or `divergent` and produce a concrete recommendation on how to realign with the latest bootstrap baseline.
+- Never overwrite existing files without explicit confirmation. For each recommendation, show a diff preview and ask the user to accept, skip, or defer — always interactive, no flags.
+- Group recommendations into ordered batches that can be applied independently (e.g. "manifests first, then commitlint, then docs").
 
 ### Public vs. private
 
-- **Public**: README includes install/usage sections, license badge, links to issues/discussions. License defaults to MIT.
-- **Private**: README is concise and internal-focused, omits public badges, license defaults to `UNLICENSED` with a short proprietary notice.
+- **Public**: README includes install/usage sections and links to issues/discussions.
+- **Private**: README is concise and internal-focused, omits public-facing sections.
 
 ## Skill packaging
 
@@ -119,31 +116,26 @@ Behavior:
 - **AC-1-2** — New-repo mode scaffolds the full tree listed above into an empty target repo; `pnpm install` then `pnpm exec commitlint --help` succeeds on the result.
 - **AC-1-3** — Scaffolded commit hook rejects `feat: add foo` and accepts `feat: #42 add foo`.
 - **AC-1-4** — Scaffolded PR template contains the `Closes #<issue>` guidance and an `### AC-<issue>-<n>` block.
-- **AC-1-5** — Existing-repo audit mode produces a grouped compliance report against a non-compliant fixture repo and proposes concrete, ordered changes without overwriting existing files by default.
-- **AC-1-6** — Audit mode, when given a repo that already matches the baseline, reports zero gaps.
-- **AC-1-7** — This repository itself conforms to the emitted baseline (self-hosting check): running audit mode against this repo after the run reports zero gaps.
+- **AC-1-5** — Existing-repo realignment mode produces a grouped realignment report against a non-compliant fixture repo and proposes concrete, ordered recommendations without overwriting existing files by default.
+- **AC-1-6** — Realignment mode, when given a repo that already matches the baseline, reports zero gaps.
+- **AC-1-7** — This repository itself conforms to the emitted baseline (self-hosting check): running realignment mode against this repo after the run reports zero gaps.
 - **AC-1-8** — `AGENTS.md`, `CLAUDE.md`, `README.md`, and `docs/file-structure.md` exist in this repo and follow the conventions documented in `superteam`.
-- **AC-1-9** — Public vs. private selection produces the documented differences (README shape, license default).
+- **AC-1-9** — Public vs. private selection produces the documented README shape differences.
 
 ## Requirement set
 
 1. Mirror `patinaproject/superteam`'s repository structure as the enforced baseline.
-2. Provide both new-repo and existing-repo audit modes in a single skill.
-3. Never overwrite files in existing repos without explicit confirmation.
-4. Cover: commit/issue/PR conventions, PNPM, Claude Code marketplace + skills config, `AGENTS.md` + `CLAUDE.md`, `README.md`, `docs/`.
-5. Self-host: this repo must adopt the baseline it emits.
-6. Distinguish public vs. private defaults.
-7. Do not block on unavailable optional tooling (marketplace publish, Codex app install); emit manifests and stop.
-
-## Open questions (for approval)
-
-1. **Marketplace publication scope** — Issue mentions "Basic marketplace and skills configuration". Reading this as emitting the two `plugin.json` manifests and leaving actual marketplace publishing as a follow-up. Confirm?
-2. **License-file generation** — Emit a `LICENSE` file only when one is missing, or always prompt? Proposal: emit only if missing.
-3. **First commit ownership** — In new-repo mode, stage but do not commit, so the user's first commit reflects their authorship. Acceptable?
-4. **Audit-mode UX** — Interactive confirm-per-change vs. emit a single patch file the user applies manually. Proposal: interactive, with a `--patch` flag (or equivalent argument) to emit as a patch instead.
-5. **`pnpm-workspace.yaml`** — Scaffold by default, or only when user opts into a workspace? Proposal: opt-in, since most repos will be single-package.
+2. Provide both new-repo and existing-repo realignment modes in a single skill.
+3. The realignment mode recommends how to realign an existing repo with the latest bootstrap baseline.
+4. Never overwrite files in existing repos without explicit confirmation; realignment is always interactive.
+5. Cover: commit/issue/PR conventions, PNPM, Claude Code + Codex plugin manifests, `AGENTS.md` + `CLAUDE.md`, `README.md`, `docs/`.
+6. Self-host: this repo must adopt the baseline it emits.
+7. Distinguish public vs. private README shape.
+8. License is out of scope — do not emit a `LICENSE` file or any license-selection prompt.
+9. Monorepo setup is out of scope — do not emit `pnpm-workspace.yaml`.
+10. PR template lives at `.github/pull_request_template.md` so GitHub auto-discovers it.
+11. Scaffold the baseline into this repo as the first execution step, before authoring the skill itself.
 
 ## Concerns
 
-- **Self-hosting chicken-and-egg**: this run must write the baseline files into *this* repo before the skill itself exists to emit them. Execution order: scaffold the repo baseline manually as part of the Executor's plan, then author the skill that encodes that same baseline as its templates. Low risk, but worth flagging.
 - **Template-drift risk**: once `superteam` changes its own baseline, this repo's templates can drift. Mitigation noted as a follow-up: a sync check between `superteam`'s reference files and this repo's `templates/`. Not in scope for issue #1.
