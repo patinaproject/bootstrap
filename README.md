@@ -70,15 +70,21 @@ Bootstrap walks the target repo's merge settings (via `gh api`, `curl`, or visua
 
 | Tool | Surface | Covered by |
 |---|---|---|
-| Claude Code | `.claude-plugin/plugin.json` | Plugin manifest |
-| Codex (CLI + App) | `.codex-plugin/plugin.json` | Plugin manifest |
-| GitHub Copilot | `.github/copilot-instructions.md` | Instructions file |
-| Cursor | `.cursor/rules/<repo>.mdc` | Rule file |
-| Windsurf | `.windsurfrules` | Rule file |
-| Aider, Zed, Cline, Codex CLI, Opencode | — | `AGENTS.md` (native) |
-| Continue.dev | `.continue/config.json` | Opt-in |
+| [Claude Code](#claude-code) | `.claude-plugin/plugin.json` | Plugin manifest |
+| [OpenAI Codex CLI](#openai-codex-cli) | `.codex-plugin/plugin.json` | Plugin manifest |
+| [OpenAI Codex App](#openai-codex-app) | `.codex-plugin/plugin.json` | Plugin manifest |
+| [GitHub Copilot](#github-copilot) | `.github/copilot-instructions.md` | Instructions file |
+| [Cursor](#cursor) | `.cursor/rules/<repo>.mdc` | Rule file |
+| [Windsurf](#windsurf) | `.windsurfrules` | Rule file |
+| [Aider](#aider) | `AGENTS.md` | Native |
+| [Zed](#zed) | `AGENTS.md` | Native |
+| [Cline](#cline) | `AGENTS.md` | Native |
+| [Opencode](#opencode) | `AGENTS.md` | Native |
+| [Continue.dev](#continuedev) | `.continue/config.json` | Opt-in |
 
 ## Installation
+
+Bootstrap ships as a Claude Code + Codex plugin. Other supported editors read the repository-level files bootstrap emits (`AGENTS.md`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`) directly — those tools require no additional plugin install. Pick the section for your tool.
 
 ### Claude Code
 
@@ -91,7 +97,7 @@ Bootstrap walks the target repo's merge settings (via `gh api`, `curl`, or visua
 2. Install Bootstrap:
 
    ```text
-   /plugin install bootstrap@patinaproject
+   /plugin install bootstrap@patinaproject-skills
    ```
 
 3. Open the target repo in Claude Code (or a GitHub issue in the target repo) and invoke:
@@ -129,6 +135,90 @@ Bootstrap walks the target repo's merge settings (via `gh api`, `curl`, or visua
    ```text
    Use $bootstrap to scaffold or realign this repository.
    ```
+
+### GitHub Copilot
+
+No plugin install required. Bootstrap-scaffolded repos ship `.github/copilot-instructions.md`, which Copilot Chat reads automatically when the repo is open in your editor.
+
+1. Clone the bootstrap-scaffolded repo and open it.
+2. Invoke Bootstrap from Copilot Chat:
+
+   ```text
+   @workspace Use the bootstrap skill to scaffold or realign this repository.
+   ```
+
+Personal Copilot preferences belong in your user-scoped Copilot settings, not in the emitted `.github/copilot-instructions.md`.
+
+### Cursor
+
+No plugin install required. Bootstrap emits `.cursor/rules/<repo>.mdc`, which Cursor loads as a project rule whenever the repo is open.
+
+1. Clone the bootstrap-scaffolded repo and open it in Cursor.
+2. Ask the Cursor agent to apply Bootstrap:
+
+   ```text
+   Use the bootstrap skill to scaffold or realign this repository.
+   ```
+
+Personal Cursor rules belong in your user-scoped Cursor settings, not in the emitted `.cursor/rules/`.
+
+### Windsurf
+
+No plugin install required. Bootstrap emits `.windsurfrules`, which Windsurf reads natively when the repo is open.
+
+1. Clone the bootstrap-scaffolded repo and open it in Windsurf.
+2. Ask Cascade to apply Bootstrap:
+
+   ```text
+   Use the bootstrap skill to scaffold or realign this repository.
+   ```
+
+### Aider
+
+No plugin install required. Aider reads `AGENTS.md` natively.
+
+1. Clone the bootstrap-scaffolded repo.
+2. Run `aider` from inside the repo and ask it to apply the bootstrap workflow described in `AGENTS.md`.
+
+### Zed
+
+No plugin install required. Zed's assistant reads `AGENTS.md` natively.
+
+1. Clone the bootstrap-scaffolded repo and open it in Zed.
+2. Ask the assistant to apply the bootstrap workflow described in `AGENTS.md`.
+
+### Cline
+
+No plugin install required. Cline reads `AGENTS.md` natively when the repo is open in VS Code.
+
+1. Clone the bootstrap-scaffolded repo and open it in VS Code with the Cline extension active.
+2. Ask Cline to apply the bootstrap workflow described in `AGENTS.md`.
+
+### Opencode
+
+No plugin install required. Opencode reads `AGENTS.md` natively.
+
+1. Clone the bootstrap-scaffolded repo and open it in Opencode.
+2. Ask Opencode to apply the bootstrap workflow described in `AGENTS.md`.
+
+### Continue.dev
+
+Continue.dev support is opt-in. Add the following entry to your `.continue/config.json` (project-scoped or user-scoped) so Continue picks up the bootstrap context:
+
+```jsonc
+{
+  "context": [
+    {
+      "provider": "file",
+      "params": {
+        "files": ["AGENTS.md", ".github/copilot-instructions.md"]
+      }
+    }
+  ]
+}
+```
+
+Then ask Continue to apply the bootstrap workflow described in `AGENTS.md`.
 
 ## First use
 
