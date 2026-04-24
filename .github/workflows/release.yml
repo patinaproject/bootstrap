@@ -32,6 +32,45 @@ jobs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
+      # TEMPORARY diagnostic: re-run the probe variants now that rulesets
+      # are disabled, to determine whether target_commitish=main vs. non-main
+      # still flips the outcome. Safe: draft/published releases are deleted
+      # before the job ends. Remove this step after #18 is resolved.
+      - name: Diagnostic - probe POST /releases (rulesets-off)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RP_MERGE_SHA: "270d51afe48e52dcf3672b7a03e67b7203e19f7a"
+        run: |
+          set +e
+          probe () {
+            local label="$1" target="$2" draft="$3" tag="$4"
+            echo "=== $label (target=$target draft=$draft tag=$tag) ==="
+            resp=$(gh api \
+              -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "X-GitHub-Api-Version: 2022-11-28" \
+              /repos/${{ github.repository }}/releases \
+              -f tag_name="$tag" \
+              -f target_commitish="$target" \
+              -f name="diagnostic probe (will delete)" \
+              -f body="diagnostic" \
+              -F draft=$draft \
+              -F prerelease=false 2>&1)
+            rc=$?
+            echo "$resp"
+            echo "exit=$rc"
+            if [ $rc -eq 0 ]; then
+              rel_id=$(echo "$resp" | python3 -c 'import sys,json;print(json.load(sys.stdin)["id"])' 2>/dev/null)
+              [ -n "$rel_id" ] && gh api -X DELETE /repos/${{ github.repository }}/releases/$rel_id >/dev/null 2>&1
+              gh api -X DELETE /repos/${{ github.repository }}/git/refs/tags/$tag >/dev/null 2>&1
+            fi
+            echo
+          }
+          probe "A: draft, branch-head" "${{ github.sha }}" "true" "v0.0.0-probe-a-${{ github.run_id }}"
+          probe "B: draft, PR#9 merge" "$RP_MERGE_SHA" "true" "v0.0.0-probe-b-${{ github.run_id }}"
+          probe "C: published, branch-head" "${{ github.sha }}" "false" "v0.0.0-probe-c-${{ github.run_id }}"
+          probe "D: published, PR#9 merge" "$RP_MERGE_SHA" "false" "v0.0.0-probe-d-${{ github.run_id }}"
+          set -e
       - id: release
         # googleapis/release-please-action@v4.4.1
         uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071
