@@ -16,7 +16,16 @@ Releases are driven by [release-please](https://github.com/googleapis/release-pl
 
 ### Workflow permissions: read and write
 
-`release-please` writes to the repo — it creates tags and publishes GitHub Releases via `POST /repos/.../releases`. That call requires the workflow's `GITHUB_TOKEN` to carry `contents: write`. The repo-level default of `read` causes `release-please-action` to fail with `Resource not accessible by integration` on the release step, even when the workflow file declares `permissions: contents: write` — workflow-level declarations are capped by the repo default.
+`release-please` writes to the repo — it creates tags, publishes GitHub Releases via `POST /repos/.../releases`, relabels the release PR (`autorelease: pending` → `autorelease: tagged`), and comments on issues referenced in the changelog. The full canonical [permissions set from the release-please-action README](https://github.com/googleapis/release-please-action#workflow-permissions) is three scopes:
+
+```yaml
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+```
+
+`issues: write` is easy to miss — PR labels live on the Issues API, so relabeling the release PR needs it even though the target is a PR. Omitting any of the three causes `release-please-action` to fail with `Resource not accessible by integration` on the release step, regardless of how `contents: write` is declared elsewhere. The repo-level default of `read` additionally caps the workflow-level declarations, so both the repo toggle and the workflow YAML must agree.
 
 Enable the read + write default:
 
@@ -50,6 +59,7 @@ Use this path when org policy caps repo-level workflow permissions below read + 
 Required token scopes:
 
 - `contents: write` — to create tags and publish releases.
+- `issues: write` — to relabel the release PR (PR labels are on the Issues API) and to comment on issues referenced in the changelog.
 - `pull-requests: write` — to open and update the standing release PR.
 
 A fine-grained PAT or a GitHub App installation token both work. Store it as an **org-level secret** (preferred, so every plugin repo inherits it) or a **repo-level secret**. Suggested name: `RELEASE_PLEASE_TOKEN`.
