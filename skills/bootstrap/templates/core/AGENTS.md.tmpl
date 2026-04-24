@@ -75,6 +75,8 @@ Pin every action reference to a full 40-character commit SHA, not a tag. Tags ar
 
 `actionlint` runs in CI on `.github/workflows/**` changes and enforces workflow hygiene as part of its other checks.
 
+Also enable **Settings → Actions → General → Require actions to be pinned to a full-length commit SHA** (at the repo or org level). GitHub then refuses to run any workflow that `uses:` an action by tag or branch, giving a hard gate on top of the CI check.
+
 ## Commit & Pull Request Guidelines
 
 Commits are enforced with Husky + commitlint. Use conventional commits with no scope and a required GitHub issue tag:
