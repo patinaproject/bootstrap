@@ -97,20 +97,28 @@ The skill prompts for (or infers) these values and templates them into emitted f
 - `<author-email>` — defaulted from `git config user.email`; written into `package.json` `author` field
 - `<use-superteam>` (yes | no) — if yes, emit `docs/superpowers/specs/.gitkeep` and `docs/superpowers/plans/.gitkeep`
 
-### Post-scaffold optional install step
+### Plugin enablement in emitted `.claude/settings.json`
 
-After scaffolding, the skill offers to register the Patina Project marketplace and install the canonical plugins in the user's Claude Code environment. Since skills cannot invoke `/plugin` slash commands directly, the skill:
+The emitted `.claude/settings.json` declares the canonical Patina plugins as enabled at the project level so anyone cloning the repo gets them on first Claude Code session without running install commands manually:
 
-1. Prints the exact commands to run:
-   ```text
-   /plugin marketplace add patinaproject/skills
-   /plugin install superteam@patinaproject
-   /plugin install superpowers@patinaproject
-   ```
-2. Documents the same commands in the emitted `README.md` (Installation section) and `CLAUDE.md`.
-3. If the `claude` CLI is available on `PATH`, offers to shell out and run the equivalent commands non-interactively.
+```jsonc
+{
+  "enabledPlugins": {
+    "superteam@patinaproject": true,
+    "superpowers@patinaproject": true
+  }
+}
+```
 
-The marketplace id is `patinaproject` (from `patinaproject/skills`). This step is skippable; it does not gate scaffold success.
+The Patina marketplace itself is typically user-level. The emitted `README.md` and `CLAUDE.md` include a one-line prerequisite:
+
+```text
+/plugin marketplace add patinaproject/skills
+```
+
+So the first-time-on-machine flow is one command; cloning a bootstrap-scaffolded repo afterward requires no further action. The marketplace id is `patinaproject` (from `patinaproject/skills`).
+
+Planner task: verify the exact `enabledPlugins` schema and whether Claude Code supports project-level marketplace declaration (e.g. `extraKnownMarketplaces`) against current Claude Code docs before templating.
 ## Modes
 
 ### New-repo mode
@@ -162,7 +170,7 @@ Behavior:
 - **AC-1-9** — Public vs. private selection produces the documented README shape differences; `SECURITY.md` is emitted only for public.
 - **AC-1-10** — Scaffolded `markdownlint-cli2` config lints all emitted `*.md` files without errors; `pnpm lint:md` script exits 0 on a fresh scaffold.
 - **AC-1-11** — Husky `pre-commit` hook runs markdown linting on staged `*.md` files and blocks commits with markdownlint violations.
-- **AC-1-12** — Post-scaffold step prints the three plugin install commands and records them in the emitted `README.md`.
+- **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject` and `superpowers@patinaproject`; emitted `README.md` records the one-time marketplace-add command. The skill does not print its own post-install step.
 
 ## Requirement set
 
@@ -181,7 +189,7 @@ Behavior:
 13. Emit `.github/CODEOWNERS` (with a prompted default owner) for all repos.
 14. Emit `SECURITY.md` for public repos only.
 15. Wire `markdownlint-cli2` into PNPM devDeps, expose a `pnpm lint:md` script, and block commits with markdown violations via a husky `pre-commit` hook.
-16. Offer a post-scaffold step that prints `/plugin marketplace add patinaproject/skills`, `/plugin install superteam@patinaproject`, and `/plugin install superpowers@patinaproject`, and records them in the emitted `README.md`. Do not gate scaffold success on this step.
+16. Enable `superteam@patinaproject` and `superpowers@patinaproject` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Record the one-time `/plugin marketplace add patinaproject/skills` prerequisite in the emitted `README.md` and `CLAUDE.md`. Do not gate scaffold success on marketplace registration.
 17. Do not emit `.github/workflows/` files or a Dependabot config.
 18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
 
