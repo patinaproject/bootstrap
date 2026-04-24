@@ -165,6 +165,7 @@ Every bootstrap-managed repo should carry these merge settings:
 | `squash_merge_commit_title` | `PR_TITLE` | Carries the lint-pr-validated title straight through to `main`. |
 | `squash_merge_commit_message` | `COMMIT_MESSAGES` | Preserves commit-level context (useful for review and git blame) in the squash body. |
 | `delete_branch_on_merge` | true | Keeps the branch list tidy after each squash. |
+| `allow_update_branch` | true | Surfaces an "Update branch" button on stale PRs so reviewers can sync without leaving the UI. |
 | Release immutability | enabled | Prevents published release assets and tags from being modified after the fact — critical for marketplace consumers pinning to a tag. UI-only: not exposed via the standard REST `repos` endpoint. |
 
 ### Checking current settings
@@ -174,14 +175,14 @@ The skill picks the check path based on what the user has installed and whether 
 **Path 1 — `gh` CLI (preferred, covers public + private uniformly):**
 
 ```bash
-gh api "repos/<owner>/<repo>" --jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge}'
+gh api "repos/<owner>/<repo>" --jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_update_branch}'
 ```
 
 **Path 2 — `curl` + public REST API (no install, no auth, public repos only):**
 
 ```bash
 curl -s "https://api.github.com/repos/<owner>/<repo>" \
-  | jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge}'
+  | jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_update_branch}'
 ```
 
 Rate limit is 60 req/hr per IP unauthenticated — fine for a one-shot realignment check. If the response is a 404 on what should be a visible repo, the repo is private and this path cannot be used.
@@ -198,6 +199,7 @@ Writes always require auth. Rather than scripting tokens, the skill directs the 
    - **Allow merge commits** → **unchecked** (currently `allow_merge_commit` should read `false`).
    - **Allow squash merging** → **checked**. Default commit message → **"Pull request title and commit details"** (maps to `squash_merge_commit_title=PR_TITLE`, `squash_merge_commit_message=COMMIT_MESSAGES`).
    - **Allow rebase merging** → **unchecked**.
+   - **Always suggest updating pull request branches** → **checked** (`allow_update_branch=true`).
    - **Automatically delete head branches** → **checked** (`delete_branch_on_merge=true`).
 2. Scroll to **Releases** (or open **[General → Releases](https://github.com/<owner>/<repo>/settings)** and scroll). Toggle **Enable release immutability** → **on**. This prevents published release assets and tags from being modified after the fact; it is verified by eye only — the setting is not exposed by the standard `repos` REST endpoint.
 3. Click **Save** under each changed control that has one; the checkboxes save inline.
@@ -211,7 +213,8 @@ gh api -X PATCH "repos/<owner>/<repo>" \
   -F allow_rebase_merge=false \
   -F squash_merge_commit_title=PR_TITLE \
   -F squash_merge_commit_message=COMMIT_MESSAGES \
-  -F delete_branch_on_merge=true
+  -F delete_branch_on_merge=true \
+  -F allow_update_branch=true
 ```
 
 ### Realignment-mode prompt format
@@ -227,8 +230,8 @@ Repository settings drift detected. Open:
   3. Default squash commit message: currently "Default to pull request title",
      should be "Pull request title and commit details".
   4. Automatically delete head branches: currently OFF, should be ON.
-  (Auto-merge and "always suggest updating PR branches" are intentionally
-   left unopinionated — neither recommended nor flagged.)
+  (Auto-merge is intentionally left unopinionated — neither recommended nor
+   flagged.)
 
 Proceed to apply via `gh api` (if available), or confirm after applying via UI?
 ```
