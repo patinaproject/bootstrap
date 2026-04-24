@@ -168,9 +168,3 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`AGENTS.md`](./AGENTS.md). The r
 - [`docs/file-structure.md`](./docs/file-structure.md) — layout reference.
 - [`patinaproject/superteam`](https://github.com/patinaproject/superteam) — sibling plugin whose layout bootstrap enforces.
 - [`patinaproject/skills`](https://github.com/patinaproject/skills) — marketplace distributing Patina plugins.
-
-## Inspiration
-
-- `patinaproject/superteam` — file-layout conventions and the dual-plugin repo pattern.
-- [release-please](https://github.com/googleapis/release-please) — conventional-commits-driven release automation.
-- [Keep a Changelog](https://keepachangelog.com/) and [Semantic Versioning](https://semver.org/) — `CHANGELOG.md` + tag conventions.
