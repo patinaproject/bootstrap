@@ -51,33 +51,6 @@ jobs:
           ignoreLabels: |
             dependencies
 
-  breaking-change-consistency:
-    name: Breaking change marker consistency
-    runs-on: ubuntu-latest
-    steps:
-      - name: Compare title `!` with body BREAKING CHANGE footer
-        env:
-          PR_TITLE: ${{ github.event.pull_request.title }}
-          PR_BODY: ${{ github.event.pull_request.body }}
-        run: |
-          title_has_bang=false
-          if echo "$PR_TITLE" | grep -qE '^[a-z]+(\([^)]*\))?!:'; then
-            title_has_bang=true
-          fi
-          body_has_footer=false
-          if printf '%s' "$PR_BODY" | grep -qE '^BREAKING[ -]CHANGE:'; then
-            body_has_footer=true
-          fi
-          if [ "$title_has_bang" = true ] && [ "$body_has_footer" = false ]; then
-            echo "::error::PR title declares a breaking change (\`!\` in prefix) but the body has no \`BREAKING CHANGE:\` footer. Explain the break in the body or drop the \`!\`."
-            exit 1
-          fi
-          if [ "$body_has_footer" = true ] && [ "$title_has_bang" = false ]; then
-            echo "::error::PR body has a \`BREAKING CHANGE:\` footer but the title is missing the \`!\` marker. Add \`!\` to the type (e.g. \`feat!: #123 ...\`) so squash-merged commits carry the marker."
-            exit 1
-          fi
-          echo "Breaking change markers are consistent."
-
   closing-keyword:
     name: Require closing keyword
     runs-on: ubuntu-latest
@@ -105,3 +78,30 @@ jobs:
           fi
           echo "::error::PR body must contain a GitHub closing keyword (e.g. \`Closes #123\`) outside code blocks, HTML comments, strikethrough, and blockquotes."
           exit 1
+
+  indicate-breaking-change:
+    name: Indicate breaking change
+    runs-on: ubuntu-latest
+    steps:
+      - name: Compare title `!` with body BREAKING CHANGE footer
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          title_has_bang=false
+          if echo "$PR_TITLE" | grep -qE '^[a-z]+(\([^)]*\))?!:'; then
+            title_has_bang=true
+          fi
+          body_has_footer=false
+          if printf '%s' "$PR_BODY" | grep -qE '^BREAKING[ -]CHANGE:'; then
+            body_has_footer=true
+          fi
+          if [ "$title_has_bang" = true ] && [ "$body_has_footer" = false ]; then
+            echo "::error::PR title declares a breaking change (\`!\` in prefix) but the body has no \`BREAKING CHANGE:\` footer. Explain the break in the body or drop the \`!\`."
+            exit 1
+          fi
+          if [ "$body_has_footer" = true ] && [ "$title_has_bang" = false ]; then
+            echo "::error::PR body has a \`BREAKING CHANGE:\` footer but the title is missing the \`!\` marker. Add \`!\` to the type (e.g. \`feat!: #123 ...\`) so squash-merged commits carry the marker."
+            exit 1
+          fi
+          echo "Breaking change markers are consistent."
