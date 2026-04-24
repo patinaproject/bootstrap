@@ -23,7 +23,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `commitlint.config.js` | yes | present; extends `@commitlint/config-conventional`; has `ticket-required` rule |
 | `.husky/commit-msg` | yes | present; runs `pnpm exec commitlint --edit "$1"` |
 | `.husky/pre-commit` | yes | present; runs `pnpm exec lint-staged` |
-| `package.json` | yes | present; has `version`; `packageManager: pnpm@9.x`; `engines.node >= 20`; scripts include `lint:md`, `check:versions`, `sync:versions`; `lint-staged` block for `*.md` |
+| `package.json` | yes | present; has `version`; `packageManager: pnpm@10.x`; `engines.node >= 24`; scripts include `lint:md`, `check:versions`, `sync:versions`; `lint-staged` block for `*.md` |
 | `pnpm-lock.yaml` | yes | present |
 | `scripts/check-plugin-versions.mjs` | yes | present; fails with non-zero exit on version drift |
 | `scripts/sync-plugin-versions.mjs` | yes | present; rewrites plugin manifests from `package.json` |
@@ -40,6 +40,8 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `.github/CODEOWNERS` | yes | present; at least one non-comment rule |
 | `.github/workflows/lint-pr.yml` | yes | present; validates PR title format, breaking-change marker consistency, closing keyword |
 | `.github/workflows/lint-md.yml` | yes | present; runs `DavidAnson/markdownlint-cli2-action` on PRs |
+| `.github/workflows/lint-actions.yml` | yes | present; runs `actionlint` on PRs touching `.github/workflows/**` |
+| `.github/actionlint.yaml` | yes | present; lists permitted self-hosted-runner labels |
 
 ## Area 3 — Agent + repo docs
 
@@ -75,7 +77,7 @@ When detected, the following surfaces should all be present. Missing platforms a
 | `.github/workflows/release.yml` | yes | present; runs `release-please` on push to default branch |
 | `release-please-config.json` | yes | valid JSON; lists both plugin manifests under `extra-files` for version sync |
 | `.release-please-manifest.json` | yes | valid JSON; `.` version matches `package.json.version` |
-| `.cursor/rules/patina.mdc` | yes | present with frontmatter |
+| `.cursor/rules/<repo>.mdc` | yes | present with frontmatter |
 | `.windsurfrules` | yes | present |
 | `skills/` | yes | directory exists with at least a `.gitkeep` or a skill subdirectory |
 

@@ -22,7 +22,7 @@ When the repo is itself an AI agent plugin, `bootstrap` also emits plugin/config
 - Codex (`.codex-plugin/plugin.json`)
 - Opencode (`.opencode/`)
 - GitHub Copilot (`.github/copilot-instructions.md`)
-- Cursor (`.cursor/rules/patina.mdc`)
+- Cursor (`.cursor/rules/<repo>.mdc`)
 - Windsurf (`.windsurfrules`)
 
 Aider, Zed, and Cline read `AGENTS.md` natively, so they are covered by the core baseline without dedicated rule files. Continue.dev support is available as an opt-in prompt.

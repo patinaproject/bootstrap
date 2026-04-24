@@ -67,7 +67,7 @@ docs/file-structure.md
 .codex-plugin/plugin.json           (Codex)
 .opencode/                          (Opencode — exact layout verified by Planner)
 .github/copilot-instructions.md     (GitHub Copilot)
-.cursor/rules/patina.mdc            (Cursor)
+.cursor/rules/<repo>.mdc            (Cursor)
 .windsurfrules                      (Windsurf)
 skills/.gitkeep
 ```

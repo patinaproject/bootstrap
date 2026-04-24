@@ -46,7 +46,7 @@ The repository root is the install surface for every supported AI coding tool th
 .claude-plugin/plugin.json
 .codex-plugin/plugin.json
 .opencode/
-.cursor/rules/patina.mdc
+.cursor/rules/<repo>.mdc
 .windsurfrules
 .github/copilot-instructions.md
 ```

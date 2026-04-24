@@ -16,7 +16,8 @@ jobs:
       tag_name: ${{ steps.release.outputs.tag_name }}
     steps:
       - id: release
-        uses: googleapis/release-please-action@v4
+        # googleapis/release-please-action@v4.4.1
+        uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           config-file: release-please-config.json
@@ -28,7 +29,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Dispatch marketplace bump on patinaproject/skills
-        uses: peter-evans/workflow-dispatch@v3
+        # benc-uk/workflow-dispatch@v1.3.1
+        uses: benc-uk/workflow-dispatch@7a027648b88c2413826b6ddd6c76114894dc5ec4
         with:
           token: ${{ secrets.PATINA_SKILLS_DISPATCH_TOKEN }}
           repo: patinaproject/skills

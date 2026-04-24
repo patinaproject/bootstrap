@@ -81,7 +81,7 @@ Verification (T1.3): `ls AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md README.
 - Additional agent-plugin surfaces (since this repo is itself an agent plugin):
   - `.opencode/` — Planner: check `sst/opencode` docs for current plugin-manifest layout; use minimal correct form.
   - `.github/copilot-instructions.md` — `@AGENTS.md` style one-liner + short purpose description.
-  - `.cursor/rules/patina.mdc` — short frontmatter + pointer to `AGENTS.md`.
+  - `.cursor/rules/<repo>.mdc` — short frontmatter + pointer to `AGENTS.md`.
   - `.windsurfrules` — short pointer to `AGENTS.md` with bootstrap specifics.
 - `skills/.gitkeep` (placeholder; W2 populates `skills/bootstrap/`).
 
@@ -110,7 +110,7 @@ Create `skills/bootstrap/templates/` mirroring the core baseline and agent-plugi
 Templates to write (one-to-one with the files emitted in W1):
 
 - `templates/core/` — `.gitignore`, `.gitattributes`, `.editorconfig`, `.nvmrc`, `.markdownlint.jsonc`, `.markdownlintignore`, `package.json.tmpl`, `commitlint.config.js`, `.husky/commit-msg`, `.husky/pre-commit`, `AGENTS.md.tmpl`, `CLAUDE.md.tmpl`, `CONTRIBUTING.md.tmpl`, `README.md.tmpl`, `SECURITY.md.tmpl` (public only), `docs/file-structure.md.tmpl`, `.github/*`, `.claude/settings.json.tmpl`.
-- `templates/agent-plugin/` — `.claude-plugin/plugin.json.tmpl`, `.codex-plugin/plugin.json.tmpl`, `.opencode/...`, `.github/copilot-instructions.md.tmpl`, `.cursor/rules/patina.mdc.tmpl`, `.windsurfrules.tmpl`, `skills/.gitkeep`.
+- `templates/agent-plugin/` — `.claude-plugin/plugin.json.tmpl`, `.codex-plugin/plugin.json.tmpl`, `.opencode/...`, `.github/copilot-instructions.md.tmpl`, `.cursor/rules/<repo>.mdc.tmpl`, `.windsurfrules.tmpl`, `skills/.gitkeep`.
 - `templates/opt-in/superpowers/` — `docs/superpowers/specs/.gitkeep`, `docs/superpowers/plans/.gitkeep`.
 - `templates/opt-in/continue/` — `.continue/config.json.tmpl`.
 

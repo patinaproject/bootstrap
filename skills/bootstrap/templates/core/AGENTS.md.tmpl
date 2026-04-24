@@ -54,6 +54,27 @@ Validate changes with targeted file checks and command output.
 
 If you add executable tooling later, document the exact verification command in `docs/`.
 
+## Issue and PR labels
+
+Use `gh label list` to see the repository's canonical label set. Each label's `description` documents when to apply it. Rely on those descriptions when selecting labels for issues and PRs — do not invent new labels without updating the repository's label set first.
+
+Verify every label has a non-empty description:
+
+```bash
+gh label list --json name,description --jq '.[] | select(.description == "")'
+```
+
+## GitHub Actions pinning
+
+Pin every action reference to a full 40-character commit SHA, not a tag. Tags are mutable; SHAs are not. Above each `uses:` line, leave a comment naming the action and version the SHA corresponds to, so updates remain reviewable.
+
+```yaml
+# actions/checkout@v4.3.1
+- uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+```
+
+`actionlint` runs in CI on `.github/workflows/**` changes and enforces workflow hygiene as part of its other checks.
+
 ## Commit & Pull Request Guidelines
 
 Commits are enforced with Husky + commitlint. Use conventional commits with no scope and a required GitHub issue tag:
