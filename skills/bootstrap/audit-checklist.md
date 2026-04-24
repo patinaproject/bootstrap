@@ -60,7 +60,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 |---|---|---|
 | `.claude/settings.json` | yes | present; parses as valid JSONC; `enabledPlugins` declared |
 
-For agent plugins, `enabledPlugins` should include `superteam@patinaproject` and `superpowers@claude-plugins-official` unless the user has explicitly opted out.
+For agent plugins, `enabledPlugins` should include `superteam@patinaproject-skills` and `superpowers@claude-plugins-official` unless the user has explicitly opted out.
 
 ## Area 5 — AI agent plugin surfaces
 

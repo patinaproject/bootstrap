@@ -13,6 +13,8 @@
 
 ## Installation
 
+`{{repo}}` ships as a Claude Code + Codex plugin. Other supported editors read the repository-level files this plugin emits (`AGENTS.md`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`) directly — those tools require no additional plugin install. Pick the section for your tool.
+
 ### Claude Code
 
 1. Register the Patina marketplace:
@@ -24,7 +26,7 @@
 2. Install the plugin:
 
    ```text
-   /plugin install {{repo}}@patinaproject
+   /plugin install {{repo}}@patinaproject-skills
    ```
 
 3. Open a target repository (or an issue in one) in Claude Code and invoke:
@@ -62,6 +64,90 @@
    ```text
    Use ${{repo}} for the workflow described above.
    ```
+
+### GitHub Copilot
+
+No plugin install required. This repo ships `.github/copilot-instructions.md`, which Copilot Chat reads automatically when the repo is open in your editor.
+
+1. Clone the repo and open it.
+2. Invoke `{{repo}}` from Copilot Chat:
+
+   ```text
+   @workspace Use the {{repo}} skill for the workflow described above.
+   ```
+
+Personal Copilot preferences belong in your user-scoped Copilot settings, not in the emitted `.github/copilot-instructions.md`.
+
+### Cursor
+
+No plugin install required. This repo ships `.cursor/rules/{{repo}}.mdc`, which Cursor loads as a project rule whenever the repo is open.
+
+1. Clone the repo and open it in Cursor.
+2. Ask the Cursor agent to apply `{{repo}}`:
+
+   ```text
+   Use the {{repo}} skill for the workflow described above.
+   ```
+
+Personal Cursor rules belong in your user-scoped Cursor settings, not in the emitted `.cursor/rules/`.
+
+### Windsurf
+
+No plugin install required. This repo ships `.windsurfrules`, which Windsurf reads natively when the repo is open.
+
+1. Clone the repo and open it in Windsurf.
+2. Ask Cascade to apply `{{repo}}`:
+
+   ```text
+   Use the {{repo}} skill for the workflow described above.
+   ```
+
+### Aider
+
+No plugin install required. Aider reads `AGENTS.md` natively.
+
+1. Clone the repo.
+2. Run `aider` from inside the repo and ask it to apply the `{{repo}}` workflow described in `AGENTS.md`.
+
+### Zed
+
+No plugin install required. Zed's assistant reads `AGENTS.md` natively.
+
+1. Clone the repo and open it in Zed.
+2. Ask the assistant to apply the `{{repo}}` workflow described in `AGENTS.md`.
+
+### Cline
+
+No plugin install required. Cline reads `AGENTS.md` natively when the repo is open in VS Code.
+
+1. Clone the repo and open it in VS Code with the Cline extension active.
+2. Ask Cline to apply the `{{repo}}` workflow described in `AGENTS.md`.
+
+### Opencode
+
+No plugin install required. Opencode reads `AGENTS.md` natively.
+
+1. Clone the repo and open it in Opencode.
+2. Ask Opencode to apply the `{{repo}}` workflow described in `AGENTS.md`.
+
+### Continue.dev
+
+Continue.dev support is opt-in. Add the following entry to your `.continue/config.json` (project-scoped or user-scoped) so Continue picks up the `{{repo}}` context:
+
+```jsonc
+{
+  "context": [
+    {
+      "provider": "file",
+      "params": {
+        "files": ["AGENTS.md", ".github/copilot-instructions.md"]
+      }
+    }
+  ]
+}
+```
+
+Then ask Continue to apply the `{{repo}}` workflow described in `AGENTS.md`.
 
 ## Usage
 

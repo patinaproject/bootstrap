@@ -125,7 +125,7 @@ The emitted `.claude/settings.json` declares the canonical Patina plugins as ena
 ```jsonc
 {
   "enabledPlugins": {
-    "superteam@patinaproject": true,
+    "superteam@patinaproject-skills": true,
     "superpowers@claude-plugins-official": true
   }
 }
@@ -137,7 +137,7 @@ The Patina marketplace itself is typically user-level. The emitted `README.md` a
 /plugin marketplace add patinaproject/skills
 ```
 
-So the first-time-on-machine flow is one command; cloning a bootstrap-scaffolded repo afterward requires no further action. The marketplace id is `patinaproject` (from `patinaproject/skills`).
+So the first-time-on-machine flow is one command; cloning a bootstrap-scaffolded repo afterward requires no further action. The marketplace id is `patinaproject-skills` (Claude Code derives it from the `patinaproject/skills` repo name).
 
 Planner task: verify the exact `enabledPlugins` schema and whether Claude Code supports project-level marketplace declaration (e.g. `extraKnownMarketplaces`) against current Claude Code docs before templating.
 
@@ -197,7 +197,7 @@ Behavior:
 - **AC-1-9** — Public vs. private selection produces the documented README shape differences; `SECURITY.md` is emitted only for public.
 - **AC-1-10** — Scaffolded `markdownlint-cli2` config lints all emitted `*.md` files without errors; `pnpm lint:md` script exits 0 on a fresh scaffold.
 - **AC-1-11** — Husky `pre-commit` hook runs markdown linting on staged `*.md` files and blocks commits with markdownlint violations.
-- **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject` and `superpowers@claude-plugins-official`. The skill does not print a post-install step or marketplace-add prompt.
+- **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject-skills` and `superpowers@claude-plugins-official`. The skill does not print a post-install step or marketplace-add prompt.
 - **AC-1-13** — When `<is-agent-plugin>` is yes, the skill emits plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. When no, none of those surfaces are emitted.
 - **AC-1-14** — Realignment mode, run against an existing agent plugin that is missing one or more currently-supported platform surfaces, reports the missing platforms and recommends adding them, bringing the plugin up to the current supported-platform set.
 - **AC-1-15** — Realignment mode, run against an existing agent plugin that already covers every currently-supported platform, reports zero platform-coverage gaps.
@@ -224,7 +224,7 @@ Behavior:
 13. Emit `.github/CODEOWNERS` (with a prompted default owner) for all repos.
 14. Emit `SECURITY.md` for public repos only.
 15. Wire `markdownlint-cli2` into PNPM devDeps, expose a `pnpm lint:md` script, and block commits with markdown violations via a husky `pre-commit` hook.
-16. Enable `superteam@patinaproject` and `superpowers@claude-plugins-official` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Do not print or document a marketplace-add command — enablement is declarative.
+16. Enable `superteam@patinaproject-skills` and `superpowers@claude-plugins-official` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Do not print or document a marketplace-add command — enablement is declarative.
 17. Do not emit `.github/workflows/` files or a Dependabot config.
 18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
 19. Provide an `<is-agent-plugin>` prompt (default no). When yes, emit plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. Cover Aider, Zed, and Cline through the baseline `AGENTS.md` rather than dedicated rule files.
