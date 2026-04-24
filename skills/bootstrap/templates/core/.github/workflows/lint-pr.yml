@@ -60,8 +60,11 @@ jobs:
       - name: Check for closing keyword in PR body
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+        shell: bash
         run: |
+          #!/usr/bin/env bash
           # shellcheck disable=SC2016
+          # SC2016: single-quoted regex/sed patterns contain literal `$` and backticks by design.
           if [ -z "$PR_BODY" ]; then
             echo '::error::PR body is empty. Add a GitHub closing keyword such as `Closes #<issue>`.'
             exit 1
