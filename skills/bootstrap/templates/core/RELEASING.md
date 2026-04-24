@@ -47,6 +47,8 @@ Determined from commit types — no human choice:
 
 `CHANGELOG.md` is owned by release-please. Do not hand-edit released sections.
 
+`CHANGELOG.md` is excluded from `pnpm lint:md` (see the `#CHANGELOG.md` glob in `package.json`). release-please emits double blank lines between sections, which violates `MD012/no-multiple-blanks`, and its generator has no knob to change that. Fighting the generator is not worth the churn — the released sections are machine-written and not meant to be hand-edited, so linting them adds no value.
+
 ## Distribution via `patinaproject/skills`
 
 When a release is published **and the repository owner is `patinaproject`**, the release workflow automatically dispatches `bump-plugin-tags.yml` on `patinaproject/skills`. That marketplace repo opens (or updates) a PR bumping this plugin's pinned `ref` across every Patina marketplace manifest.
