@@ -4,13 +4,31 @@ Releases are driven by [release-please](https://github.com/googleapis/release-pl
 
 ## How it works
 
-1. Every push to `main` runs the `Release` workflow.
+1. A maintainer manually triggers the `Release` workflow from **Actions → Release → Run workflow** on `main`. The workflow does not run on pushes.
 2. `release-please` scans Conventional Commits since the last tag.
 3. It opens (or updates) a standing **"chore: release X.Y.Z"** PR that:
    - Bumps `package.json` version.
    - Syncs `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` to the new version (configured in `release-please-config.json`).
    - Appends generated entries to `CHANGELOG.md`.
 4. **Clicking Merge on that PR** is the release action. It tags `vX.Y.Z` and publishes a GitHub Release with notes generated from the same commits.
+
+## Prerequisites (one-time settings)
+
+### Allow Actions to create pull requests
+
+`release-please` opens its standing release PR using `secrets.GITHUB_TOKEN`. This requires:
+
+- **Settings → Actions → General → Workflow permissions → Allow GitHub Actions to create and approve pull requests**.
+
+If the repo-level checkbox is greyed out, the setting is controlled by the organization. For repos under `patinaproject`, enable it once at the org level: **organization Settings → Actions → General → Workflow permissions**, then toggle the same option. Without it, the workflow fails with `GitHub Actions is not permitted to create or approve pull requests.`
+
+### Require SHA-pinned actions
+
+Also recommended (defense-in-depth, aligns with the SHA-pin convention in [`AGENTS.md`](AGENTS.md)):
+
+- **Settings → Actions → General → Require actions to be pinned to a full-length commit SHA** (available at repo or org level).
+
+When enabled, GitHub refuses to run workflows that `uses:` an action by tag or branch.
 
 ## Semver decision
 
