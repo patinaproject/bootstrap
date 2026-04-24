@@ -39,7 +39,13 @@ Behavior:
 - For each gap, produce a concrete recommendation on how to realign with the current baseline.
 - Detect whether the repo is an AI agent plugin (by presence of any agent-plugin manifest). When detected, additionally recommend any currently-supported AI platform surface that is missing.
 - For each recommendation, show a diff preview and ask the user to accept, skip, or defer. **Never overwrite existing files without explicit confirmation.** There are no flags or escape hatches; realignment is always interactive.
-- Group recommendations into ordered batches that can be applied independently: manifests → commit/PR conventions → PNPM tooling → agent docs → docs/README → AI platform surfaces.
+- Group recommendations into ordered batches that can be applied independently. Each batch below must cover its listed files; no file from the "Source of truth for repo baseline" list in `AGENTS.md` may be skipped. `patinaproject/bootstrap` is a normal realignment target — the skill must not self-exclude when run against it.
+  1. Plugin manifests: `.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`, `.release-please-manifest.json`.
+  2. Commit / PR conventions: `commitlint.config.js`, `.husky/*`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/*`.
+  3. PNPM tooling: `package.json`, `.markdownlint.jsonc`, `scripts/check-plugin-versions.mjs`, `scripts/sync-plugin-versions.mjs`.
+  4. Agent + repo docs: `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `README.md`, `RELEASING.md`.
+  5. AI platform surfaces: `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`.
+  6. Workflows: `.github/workflows/*` (including `release.yml` with job-level `permissions:`).
 
 ## Prompts
 
