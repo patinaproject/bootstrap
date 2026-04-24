@@ -390,6 +390,10 @@ All "manual" cells are labeled manual because GitHub UI interactions and cross-r
 - **Risk R3 — manual recovery drift.** Creating `v1.0.0` via `gh release create` (Task R1 Step 3) bypasses the workflow, so `notify-patinaproject-skills` does not fire automatically for this one release. **Mitigation:** Task R1 Step 4 dispatches `bump-plugin-tags.yml` manually; verify the marketplace PR opens on `patinaproject/skills`.
 - **Rollback path.** All template and doc changes are single-commit, file-level edits; revert is `git revert <sha>`. The manual recovery (tag + release) is idempotent — if anything looks wrong, delete the tag and release (`gh release delete v1.0.0 --cleanup-tag`) and redo.
 
+## Appendix A — v1.0.0 recovery runbook (paste into PR body Validation)
+
+The ready-to-paste Markdown for the PR body's `Validation` section lives in [`2026-04-24-18-release-workflow-fails-to-create-github-release-recovery-runbook.md`](./2026-04-24-18-release-workflow-fails-to-create-github-release-recovery-runbook.md). Finisher copies that file's contents verbatim into the PR body under `Validation`.
+
 ## Blockers
 
 - None. All three Brainstormer open questions are resolved above from repo state. If Executor observes `default_workflow_permissions` still reads `read` after toggling the UI setting — indicating an actual org-policy cap rather than a repo-level default — halt and switch to the PAT/App-token fallback path per Risk R2 before merging.
