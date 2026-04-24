@@ -1,6 +1,6 @@
 {
   "enabledPlugins": {
-    "superteam@patinaproject": true,
+    "superteam@patinaproject-skills": true,
     "superpowers@claude-plugins-official": true
   }
 }

@@ -71,7 +71,7 @@ Verification (T1.3): `ls AGENTS.md CLAUDE.md CONTRIBUTING.md SECURITY.md README.
   ```jsonc
   {
     "enabledPlugins": {
-      "superteam@patinaproject": true,
+      "superteam@patinaproject-skills": true,
       "superpowers@claude-plugins-official": true
     }
   }
