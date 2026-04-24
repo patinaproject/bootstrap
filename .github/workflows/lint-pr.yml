@@ -60,6 +60,7 @@ jobs:
       - name: Check for closing keyword in PR body
         env:
           PR_BODY: ${{ github.event.pull_request.body }}
+        # shellcheck disable=SC2016
         run: |
           if [ -z "$PR_BODY" ]; then
             echo '::error::PR body is empty. Add a GitHub closing keyword such as `Closes #<issue>`.'
