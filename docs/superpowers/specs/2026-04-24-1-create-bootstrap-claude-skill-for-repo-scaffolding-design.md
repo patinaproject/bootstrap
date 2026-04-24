@@ -202,6 +202,11 @@ Behavior:
 - **AC-1-13** — When `<is-agent-plugin>` is yes, the skill emits plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. When no, none of those surfaces are emitted.
 - **AC-1-14** — Realignment mode, run against an existing agent plugin that is missing one or more currently-supported platform surfaces, reports the missing platforms and recommends adding them, bringing the plugin up to the current supported-platform set.
 - **AC-1-15** — Realignment mode, run against an existing agent plugin that already covers every currently-supported platform, reports zero platform-coverage gaps.
+- **AC-1-16** — Agent-plugin mode emits `.github/workflows/release.yml` wired to [release-please](https://github.com/googleapis/release-please), `release-please-config.json`, and `.release-please-manifest.json` so releases are driven by conventional commits. Semver level is auto-derived from commit types; there is no manual patch/minor/major input.
+- **AC-1-17** — Every emitted repo ships `.github/workflows/lint-pr.yml` that validates PR titles (ASCII-only, conventional commits with no scope, `#<issue>` subject ref), breaking-change marker consistency (title `!` ⇔ body `BREAKING CHANGE:` footer), and a `Closes #<issue>` closing keyword in the PR body.
+- **AC-1-18** — `package.json` is the canonical version source; `scripts/sync-plugin-versions.mjs` and `scripts/check-plugin-versions.mjs` plus a husky `pre-commit` check block divergence between `package.json`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json`.
+- **AC-1-19** — `CHANGELOG.md` is release-please-compatible (hand-edits to released sections are prohibited); `RELEASING.md` documents the release-please-driven flow and the `DISTRIBUTE_VIA_PATINAPROJECT_SKILLS` behavior.
+- **AC-1-20** — The emitted agent-plugin `release.yml` auto-dispatches `bump-plugin-tags.yml` on `patinaproject/skills` after a successful release when `github.repository_owner == 'patinaproject'`. Forks in other orgs skip the step silently. The one-time org-level secret `PATINA_SKILLS_DISPATCH_TOKEN` is documented in `RELEASING.md`.
 
 ## Requirement set
 
@@ -225,6 +230,12 @@ Behavior:
 18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
 19. Provide an `<is-agent-plugin>` prompt (default no). When yes, emit plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. Cover Aider, Zed, and Cline through the baseline `AGENTS.md` rather than dedicated rule files.
 20. Realignment mode detects whether the target is an AI agent plugin (by presence of any agent-plugin manifest). When detected, realignment additionally recommends adding any currently-supported platform surface the plugin is missing, so existing plugins can be brought up to the current supported-platform set on every `/bootstrap` rerun.
+21. Wire `release-please` in agent-plugin mode for conventional-commits-driven releases. Emit `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`. `CHANGELOG.md` and GitHub Release notes are generated from commits.
+22. Emit `.github/workflows/lint-pr.yml` in the core baseline. Enforce ASCII-only PR titles, conventional commits with no scope, `#<issue>` subject, breaking-change marker consistency, and closing-keyword presence.
+23. Make `package.json` the canonical version source. Emit `scripts/sync-plugin-versions.mjs` and `scripts/check-plugin-versions.mjs`. Husky `pre-commit` runs `pnpm check:versions` to block drift between `package.json`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json`.
+24. Emit `CHANGELOG.md` (release-please-owned) and `RELEASING.md` (documents the flow plus the `PATINA_SKILLS_DISPATCH_TOKEN` prerequisite).
+25. Emit an auto-dispatch job in agent-plugin `release.yml` that fires `bump-plugin-tags.yml` on `patinaproject/skills` after a successful release, gated on `github.repository_owner == 'patinaproject'`. No repo variable, no prompt; forks skip automatically.
+26. Revise prior requirement #17 — `.github/workflows/` is now part of the baseline: `lint-pr.yml` in core, `release.yml` in agent-plugin mode. Dependabot remains out of scope.
 
 ## Concerns
 

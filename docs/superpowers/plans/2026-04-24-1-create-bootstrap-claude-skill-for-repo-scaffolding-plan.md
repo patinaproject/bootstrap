@@ -162,6 +162,7 @@ Record all results in the Executor done report.
 | W1 — Self-host baseline | All repo-root and `.github/` + `.claude/` files; `pnpm install` to generate lockfile | — |
 | W2 — Author skill | `skills/bootstrap/` with SKILL.md, templates/, audit-checklist.md | W1 |
 | W3 — Verification | Self-audit walk, tooling smoke tests | W1, W2 |
+| W4 — Release flow + PR hygiene | release-please, lint-pr workflow, version enforcement scripts, marketplace auto-dispatch, CHANGELOG + RELEASING docs, template mirrors | W1, W2 |
 
 ## Task IDs
 
@@ -176,3 +177,11 @@ Record all results in the Executor done report.
 - **T3.1** Self-audit walk
 - **T3.2** Fixture sanity documentation
 - **T3.3** Tooling smoke tests
+- **T4.1** Version enforcement — `scripts/sync-plugin-versions.mjs`, `scripts/check-plugin-versions.mjs`, husky `pre-commit` hook, `package.json` canonical `version` field
+- **T4.2** `.github/workflows/lint-pr.yml` — ASCII-only title, conventional commits with no scope, `#<issue>` subject pattern, breaking-change marker consistency, closing-keyword check (patinaproject/patinaproject adapted)
+- **T4.3** release-please wiring — `.github/workflows/release.yml`, `release-please-config.json`, `.release-please-manifest.json`. Both plugin manifests listed under `extra-files` with `$.version` jsonpath for lockstep bumping
+- **T4.4** `CHANGELOG.md` (release-please-owned stub) and `RELEASING.md` (flow documentation)
+- **T4.5** Marketplace auto-dispatch — `notify-patinaproject-skills` job in `release.yml` gated on `github.repository_owner == 'patinaproject'`, dispatching `bump-plugin-tags.yml` via `peter-evans/workflow-dispatch@v3` using `PATINA_SKILLS_DISPATCH_TOKEN`
+- **T4.6** Template mirror — `lint-pr.yml`, scripts, `CHANGELOG.md`, `RELEASING.md` → `templates/core/`; `release.yml`, `release-please-config.json`, `.release-please-manifest.json` → `templates/agent-plugin/`. `package.json.tmpl` updated with `version` field and new scripts
+- **T4.7** Audit checklist + SKILL.md updates reflecting W4 files
+- **T4.8** Follow-up issue filed — [patinaproject/skills#12](https://github.com/patinaproject/skills/issues/12) covers marketplace tag tracking for Claude Code + Codex, opencode via npm, org-level dispatch receiver, and marketplace's own release cycle via bootstrap
