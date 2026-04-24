@@ -35,22 +35,37 @@ The `docs/superpowers/specs/` and `docs/superpowers/plans/` trees are created by
 The skill scaffolds the following tree (paths relative to the target repo root):
 
 ```text
+.claude/settings.json
 .claude-plugin/plugin.json
 .codex-plugin/plugin.json
-.github/pull_request_template.md
+.github/CODEOWNERS
 .github/ISSUE_TEMPLATE/bug_report.md
 .github/ISSUE_TEMPLATE/feature_request.md
-.husky/commit-msg
+.github/pull_request_template.md
+.gitattributes
 .gitignore
+.husky/commit-msg
+.husky/pre-commit
 .editorconfig
+.markdownlint.jsonc
+.markdownlintignore
+.nvmrc
 AGENTS.md
 CLAUDE.md
 CONTRIBUTING.md
 README.md
+SECURITY.md                 (public repos only)
 commitlint.config.js
 package.json
 docs/file-structure.md
 skills/.gitkeep
+```
+
+Opt-in (prompted during run):
+
+```text
+docs/superpowers/specs/.gitkeep
+docs/superpowers/plans/.gitkeep
 ```
 
 ### Conventions encoded
@@ -61,17 +76,41 @@ skills/.gitkeep
 - **Issue titles**: plain-language, no conventional-commit prefix.
 - **Issue templates**: minimal bug report + feature request.
 - **Contributor docs**: `AGENTS.md` as the shared workflow contract, `CLAUDE.md` that imports `AGENTS.md` via `@AGENTS.md` and adds Claude-only guidance.
-- **PNPM**: `"packageManager": "pnpm@9.15.4"` pin, `prepare: "husky"` script, commitlint devDeps, `.npmrc` with `engine-strict=true`, Node engines field.
+- **PNPM**: `"packageManager": "pnpm@9.15.4"` pin, `prepare: "husky"` script, commitlint + markdownlint-cli2 devDeps, `.npmrc` with `engine-strict=true`, Node engines field, `.nvmrc` matching.
+- **Markdown linting**: `markdownlint-cli2` with `.markdownlint.jsonc` and a `.markdownlintignore` that excludes `node_modules/`, `pnpm-lock.yaml`, and any other generated content. The `pnpm lint:md` script uses a glob that does not traverse `node_modules/`. Husky `pre-commit` runs linting on staged `*.md` via `lint-staged` or equivalent so the hook is scoped to changed files and never walks `node_modules/`.
+- **Line endings**: `.gitattributes` with `* text=auto eol=lf`.
 - **Claude Code / Codex plugin surfaces**: both manifests at the repo root pointing at `./skills`.
+- **Claude Code project settings**: `.claude/settings.json` baseline (empty permissions/hooks, with comments) emitted into every scaffolded repo.
+- **Code ownership**: `.github/CODEOWNERS` with a prompted default owner (e.g. `@patinaproject/maintainers`).
+- **Security reporting** (public repos only): `SECURITY.md` with a templated `<security-contact>` placeholder and acknowledgement SLA.
 
 ### Placeholders
 
 The skill prompts for (or infers) these values and templates them into emitted files:
 
 - `<owner>`, `<repo>`, `<repo-description>`
-- `<visibility>` (public | private) — affects README badges and license default
+- `<visibility>` (public | private) — affects README shape and whether `SECURITY.md` is emitted
 - `<primary-skill-name>` (optional; if set, scaffolds `skills/<name>/SKILL.md` starter)
+- `<codeowner>` (default `@<owner>/maintainers`) — written into `.github/CODEOWNERS`
+- `<security-contact>` (public repos only) — written into `SECURITY.md`; defaulted from `git config user.email` and editable before scaffold
+- `<author-name>` — defaulted from `git config user.name`; written into `package.json` `author` field
+- `<author-email>` — defaulted from `git config user.email`; written into `package.json` `author` field
+- `<use-superteam>` (yes | no) — if yes, emit `docs/superpowers/specs/.gitkeep` and `docs/superpowers/plans/.gitkeep`
 
+### Post-scaffold optional install step
+
+After scaffolding, the skill offers to register the Patina Project marketplace and install the canonical plugins in the user's Claude Code environment. Since skills cannot invoke `/plugin` slash commands directly, the skill:
+
+1. Prints the exact commands to run:
+   ```text
+   /plugin marketplace add patinaproject/skills
+   /plugin install superteam@patinaproject
+   /plugin install superpowers@patinaproject
+   ```
+2. Documents the same commands in the emitted `README.md` (Installation section) and `CLAUDE.md`.
+3. If the `claude` CLI is available on `PATH`, offers to shell out and run the equivalent commands non-interactively.
+
+The marketplace id is `patinaproject` (from `patinaproject/skills`). This step is skippable; it does not gate scaffold success.
 ## Modes
 
 ### New-repo mode
@@ -120,7 +159,10 @@ Behavior:
 - **AC-1-6** — Realignment mode, when given a repo that already matches the baseline, reports zero gaps.
 - **AC-1-7** — This repository itself conforms to the emitted baseline (self-hosting check): running realignment mode against this repo after the run reports zero gaps.
 - **AC-1-8** — `AGENTS.md`, `CLAUDE.md`, `README.md`, and `docs/file-structure.md` exist in this repo and follow the conventions documented in `superteam`.
-- **AC-1-9** — Public vs. private selection produces the documented README shape differences.
+- **AC-1-9** — Public vs. private selection produces the documented README shape differences; `SECURITY.md` is emitted only for public.
+- **AC-1-10** — Scaffolded `markdownlint-cli2` config lints all emitted `*.md` files without errors; `pnpm lint:md` script exits 0 on a fresh scaffold.
+- **AC-1-11** — Husky `pre-commit` hook runs markdown linting on staged `*.md` files and blocks commits with markdownlint violations.
+- **AC-1-12** — Post-scaffold step prints the three plugin install commands and records them in the emitted `README.md`.
 
 ## Requirement set
 
@@ -135,6 +177,13 @@ Behavior:
 9. Monorepo setup is out of scope — do not emit `pnpm-workspace.yaml`.
 10. PR template lives at `.github/pull_request_template.md` so GitHub auto-discovers it.
 11. Scaffold the baseline into this repo as the first execution step, before authoring the skill itself.
+12. Emit `.claude/settings.json`, `.nvmrc`, `.gitattributes`, `.editorconfig`, and `.markdownlint.jsonc` as part of the baseline.
+13. Emit `.github/CODEOWNERS` (with a prompted default owner) for all repos.
+14. Emit `SECURITY.md` for public repos only.
+15. Wire `markdownlint-cli2` into PNPM devDeps, expose a `pnpm lint:md` script, and block commits with markdown violations via a husky `pre-commit` hook.
+16. Offer a post-scaffold step that prints `/plugin marketplace add patinaproject/skills`, `/plugin install superteam@patinaproject`, and `/plugin install superpowers@patinaproject`, and records them in the emitted `README.md`. Do not gate scaffold success on this step.
+17. Do not emit `.github/workflows/` files or a Dependabot config.
+18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
 
 ## Concerns
 
