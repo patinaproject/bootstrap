@@ -34,10 +34,10 @@ The `docs/superpowers/specs/` and `docs/superpowers/plans/` trees are created by
 
 The skill scaffolds the following tree (paths relative to the target repo root):
 
+**Core baseline** (every repo):
+
 ```text
 .claude/settings.json
-.claude-plugin/plugin.json
-.codex-plugin/plugin.json
 .github/CODEOWNERS
 .github/ISSUE_TEMPLATE/bug_report.md
 .github/ISSUE_TEMPLATE/feature_request.md
@@ -58,10 +58,31 @@ SECURITY.md                 (public repos only)
 commitlint.config.js
 package.json
 docs/file-structure.md
+```
+
+**AI agent plugin add-ons** (emitted only when `<is-agent-plugin>` is yes):
+
+```text
+.claude-plugin/plugin.json          (Claude Code)
+.codex-plugin/plugin.json           (Codex)
+.opencode/                          (Opencode — exact layout verified by Planner)
+.github/copilot-instructions.md     (GitHub Copilot)
+.cursor/rules/patina.mdc            (Cursor)
+.windsurfrules                      (Windsurf)
 skills/.gitkeep
 ```
 
-Opt-in (prompted during run):
+`AGENTS.md` is the portable surface consumed by Aider, Zed, Cline, and others that natively honor it; it ships in the core baseline, not the agent-plugin block, so those editors are covered without dedicated rule files.
+
+Opt-in secondary editors (prompted during agent-plugin mode):
+
+```text
+.continue/config.json               (Continue.dev)
+```
+
+Planner reviews current docs for each platform (Claude Code, Codex, Opencode, Copilot, Cursor, Windsurf, Continue.dev) before templating and uses `patinaproject/superteam`'s file patterns as the Patina-idiomatic reference for Claude Code and Codex manifests.
+
+**Opt-in prompts** (independent of agent-plugin mode):
 
 ```text
 docs/superpowers/specs/.gitkeep
@@ -96,6 +117,7 @@ The skill prompts for (or infers) these values and templates them into emitted f
 - `<author-name>` — defaulted from `git config user.name`; written into `package.json` `author` field
 - `<author-email>` — defaulted from `git config user.email`; written into `package.json` `author` field
 - `<use-superteam>` (yes | no) — if yes, emit `docs/superpowers/specs/.gitkeep` and `docs/superpowers/plans/.gitkeep`
+- `<is-agent-plugin>` (yes | no, default no) — if yes, emit Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf plugin surfaces plus `skills/.gitkeep`
 
 ### Plugin enablement in emitted `.claude/settings.json`
 
@@ -138,10 +160,11 @@ Preconditions:
 - Target is a git repository with existing content.
 
 Behavior:
-- Inspect the repo and produce a **realignment report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure.
+- Inspect the repo and produce a **realignment report** grouped by baseline area: plugin manifests, skills layout, commit/PR conventions, PNPM tooling, agent docs, README/docs structure, AI editor surfaces.
+- Detect whether the repo is an AI agent plugin by presence of any agent-plugin manifest (`.claude-plugin/`, `.codex-plugin/`, `.opencode/`, `.github/copilot-instructions.md`, `.cursor/`, `.windsurfrules`, etc.). When detected, realignment includes AI editor coverage: any currently-supported platform that is missing is recommended as an addition, bringing existing plugins up to the latest supported-platform set.
 - For each gap, classify as `missing`, `stale`, or `divergent` and produce a concrete recommendation on how to realign with the latest bootstrap baseline.
 - Never overwrite existing files without explicit confirmation. For each recommendation, show a diff preview and ask the user to accept, skip, or defer — always interactive, no flags.
-- Group recommendations into ordered batches that can be applied independently (e.g. "manifests first, then commitlint, then docs").
+- Group recommendations into ordered batches that can be applied independently (e.g. "manifests first, then commitlint, then docs, then new-platform manifests").
 
 ### Public vs. private
 
@@ -171,6 +194,9 @@ Behavior:
 - **AC-1-10** — Scaffolded `markdownlint-cli2` config lints all emitted `*.md` files without errors; `pnpm lint:md` script exits 0 on a fresh scaffold.
 - **AC-1-11** — Husky `pre-commit` hook runs markdown linting on staged `*.md` files and blocks commits with markdownlint violations.
 - **AC-1-12** — Emitted `.claude/settings.json` enables `superteam@patinaproject` and `superpowers@patinaproject`; emitted `README.md` records the one-time marketplace-add command. The skill does not print its own post-install step.
+- **AC-1-13** — When `<is-agent-plugin>` is yes, the skill emits plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. When no, none of those surfaces are emitted.
+- **AC-1-14** — Realignment mode, run against an existing agent plugin that is missing one or more currently-supported platform surfaces, reports the missing platforms and recommends adding them, bringing the plugin up to the current supported-platform set.
+- **AC-1-15** — Realignment mode, run against an existing agent plugin that already covers every currently-supported platform, reports zero platform-coverage gaps.
 
 ## Requirement set
 
@@ -192,6 +218,8 @@ Behavior:
 16. Enable `superteam@patinaproject` and `superpowers@patinaproject` directly in the emitted `.claude/settings.json` under `enabledPlugins`. Record the one-time `/plugin marketplace add patinaproject/skills` prerequisite in the emitted `README.md` and `CLAUDE.md`. Do not gate scaffold success on marketplace registration.
 17. Do not emit `.github/workflows/` files or a Dependabot config.
 18. Derive `<author-name>`, `<author-email>`, and the `SECURITY.md` `<security-contact>` default from the user's local `git config user.name` / `git config user.email`. Halt with a blocker if those are unset.
+19. Provide an `<is-agent-plugin>` prompt (default no). When yes, emit plugin surfaces for Claude Code, Codex, Opencode, Copilot, Cursor, and Windsurf, plus `skills/.gitkeep`. Cover Aider, Zed, and Cline through the baseline `AGENTS.md` rather than dedicated rule files.
+20. Realignment mode detects whether the target is an AI agent plugin (by presence of any agent-plugin manifest). When detected, realignment additionally recommends adding any currently-supported platform surface the plugin is missing, so existing plugins can be brought up to the current supported-platform set on every `/bootstrap` rerun.
 
 ## Concerns
 
