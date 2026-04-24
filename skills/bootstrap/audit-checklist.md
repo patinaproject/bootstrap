@@ -42,6 +42,9 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `.github/workflows/lint-md.yml` | yes | present; runs `DavidAnson/markdownlint-cli2-action` on PRs |
 | `.github/workflows/lint-actions.yml` | yes | present; runs `actionlint` on PRs touching `.github/workflows/**` |
 | `.github/actionlint.yaml` | yes | present; lists permitted self-hosted-runner labels |
+| End-to-end release smoke | yes | After realignment, run `gh workflow run Release --repo <owner>/<repo>` on a repo seeded with at least one `feat:` or `fix:` commit since its last tag. Verify release-please opens/updates a release PR; on merge, a tag and GitHub Release appear, and — when `<owner> == patinaproject` — a `bump-plugin-tags.yml` dispatch fires on `patinaproject/skills`. Report a gap if the target has no prior release **and** `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` returns `read`. |
+| Default workflow permissions | yes | `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` must return `write`. When it returns `read`, emit a realignment-gap warning entry recommending **Settings → Actions → General → Workflow permissions → Read and write permissions**. This check runs regardless of whether the repo has ever cut a release, so the problem surfaces before the first 403. |
+| Tag rulesets do not require signatures | yes | `gh api repos/<owner>/<repo>/rulesets --jq '.[] \| select(.target=="tag")'` must not return any ruleset whose `rules[].type == "required_signatures"` applies to the release-tag pattern. When it does, emit a realignment-gap warning entry: signed tags break `release-please-action`, which cannot sign; scope the signature rule to branches or to non-release tag refs. |
 
 ### Reserved GitHub labels
 
@@ -135,12 +138,12 @@ For each gap, emit:
   Action? (accept / skip / defer)
 ```
 
-Group recommendations into ordered batches and offer them in this sequence:
+Group recommendations into ordered batches and offer them in this sequence (matching `SKILL.md` → Realignment mode; each batch must cover every file in the "Source of truth for repo baseline" list in `AGENTS.md`):
 
-1. Plugin manifests
-2. Commit / PR conventions (commitlint, husky, templates)
-3. PNPM tooling (package.json, lockfile, lint-staged, markdownlint)
-4. Agent + repo docs
-5. Docs / README
-6. AI platform surfaces (agent plugins)
+1. Plugin manifests (`.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`, `.release-please-manifest.json`)
+2. Commit / PR conventions (`commitlint.config.js`, `.husky/*`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/*`)
+3. PNPM tooling (`package.json`, `.markdownlint.jsonc`, `scripts/check-plugin-versions.mjs`, `scripts/sync-plugin-versions.mjs`)
+4. Agent + repo docs (`AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `README.md`, `RELEASING.md`)
+5. AI platform surfaces (`.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`)
+6. Workflows (`.github/workflows/*`, including `release.yml` with job-level `permissions:`)
 7. Superpowers scaffolding (opt-in)
