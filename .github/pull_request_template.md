@@ -29,7 +29,25 @@ This title rule applies to pull requests only. GitHub issue titles should stay p
 
 Short outcome summary.
 
-- [ ] Manual test: `verification command`
+<!--
+  Evidence rows: one per required platform. Fields are pipe-separated in fixed order:
+  runner | env | @handle | ISO (UTC timestamp). Omit evidence rows only for ACs
+  explicitly marked `[platform: none]`. Do not use detached `- Evidence:` bullets.
+-->
+- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>
+<!--
+  E2E gap row is REQUIRED on every AC and must sit directly above the Manual test row.
+  If automated coverage is comprehensive, state that explicitly as `no known gap: <reason>`.
+  Stand-ins are rejected: `none required`, `n/a`, `not applicable`,
+  `automated coverage is sufficient`. Reviewer MUST check this box before merging.
+-->
+- [ ] ⚠️ E2E gap: <what automated coverage does not verify>
+<!--
+  Manual test row uses the literal prefix `Manual test:`, concrete numbered steps,
+  and stays unchecked until a human reviewer performs the steps and flips the box
+  in the GitHub UI. Reviewer MUST check this box before merging.
+-->
+- [ ] Manual test: <concrete numbered steps; observed outcome>
 
 ### AC-<issue>-<n>
 
