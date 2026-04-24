@@ -6,7 +6,7 @@ Merging release-please's standing release PR is supposed to produce a `vX.Y.Z` t
 
 Root cause: `.github/workflows/release.yml` listens only on `workflow_dispatch`. release-please needs a *second* workflow run after the release PR merges — that run is what sees the release commit on `main` and creates the tag + release. Without a `push` trigger, the second run never fires automatically, and `RELEASING.md` step 4 reinforces the wrong mental model by saying "Clicking Merge on that PR is the release action."
 
-#4 / [#6](https://github.com/patinaproject/bootstrap/pull/6) introduced the dispatch-only trigger to avoid an earlier failure — GitHub Actions lacked permission to create PRs. That failure is now addressed by the `RELEASING.md` Prerequisites section (the org-level "Allow Actions to create pull requests" toggle and `PATINA_SKILLS_DISPATCH_TOKEN`). The dispatch-only constraint no longer serves its original purpose.
+PR #4 / [#6](https://github.com/patinaproject/bootstrap/pull/6) introduced the dispatch-only trigger to avoid an earlier failure — GitHub Actions lacked permission to create PRs. That failure is now addressed by the `RELEASING.md` Prerequisites section (the org-level "Allow Actions to create pull requests" toggle and `PATINA_SKILLS_DISPATCH_TOKEN`). The dispatch-only constraint no longer serves its original purpose.
 
 ## Goals
 
