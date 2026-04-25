@@ -42,29 +42,30 @@ jobs:
 
   notify-patinaproject-skills:
     needs: release-please
-    if: needs.release-please.outputs.release_created == 'true'
+    # Only run when a release was actually cut AND we're on a patinaproject-owned
+    # repo. Forks outside the org skip this job silently, so they don't need to
+    # provision the `patinaproject-automation` GitHub App secrets.
+    if: needs.release-please.outputs.release_created == 'true' && github.repository_owner == 'patinaproject'
     runs-on: ubuntu-latest
     steps:
-      # GitHub Actions does not permit `secrets.X` in `if:` expressions, so we
-      # probe the secret via an env binding here and gate the dispatch step on
-      # the boolean output below. The probe never echoes the secret value.
-      - name: Check dispatch token availability
-        id: check-token
-        env:
-          TOKEN: ${{ secrets.PATINAPROJECT_SKILLS_DISPATCH_TOKEN }}
-        run: |
-          if [ -n "$TOKEN" ]; then
-            echo "available=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "available=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::PATINAPROJECT_SKILLS_DISPATCH_TOKEN not configured; skipping marketplace bump for this release. Configure the org secret per RELEASING.md, or fire \`gh workflow run plugin-release-bump.yml --repo patinaproject/skills -f plugin=<repo> -f tag=<tag>\` manually."
-          fi
+      # Mint a per-job installation token for the org-owned `patinaproject-automation`
+      # GitHub App. The App is installed only on `patinaproject/skills` and has
+      # `Actions: Read and write`, so the resulting token can dispatch the
+      # marketplace-bump workflow without a user-tied PAT.
+      - name: Mint patinaproject-automation App token
+        id: app-token
+        # actions/create-github-app-token@v3.1.1
+        uses: actions/create-github-app-token@1b10c78c7865c340bc4f6099eb2f838309f1e8c3
+        with:
+          app-id: ${{ secrets.PATINAPROJECT_AUTOMATION_APP_ID }}
+          private-key: ${{ secrets.PATINAPROJECT_AUTOMATION_PRIVATE_KEY }}
+          owner: patinaproject
+          repositories: skills
       - name: Dispatch marketplace bump on patinaproject/skills
-        if: steps.check-token.outputs.available == 'true'
         # benc-uk/workflow-dispatch@v1.3.1
         uses: benc-uk/workflow-dispatch@7a027648b88c2413826b6ddd6c76114894dc5ec4
         with:
-          token: ${{ secrets.PATINAPROJECT_SKILLS_DISPATCH_TOKEN }}
+          token: ${{ steps.app-token.outputs.token }}
           repo: patinaproject/skills
           workflow: plugin-release-bump.yml
           inputs: |
