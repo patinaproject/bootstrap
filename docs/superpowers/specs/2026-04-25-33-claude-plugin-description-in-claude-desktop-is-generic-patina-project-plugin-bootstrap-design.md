@@ -36,7 +36,7 @@ Character count: 148. For the `description` field (single-line, may truncate), a
 
 > "Scaffold or realign repositories to the Patina Project baseline: commits, PRs, PNPM tooling, agent docs, and plugin surfaces."
 
-Character count: 124. Either variant is acceptable; the shorter form is preferred for the `description` key in `plugin.json` where space is constrained.
+Character count: 125. Either variant is acceptable; the shorter form is preferred for the `description` key in `plugin.json` where space is constrained.
 
 ## Required Scope
 
@@ -50,7 +50,7 @@ Character count: 124. Either variant is acceptable; the shorter form is preferre
 
 ### Out of scope for this PR (separate PR in patinaproject/skills)
 
-4. **Marketplace entry:** Add a `bootstrap` entry to `.claude-plugin/marketplace.json` in `patinaproject/skills`. This edit touches a separate repository and must be a separate PR there. It is tracked as a dependency of AC-33-3.
+1. **Marketplace entry:** Add a `bootstrap` entry to `.claude-plugin/marketplace.json` in `patinaproject/skills`. This edit touches a separate repository and must be a separate PR there. It is tracked as a dependency of AC-33-3.
 
 **Rationale for separating the marketplace PR:** `patinaproject/skills` is an independent repository with its own review cycle, versioning, and deployment gate. Coupling it into this PR would block merging the local description fix on an unrelated repo's CI. The two changes are independently deployable; sequencing them (bootstrap PR first, marketplace PR second) is the right call.
 
@@ -69,6 +69,7 @@ Character count: 124. Either variant is acceptable; the shorter form is preferre
 Given a user opens Claude Desktop's plugin customization menu, when they view the bootstrap plugin entry, then they see the new repo-authored description rather than "Patina Project plugin: bootstrap".
 
 Verification:
+
 - [ ] After the bootstrap PR merges and the marketplace PR is live, open Claude Desktop → plugin customization menu → bootstrap entry.
 - [ ] Confirm the displayed description matches the agreed copy, not the generic fallback.
 
@@ -77,9 +78,10 @@ Verification:
 Given the bootstrap repo at HEAD (after this PR merges), when a reviewer reads `.claude-plugin/plugin.json`, then the `description` field is the new agreed copy and its value matches the `description` emitted by `skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` after a realignment run.
 
 Verification:
-- [ ] `grep '"description"' .claude-plugin/plugin.json` returns the agreed copy.
-- [ ] `grep '"description"' skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` returns the same copy.
-- [ ] Both values are identical (no drift between template and root file).
+
+- [ ] `grep '"description"' .claude-plugin/plugin.json` returns the agreed literal copy.
+- [ ] `grep '"description"' skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` returns the `{{repo-description}}` placeholder (not the literal copy — the template uses a placeholder that realignment expands into the root file).
+- [ ] Both the root file and the template are in sync: the root value reflects what the template placeholder resolves to after realignment (no drift).
 
 ### AC-33-3
 
@@ -88,6 +90,7 @@ Given the `patinaproject/skills` marketplace at HEAD (after the separate marketp
 Note: This AC is satisfied by a separate PR in `patinaproject/skills` and is out of scope for this PR. It is listed here to document the full required outcome.
 
 Verification:
+
 - [ ] `jq '.plugins[] | select(.name == "bootstrap")' .claude-plugin/marketplace.json` returns a non-empty result with the agreed description.
 
 ### AC-33-4
@@ -95,6 +98,7 @@ Verification:
 Given a fresh repository bootstrapped via this skill after the change ships, when the generated `.claude-plugin/plugin.json` is produced, then the `description` placeholder guides the maintainer toward an informative description (no generic fallback is hard-coded into the generated file).
 
 Verification:
+
 - [ ] In `skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl`, the `description` field uses the `{{repo-description}}` placeholder (not a hard-coded generic string).
 - [ ] A test invocation of bootstrap on a scratch repo produces a `.claude-plugin/plugin.json` where `description` reflects the supplied `{{repo-description}}` value.
 
