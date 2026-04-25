@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/patinaproject/bootstrap/compare/v1.1.0...v1.1.1) (2026-04-25)
+
+
+### Bug Fixes
+
+* [#26](https://github.com/patinaproject/bootstrap/issues/26) dispatch correct workflow name on patinaproject/skills ([#27](https://github.com/patinaproject/bootstrap/issues/27)) ([28209ed](https://github.com/patinaproject/bootstrap/commit/28209edc4898d8becef8e90ea43422dd08b718b8))
+
 ## [1.1.0](https://github.com/patinaproject/bootstrap/compare/v1.0.0...v1.1.0) (2026-04-24)
 
 
