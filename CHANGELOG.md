@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.2](https://github.com/patinaproject/bootstrap/compare/v1.1.1...v1.1.2) (2026-04-25)
+
+
+### Bug Fixes
+
+* [#26](https://github.com/patinaproject/bootstrap/issues/26) update App slug references after rename to patina-project-automation ([#29](https://github.com/patinaproject/bootstrap/issues/29)) ([cc1677c](https://github.com/patinaproject/bootstrap/commit/cc1677c8c4ee96f9b8c4a68532058543f8dfb55b))
+
 ## [1.1.1](https://github.com/patinaproject/bootstrap/compare/v1.1.0...v1.1.1) (2026-04-25)
 
 
