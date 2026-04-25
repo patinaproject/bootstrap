@@ -120,7 +120,7 @@ Determined from commit types — no human choice:
 
 ## Distribution via `patinaproject/skills`
 
-When a release is published **and the repository owner is `patinaproject`**, the release workflow automatically dispatches `bump-plugin-tags.yml` on `patinaproject/skills`. That marketplace repo opens (or updates) a PR bumping this plugin's pinned `ref` across every Patina marketplace manifest.
+When a release is published **and the repository owner is `patinaproject`**, the release workflow automatically dispatches `plugin-release-bump.yml` on `patinaproject/skills`. That marketplace repo opens (or updates) a PR bumping this plugin's pinned `ref` across every Patina marketplace manifest.
 
 No per-repo opt-in is required — the `github.repository_owner == 'patinaproject'` check in the workflow gates this behavior. Forks in other orgs skip the step automatically.
 
