@@ -73,3 +73,23 @@ None. The correct filename is established by the successful manual dispatch duri
 - Replacing `benc-uk/workflow-dispatch` with another dispatcher.
 - Changes to the `PATINA_SKILLS_DISPATCH_TOKEN` secret, permissions, or the `github.repository_owner == 'patinaproject'` gate.
 - Back-editing historical design, plan, or runbook documents under `docs/superpowers/` that referenced the old filename at the time of writing.
+
+## Scope expansion
+
+The v1.1.0 release run ([24921997515](https://github.com/patinaproject/bootstrap/actions/runs/24921997515)) cut the tag and published the GitHub Release successfully, but the `notify-patinaproject-skills` job failed with `Parameter token or opts.auth is required`. Root cause: the org-level dispatch secret is not configured, so the templated reference resolves to an empty string, and the dispatcher rejects the empty token. The renamed workflow (AC-26-1) is irrelevant to the failure — the job never reaches the dispatch call.
+
+Today every release will keep ending in a red CI badge until the secret is configured. That is operator-visible noise on a successful release and conflates two distinct conditions (release broken vs. marketplace bump deferred). The graceful-degradation requirement: when the dispatch token is unavailable, the notify job should treat the marketplace bump as deferred, not as a release failure, and tell the operator how to recover manually.
+
+### AC-26-3
+
+The `notify-patinaproject-skills` job degrades gracefully when the dispatch token secret is unavailable.
+
+- **Given** a release run on `patinaproject/bootstrap` where the `release-please` job reports `release_created == 'true'` and the org-level dispatch secret used by the notify job is unset (resolves to an empty string),
+- **When** the `notify-patinaproject-skills` job runs,
+- **Then** it logs a clear warning naming the missing secret and the manual remediation command, skips the dispatch step instead of invoking it, and the job ends in a success conclusion. The `release-please` job's tag and Release publication remain unaffected (independent job, independent conclusion).
+
+Verification (post-merge, next release):
+
+- [ ] `gh run view --repo patinaproject/bootstrap <run-id>` shows both `release-please` and `notify-patinaproject-skills` with conclusion `success` when the secret is unset.
+- [ ] The notify-job log contains a `::warning::` line naming the missing secret and pointing the operator at the manual `gh workflow run plugin-release-bump.yml ...` recovery command.
+- [ ] The release tag and GitHub Release for the version remain present and correct.
