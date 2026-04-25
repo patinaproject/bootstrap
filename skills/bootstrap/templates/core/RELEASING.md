@@ -126,7 +126,7 @@ No per-repo opt-in is required — the `github.repository_owner == 'patinaprojec
 
 Prerequisite (org-level, one-time):
 
-- Org secret on `patinaproject`: `PATINA_SKILLS_DISPATCH_TOKEN` — a fine-grained PAT (or GitHub App installation token) with `actions: write` on `patinaproject/skills`. Available to every plugin repo in the org.
+- Org secret on `patinaproject`: `PATINAPROJECT_SKILLS_DISPATCH_TOKEN` — a fine-grained PAT (or GitHub App installation token) with `actions: write` on `patinaproject/skills`. Available to every plugin repo in the org.
 
 If the token is missing, the notify job emits a `::warning::` naming the missing secret and skips the dispatch step; the release itself still completes (the notify step runs in a separate job and now ends in success rather than failure). To recover, run the manual `gh workflow run plugin-release-bump.yml --repo patinaproject/skills -f plugin=<repo> -f tag=<tag>` shown above, or kick off the marketplace bump from `patinaproject/skills`' Actions tab.
 
