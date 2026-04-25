@@ -89,6 +89,60 @@ during plan execution:
   `bump-plugin-tags.yml` (the pre-fix, broken state) with no other side
   effects.
 
+## Scope expansion (AC-26-3)
+
+Adds a workstream that makes the `notify-patinaproject-skills` job degrade
+gracefully when `PATINA_SKILLS_DISPATCH_TOKEN` is unset, surfaced after the
+v1.1.0 release run failed the notify job with
+`Parameter token or opts.auth is required`. Implements AC-26-3 in the design.
+
+### 3. Probe-and-gate the dispatch step on token availability
+
+- **Files**
+  - `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`
+    — insert a "Check dispatch token availability" step before the existing
+    dispatch step, gate the dispatch step on its output, no `uses:` lines
+    changed.
+  - `.github/workflows/release.yml` — mirror the template byte-for-byte.
+  - `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md`,
+    `skills/bootstrap/templates/core/RELEASING.md`, root `RELEASING.md` —
+    one-paragraph addendum under the existing
+    "Distribution via `patinaproject/skills`" section that the missing-token
+    case now warns and skips instead of failing the run, and that the manual
+    `gh workflow run plugin-release-bump.yml ...` command above is the
+    recovery path.
+- **Edit detail** — The probe step uses an `env:` binding to read the secret
+  in shell (the only way to test it; `secrets.X` is not allowed in `if:`
+  conditions). The shell sets `available=true|false` on `$GITHUB_OUTPUT`
+  based on whether the env var is non-empty, and emits a single
+  `::warning::` line when unavailable that names the missing secret and the
+  manual `gh workflow run plugin-release-bump.yml --repo patinaproject/skills
+  -f plugin=<repo> -f tag=<tag>` remediation. The probe never echoes the
+  secret value — only a boolean. The existing dispatch step gains
+  `if: steps.<probe-id>.outputs.available == 'true'`. SHA-pinning on the
+  existing `benc-uk/workflow-dispatch` step is preserved (no `uses:` line
+  changes).
+- **Order** — Edit the template first, then mirror to the root in the same
+  commit so the templates-first loop is visible in the diff.
+- **Risks**
+  - GitHub Actions does not allow `secrets.X` in `if:` expressions, hence
+    the env-bound probe step. The probe deliberately does not log the
+    secret's value — only a boolean output and, in the missing case, a
+    warning that names the secret by name (matches what is already in
+    `RELEASING.md`).
+  - Org-level workflow log redaction would mask the value even if it leaked,
+    but we don't rely on that — we never echo `$TOKEN`.
+- **Verification**
+  - Pre-merge:
+    `diff skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml .github/workflows/release.yml`
+    is empty; `actionlint` (CI) passes; `pnpm lint:md` passes; the diff
+    shows no `uses:` line changed.
+  - Post-merge (authoritative): a real `Release` workflow run on `main`.
+    With the secret unset (current state), both jobs end `success` and the
+    notify job's log contains the `::warning::` line. With the secret
+    present (future state), the dispatch step fires — covered by AC-26-1's
+    existing post-merge verification.
+
 ## Blockers
 
 None.
