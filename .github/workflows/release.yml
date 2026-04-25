@@ -51,7 +51,7 @@ jobs:
         with:
           token: ${{ secrets.PATINA_SKILLS_DISPATCH_TOKEN }}
           repo: patinaproject/skills
-          workflow: bump-plugin-tags.yml
+          workflow: plugin-release-bump.yml
           inputs: |
             {
               "plugin": "${{ github.event.repository.name }}",
