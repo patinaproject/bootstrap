@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/patinaproject/bootstrap/compare/v1.2.0...v1.3.0) (2026-04-27)
+
+
+### Features
+
+* [#48](https://github.com/patinaproject/bootstrap/issues/48) clarify release-triggering commit types ([#50](https://github.com/patinaproject/bootstrap/issues/50)) ([424300a](https://github.com/patinaproject/bootstrap/commit/424300a2caa04565f946805be2eb72e4aef67804))
+
 ## [1.2.0](https://github.com/patinaproject/bootstrap/compare/v1.1.2...v1.2.0) (2026-04-27)
 
 
