@@ -132,8 +132,8 @@ Do not use manual dispatch as the ordinary release process. Do not perform manua
 Run:
 
 ```bash
-rg -n "There is no manual dispatch|No `gh workflow run` step is ever required" skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
-rg -n "Manual recovery dispatch|gh workflow run Release|escape hatch" skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
+rg -n 'There is no manual dispatch|No `gh workflow run` step is ever required' skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
+rg -n 'Manual recovery dispatch|gh workflow run Release|escape hatch' skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
 ```
 
 Expected: the first command returns no matches; the second command returns the
@@ -146,29 +146,21 @@ new recovery section in both template files.
 - Modify: `.github/workflows/release.yml`
 - Modify: `RELEASING.md`
 
-- [ ] **Step 1: Mirror the Patina Project workflow supplement to root**
+- [ ] **Step 1: Run the local bootstrap realignment loop for root mirrors**
 
-Run:
+Invoke the local `bootstrap` skill against this repository in realignment mode
+after the template edits are complete. Accept the proposed release workflow and
+release-doc root mirror updates for this repository. The accepted mirror updates
+must make root `.github/workflows/release.yml` match
+`skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`
+and root `RELEASING.md` match
+`skills/bootstrap/templates/patinaproject-supplement/RELEASING.md`.
 
-```bash
-cp skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml .github/workflows/release.yml
-```
+Expected: the realignment loop reports `.github/workflows/release.yml` and
+`RELEASING.md` as root baseline files updated from the Patina Project
+supplement templates.
 
-Expected: root `.github/workflows/release.yml` now matches the supplement
-template byte-for-byte.
-
-- [ ] **Step 2: Mirror the Patina Project release docs to root**
-
-Run:
-
-```bash
-cp skills/bootstrap/templates/patinaproject-supplement/RELEASING.md RELEASING.md
-```
-
-Expected: root `RELEASING.md` now matches the supplement template
-byte-for-byte.
-
-- [ ] **Step 3: Verify root/template parity**
+- [ ] **Step 2: Verify root/template parity**
 
 Run:
 
@@ -212,14 +204,15 @@ Expected: every printed `on:` block contains both `workflow_dispatch:` and
 Run:
 
 ```bash
-rg -n "github.event|event_name|workflow_dispatch" \
+rg -n 'github\.event_name|event_name|if:.*github\.event|workflow_dispatch' \
   skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml \
   skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml \
   .github/workflows/release.yml
 ```
 
 Expected: matches are limited to the `workflow_dispatch:` trigger and comments;
-there are no event-type conditionals such as `github.event_name`.
+there are no event-type conditionals such as `github.event_name` or
+`if: ... github.event...`.
 
 - [ ] **Step 3: Verify AC-49-3 documentation framing**
 
