@@ -49,7 +49,7 @@ Behavior:
 
 ## Prompts
 
-The skill collects the following inputs. Author name, author email, and the security contact are derived from `git config user.name` and `git config user.email`; halt with a blocker if those are unset.
+The skill collects the following inputs. Author name, author email, and the security contact are derived from `git config user.name` and `git config user.email`; halt with a blocker if those are unset. Author handle is resolved with `gh api user --jq .login`; when unavailable, prompt `Author GitHub handle (for author URL)?` with no default.
 
 | Prompt | Default | Notes |
 |---|---|---|
@@ -62,8 +62,9 @@ The skill collects the following inputs. Author name, author email, and the secu
 | `<primary-skill-name>` | — | optional; scaffolds `skills/<name>/SKILL.md` starter |
 | `<codeowner>` | `@<owner>` | written into `.github/CODEOWNERS` |
 | `<security-contact>` | from `git config user.email` | public repos only; written into `SECURITY.md` |
-| `<author-name>` | from `git config user.name` | written into `package.json` |
-| `<author-email>` | from `git config user.email` | written into `package.json` |
+| `<author-name>` | from `git config user.name` | written into every `author` block |
+| `<author-email>` | from `git config user.email` | written into every `author` block |
+| `<author-handle>` | from `gh api user --jq .login` | prompted if unavailable; written into `author.url` |
 | Continue.dev | no | opt-in secondary editor surface during agent-plugin mode |
 
 ## Core baseline
@@ -158,6 +159,7 @@ The skill does not recommend running any commands postinstall. Plugin enablement
 - **Workflow linting**: `.github/workflows/lint-actions.yml` runs `actionlint` on PRs that touch `.github/workflows/**` or `.github/actionlint.yaml`. Catches malformed refs, invalid expressions, permission mistakes, and (alongside our SHA-pin convention) supply-chain drift.
 - **GitHub Actions pinning**: every `uses:` in emitted workflows references a full 40-char commit SHA with a `# <action>@<version>` comment above it, rather than a mutable tag. Documented in `AGENTS.md`.
 - **Labels**: `AGENTS.md` directs contributors to use `gh label list` and the repository's label descriptions as the source of truth when labeling issues and PRs.
+- **Author identity**: `package.json`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` use the same human author record: name and email from `git config`, plus `https://github.com/<author-handle>` from `gh api user --jq .login` or the required author-handle prompt. Repository-level URLs (`homepage`, `repository`, and Codex interface URLs) continue to use `<owner>/<repo>`.
 - **Releases (agent-plugin mode)**: [`release-please`](https://github.com/googleapis/release-please) reads conventional commits since the last tag, opens a standing release PR that bumps `package.json` + both plugin manifests + `CHANGELOG.md`, and publishes a GitHub Release on merge. Semver level is derived from commit types; there is no manual patch/minor/major choice.
 - **Distribution via `patinaproject/skills` (agent-plugin mode, auto-detected)**: when the repo owner is `patinaproject`, the emitted release workflow also dispatches `plugin-release-bump.yml` on `patinaproject/skills` immediately after a release, so the marketplace surfaces the new tag without manual steps. Forks outside the org skip the step automatically. The dispatch is authenticated by an org-owned GitHub App (`patina-project-automation`) installed on `patinaproject/skills` only; org secrets `PATINAPROJECT_AUTOMATION_APP_ID` and `PATINAPROJECT_AUTOMATION_PRIVATE_KEY` are exposed to every plugin repo. Setup is one-time per org and documented in the emitted `RELEASING.md`.
 - **Version canonicalization**: `package.json` is the single source of truth for the plugin version. `scripts/sync-plugin-versions.mjs` rewrites `.claude-plugin/plugin.json` and `.codex-plugin/plugin.json` to match; `scripts/check-plugin-versions.mjs` enforces the lockstep via husky `pre-commit`.
@@ -245,7 +247,7 @@ Repository settings drift detected. Open:
 Proceed to apply via `gh api` (if available), or confirm after applying via UI?
 ```
 
-In realignment mode, report which check path was used (`gh`, `curl`, or `skipped`) and the full list of diverging fields. Never modify settings without explicit user confirmation.
+In realignment mode, report which check path was used (`gh`, `curl`, or `skipped`) and the full list of diverging fields. Never modify settings without explicit user confirmation. When package or plugin author URLs point to the repository owner instead of the resolved author handle, report the author block as divergent and offer the normal interactive rewrite.
 
 ### Reserved labels
 

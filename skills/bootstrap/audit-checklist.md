@@ -23,7 +23,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `commitlint.config.js` | yes | present; extends `@commitlint/config-conventional`; has `ticket-required` rule |
 | `.husky/commit-msg` | yes | present; runs `pnpm exec commitlint --edit "$1"` |
 | `.husky/pre-commit` | yes | present; runs `pnpm exec lint-staged` |
-| `package.json` | yes | present; has `version`; `packageManager: pnpm@10.x`; `engines.node >= 24`; scripts include `lint:md`, `check:versions`, `sync:versions`; `lint-staged` block for `*.md` |
+| `package.json` | yes | present; has `version`; `author.name`; `author.email`; `author.url`; `packageManager: pnpm@10.x`; `engines.node >= 24`; scripts include `lint:md`, `check:versions`, `sync:versions`; `lint-staged` block for `*.md` |
 | `pnpm-lock.yaml` | yes | present |
 | `scripts/check-plugin-versions.mjs` | yes | present; fails with non-zero exit on version drift |
 | `scripts/sync-plugin-versions.mjs` | yes | present; rewrites plugin manifests from `package.json` |
@@ -80,8 +80,8 @@ When detected, the following surfaces should all be present. Missing platforms a
 
 | File | Required (agent plugin) | Check |
 |---|---|---|
-| `.claude-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`; `version` matches `package.json` |
-| `.codex-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `skills`, `interface`; `version` matches `package.json` |
+| `.claude-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `author.name`, `author.email`, `author.url`, `skills`; `version` matches `package.json` |
+| `.codex-plugin/plugin.json` | yes | valid JSON; has `name`, `version`, `description`, `author.name`, `author.email`, `author.url`, `skills`, `interface`; `version` matches `package.json` |
 | `.github/copilot-instructions.md` | yes | present; references `AGENTS.md` |
 | `.github/workflows/release.yml` | yes | present; runs `release-please` on push to default branch |
 | `release-please-config.json` | yes | valid JSON; lists both plugin manifests under `extra-files` for version sync |
@@ -89,6 +89,8 @@ When detected, the following surfaces should all be present. Missing platforms a
 | `.cursor/rules/<repo>.mdc` | yes | present with frontmatter |
 | `.windsurfrules` | yes | present |
 | `skills/` | yes | directory exists with at least a `.gitkeep` or a skill subdirectory |
+
+Author URLs in `package.json`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` must point to the resolved `https://github.com/<author-handle>`, not the repository owner URL. Repository-level URLs such as `homepage`, `repository`, and Codex interface URLs stay on `https://github.com/<owner>/<repo>`.
 
 ## Area 6 — Superpowers opt-in
 
