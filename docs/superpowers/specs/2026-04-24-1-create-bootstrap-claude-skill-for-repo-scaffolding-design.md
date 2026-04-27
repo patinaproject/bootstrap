@@ -8,7 +8,7 @@ The enforced baseline mirrors `patinaproject/superteam`: a dual-plugin repositor
 
 ## Background
 
-Every new Patina project starts with the same setup work, and drift between repos is already visible. `superteam` has settled on a durable file structure, so `bootstrap` treats that structure as the canonical template and gives every new repo — and every retrofit — a single invocation to reach it.
+Every new Patina Project repo starts with the same setup work, and drift between repos is already visible. `superteam` has settled on a durable file structure, so `bootstrap` treats that structure as the canonical template and gives every new repo — and every retrofit — a single invocation to reach it.
 
 ## Non-goals
 
@@ -79,7 +79,7 @@ Opt-in secondary editors (prompted during agent-plugin mode):
 .continue/config.json               (Continue.dev)
 ```
 
-Planner reviews current docs for each platform (Claude Code, Codex, Opencode, Copilot, Cursor, Windsurf, Continue.dev) before templating and uses `patinaproject/superteam`'s file patterns as the Patina-idiomatic reference for Claude Code and Codex manifests.
+Planner reviews current docs for each platform (Claude Code, Codex, Opencode, Copilot, Cursor, Windsurf, Continue.dev) before templating and uses `patinaproject/superteam`'s file patterns as the Patina Project-idiomatic reference for Claude Code and Codex manifests.
 
 **Opt-in prompts** (independent of agent-plugin mode):
 
@@ -120,7 +120,7 @@ The skill prompts for (or infers) these values and templates them into emitted f
 
 ### Plugin enablement in emitted `.claude/settings.json`
 
-The emitted `.claude/settings.json` declares the canonical Patina plugins as enabled at the project level so anyone cloning the repo gets them on first Claude Code session without running install commands manually:
+The emitted `.claude/settings.json` declares the canonical Patina Project plugins as enabled at the project level so anyone cloning the repo gets them on first Claude Code session without running install commands manually:
 
 ```jsonc
 {
@@ -131,7 +131,7 @@ The emitted `.claude/settings.json` declares the canonical Patina plugins as ena
 }
 ```
 
-The Patina marketplace itself is typically user-level. The emitted `README.md` and `CLAUDE.md` include a one-line prerequisite:
+The Patina Project marketplace itself is typically user-level. The emitted `README.md` and `CLAUDE.md` include a one-line prerequisite:
 
 ```text
 /plugin marketplace add patinaproject/skills

@@ -1,6 +1,6 @@
 # Agent Spawn Template
 
-`bootstrap` is primarily a single-agent skill. This template exists for symmetry with other Patina skills and for cases where a host runtime delegates the realignment pass to a subagent.
+`bootstrap` is primarily a single-agent skill. This template exists for symmetry with other Patina Project skills and for cases where a host runtime delegates the realignment pass to a subagent.
 
 When spawning a subagent for `bootstrap`:
 

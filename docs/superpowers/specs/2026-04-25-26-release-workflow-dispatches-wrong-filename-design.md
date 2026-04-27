@@ -2,7 +2,7 @@
 
 ## Context
 
-The Patina supplement variant of `release.yml` emits a `notify-patinaproject-skills` job that, after a successful release, dispatches a workflow on `patinaproject/skills` to open a marketplace-bump PR for the new tag. The dispatch currently targets `bump-plugin-tags.yml`, but the actual workflow file on `patinaproject/skills` is `plugin-release-bump.yml`. The mismatch was discovered during v1.0.0 recovery (issue #18): manual `gh workflow run bump-plugin-tags.yml --repo patinaproject/skills ...` returned HTTP 404, while `plugin-release-bump.yml` succeeded.
+The Patina Project supplement variant of `release.yml` emits a `notify-patinaproject-skills` job that, after a successful release, dispatches a workflow on `patinaproject/skills` to open a marketplace-bump PR for the new tag. The dispatch currently targets `bump-plugin-tags.yml`, but the actual workflow file on `patinaproject/skills` is `plugin-release-bump.yml`. The mismatch was discovered during v1.0.0 recovery (issue #18): manual `gh workflow run bump-plugin-tags.yml --repo patinaproject/skills ...` returned HTTP 404, while `plugin-release-bump.yml` succeeded.
 
 Left unfixed, every future release from `patinaproject/bootstrap` will fail the notify step and require manual operator action to open the marketplace-bump PR on `patinaproject/skills`.
 
@@ -28,7 +28,7 @@ Pure rename. No behavior change, no permission change, no token change.
 2. **Root mirror** — Apply the identical change to `.github/workflows/release.yml` so the root tracks the template.
 3. **Doc alignment** — Update the operator-facing references to the dispatched workflow filename so they match the template. In scope:
    - `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md`
-   - `skills/bootstrap/templates/core/RELEASING.md` (shared paragraph describing Patina auto-dispatch)
+   - `skills/bootstrap/templates/core/RELEASING.md` (shared paragraph describing Patina Project auto-dispatch)
    - `RELEASING.md` (mirrored root)
    - `skills/bootstrap/SKILL.md` (describes the supplement's notify job)
    - `skills/bootstrap/audit-checklist.md` (if it names the filename as part of a check)
@@ -40,7 +40,7 @@ Pure rename. No behavior change, no permission change, no token change.
 
 The `notify-patinaproject-skills` job dispatches `plugin-release-bump.yml` on `patinaproject/skills`.
 
-- **Given** the Patina supplement variant of `release.yml` is in effect on `patinaproject/bootstrap` and the `release-please` job reports `release_created == 'true'` for some tag `vX.Y.Z`,
+- **Given** the Patina Project supplement variant of `release.yml` is in effect on `patinaproject/bootstrap` and the `release-please` job reports `release_created == 'true'` for some tag `vX.Y.Z`,
 - **When** the `notify-patinaproject-skills` job runs the `benc-uk/workflow-dispatch` step,
 - **Then** the step posts to `POST /repos/patinaproject/skills/actions/workflows/plugin-release-bump.yml/dispatches` with inputs `{"plugin":"bootstrap","tag":"vX.Y.Z"}`, the call returns HTTP 204, and a corresponding run appears in `gh run list --workflow=plugin-release-bump.yml --repo patinaproject/skills`.
 

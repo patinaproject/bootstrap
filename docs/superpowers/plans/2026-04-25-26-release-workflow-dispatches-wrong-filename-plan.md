@@ -4,7 +4,7 @@
 
 Implements the design at
 [`docs/superpowers/specs/2026-04-25-26-release-workflow-dispatches-wrong-filename-design.md`](../specs/2026-04-25-26-release-workflow-dispatches-wrong-filename-design.md).
-The Patina supplement of `release.yml` dispatches `bump-plugin-tags.yml` on
+The Patina Project supplement of `release.yml` dispatches `bump-plugin-tags.yml` on
 `patinaproject/skills`, but the workflow on that repo is
 `plugin-release-bump.yml`. Pure rename through the templates-first loop, with
 matching updates to current operator-facing docs that name the dispatched
