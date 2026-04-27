@@ -87,7 +87,7 @@ state that Release Please opens release PRs from releasable Conventional Commit
 types, and that misclassifying product changes as `docs:` can cause a no-op
 release run and skip downstream marketplace bump automation. It should document
 the default bump mapping used by the baseline: `fix:` creates a patch release,
-`feat:` creates a minor release, and `feat!:` or a `BREAKING CHANGE:` footer
+`feat:` creates a minor release, and `<type>!:` or a `BREAKING CHANGE:` footer
 creates a major release. It should also say that other types, including
 `docs:` and `chore:`, do not bump versions under the baseline unless Release
 Please configuration changes later. The guidance should be prescriptive:

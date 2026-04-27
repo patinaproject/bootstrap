@@ -111,7 +111,7 @@ Determined from releasable Conventional Commit types — no human choice:
 
 - `fix:` → patch
 - `feat:` → minor
-- `feat!:` or `BREAKING CHANGE:` footer → major
+- `<type>!:` or `BREAKING CHANGE:` footer → major
 - `docs:`, `chore:`, and other non-releasable types → no version bump under this baseline
 
 If a change should produce a release, do not use a non-bumping type. For example, a Markdown-only edit to `skills/**/SKILL.md` that changes installed skill behavior should use `feat:` or `fix:`, not `docs:`.
