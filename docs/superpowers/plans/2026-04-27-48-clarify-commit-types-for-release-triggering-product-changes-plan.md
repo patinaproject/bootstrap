@@ -104,7 +104,7 @@ explain that Release Please can no-op when product changes are misclassified as
 Run:
 
 ```bash
-rg -n "no version bump|If a change should produce a release|misclassified as `docs:`|marketplace bump" skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
+rg -n 'no version bump|If a change should produce a release|misclassified as `docs:`|marketplace bump' skills/bootstrap/templates/core/RELEASING.md skills/bootstrap/templates/patinaproject-supplement/RELEASING.md
 ```
 
 Expected: both files include the no-bump rule, release-worthy warning, and
@@ -130,7 +130,7 @@ and accept the proposed root diff so root generated files match the templates.
 Run:
 
 ```bash
-rg -n "Commit type selection|product/runtime changes by default|no version bump|must not use non-bumping|misclassified as `docs:`" AGENTS.md CONTRIBUTING.md RELEASING.md README.md .github/copilot-instructions.md
+rg -n 'Commit type selection|product/runtime changes by default|no version bump|must not use non-bumping|misclassified as `docs:`' AGENTS.md CONTRIBUTING.md RELEASING.md README.md .github/copilot-instructions.md
 ```
 
 Expected: the root files contain the same commit-type and release-mapping
