@@ -1,4 +1,4 @@
-# Use the author's identity in emitted manifests Implementation Plan
+# Plan: Use the author's identity (name, email, GitHub URL), not the organization, in emitted manifests [#35](https://github.com/patinaproject/bootstrap/issues/35)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
