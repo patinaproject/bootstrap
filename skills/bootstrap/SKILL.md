@@ -124,15 +124,15 @@ The agent-plugin `README.md.tmpl` is richer than the core one: it includes insta
 
 Aider, Zed, Cline, Codex CLI, and Opencode read `AGENTS.md` natively and are covered by the core baseline — no dedicated surface needed. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
 
-### Patina organization supplement
+### Patina Project organization supplement
 
-When the target repo's owner is `patinaproject`, the skill replaces the agent-plugin `.github/workflows/release.yml` with the supplement at `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`. The supplement adds a `notify-patinaproject-skills` job that dispatches `plugin-release-bump.yml` on `patinaproject/skills` after each release. Non-Patina repos get the clean base workflow without any Patina-specific plumbing.
+When the target repo's owner is `patinaproject`, the skill replaces the agent-plugin `.github/workflows/release.yml` with the supplement at `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`. The supplement adds a `notify-patinaproject-skills` job that dispatches `plugin-release-bump.yml` on `patinaproject/skills` after each release. Repos outside Patina Project get the clean base workflow without any Patina Project-specific plumbing.
 
 Detection is done at scaffold time from `git remote get-url origin` (or the configured `<owner>` prompt). The base workflow does not carry dead `if:` gates.
 
 ## Plugin enablement
 
-The emitted `.claude/settings.json` enables the canonical Patina plugins at the project level:
+The emitted `.claude/settings.json` enables the canonical Patina Project plugins at the project level:
 
 ```jsonc
 {

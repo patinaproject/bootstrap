@@ -3,10 +3,10 @@
 ## Context
 
 The repo currently mixes the complete company name, `Patina Project`, with
-shortened company-display prose such as `Patina marketplace`, `Patina plugins`,
-`outside Patina`, and `Patina-specific secret`. That shortened wording appears
-in root docs, emitted templates, the bootstrap skill contract, plugin metadata,
-and some historical Superpowers artifacts.
+shortened company-display prose in marketplace, plugin, baseline, release, and
+organization-supplement wording. That shortened wording appears in root docs,
+emitted templates, the bootstrap skill contract, plugin metadata, and some
+historical Superpowers artifacts.
 
 The change is wording-only, but it touches the bootstrap baseline. Repository
 guidance makes `skills/bootstrap/templates/**` the source of truth for emitted
@@ -15,16 +15,15 @@ baseline files, so generated root mirrors must stay aligned with the templates.
 ## Decision
 
 Use `Patina Project` for company-display prose throughout current repository
-content. Preserve `patina` and `Patina` when they are part of a different
+content. Preserve `patina` and capitalized product terms when they are part of a different
 semantic category:
 
 - repository owner, package, plugin, marketplace, URL, email-domain, file path,
   environment-variable, or workflow identifiers such as `patinaproject`,
   `patinaproject/skills`, `patina-project-automation`, and
   `PATINAPROJECT_*`;
-- product/domain terms such as material patina, Patina Gallery, Patina
-  Thunderdome, or other named features where `Patina` is not shorthand for the
-  company;
+- product/domain terms such as material patina, gallery products, contest names,
+  or other named features where the word is not shorthand for the company;
 - quoted issue titles, historical release notes, or generated identifiers where
   changing the text would rewrite record identity rather than current prose.
 
@@ -39,12 +38,12 @@ verify that no shortened company-display wording remains.
    untouched. This minimizes churn, but leaves public repository text that still
    violates the naming rule.
 2. **Comprehensive prose audit.** Update every current repository prose surface
-   where `Patina` is shorthand for the company, including historical
+   where the shortened name is shorthand for the company, including historical
    Superpowers artifacts when the sentence still reads as general company
    guidance. Preserve identifiers and product names. This satisfies the issue
    most directly, with a small amount of documentation churn.
-3. **Automated global replacement.** Replace `Patina ` with `Patina Project `
-   broadly and fix breakage afterward. This is too risky because `Patina`
+3. **Automated global replacement.** Replace the shortened company name with
+   `Patina Project` broadly and fix breakage afterward. This is too risky because it
    appears in product names, issue titles, generated route names, and domain
    concepts.
 
@@ -53,11 +52,10 @@ wording while keeping identifier and product-name boundaries explicit.
 
 ## Requirements
 
-- R1: Company-display prose uses `Patina Project`, not shortened `Patina`.
+- R1: Company-display prose uses `Patina Project`, not the shortened company name.
 - R2: Identifiers, slugs, domains, email addresses, URLs, environment variables,
   file paths, workflow names, and plugin IDs are preserved.
-- R3: Product/domain names such as Patina Gallery and Patina Thunderdome are
-  preserved.
+- R3: Product/domain names such as gallery products and contest names are preserved.
 - R4: Template-owned root baseline files are changed from template sources first
   and mirrored into the repo root in the same branch.
 - R5: Historical Superpowers docs are updated only when the wording is ordinary
@@ -68,9 +66,8 @@ wording while keeping identifier and product-name boundaries explicit.
 
 ## Acceptance Criteria
 
-- AC-46-1: Given a public-facing docs or template sentence refers to the company
-  as `Patina`, when the wording is updated, then it uses `Patina Project`
-  instead.
+- AC-46-1: Given a public-facing docs or template sentence uses the shortened
+  company name, when the wording is updated, then it uses `Patina Project`.
 - AC-46-2: Given a lowercase identifier, domain, URL, environment variable, or
   product/domain term contains `patina`, when the audit is performed, then that
   identifier is preserved unless it is explicitly company display text.
@@ -80,9 +77,9 @@ wording while keeping identifier and product-name boundaries explicit.
 
 ## Implementation Shape
 
-1. Search for company-display candidates with targeted patterns such as
-   `Patina marketplace`, `Patina plugins`, `Patina baseline`, `outside Patina`,
-   `Patina-specific`, `Non-Patina`, and `canonical Patina`.
+1. Search for company-display candidates with targeted patterns that cover
+   marketplace, plugin, baseline, organization-supplement, fork, and
+   company-specific wording.
 2. Update source templates under `skills/bootstrap/templates/**` before changing
    corresponding root files.
 3. Update root mirrors and skill docs so the current repo reads consistently.
@@ -94,7 +91,7 @@ wording while keeping identifier and product-name boundaries explicit.
 
 - Renaming `patinaproject` slugs, plugin IDs, package names, email domains,
   URLs, environment variables, workflow names, or GitHub App names.
-- Renaming product/domain terms such as Patina Gallery, Patina Thunderdome, or
+- Renaming product/domain terms such as gallery products, contest names, or
   patina as material aging.
 - Changing release behavior, marketplace dispatch behavior, or bootstrap
   realignment mechanics.

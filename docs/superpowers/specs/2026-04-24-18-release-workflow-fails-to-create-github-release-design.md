@@ -16,7 +16,7 @@ No `v1.0.0` tag was cut, no GitHub Release was published, and the `notify-patina
 
 This is the same observable end-state as issue [#16](https://github.com/patinaproject/bootstrap/issues/16) (closed by `fb1f7c1`, which restored the `push: branches: [main]` trigger). The prior fix got the second workflow run to fire; the failure has now moved one step later, to the `POST /repos/.../releases` call itself. The repo-level default `GITHUB_TOKEN` is read-only, and the workflow-level `permissions: contents: write` declaration is being capped by the org/repo default, so release-please is denied when it tries to create the release.
 
-Beyond unblocking this specific release, the `bootstrap` skill is supposed to be the source of truth for every Patina repo's baseline config. Today its templates document only the "Allow Actions to create PRs" prerequisite and stop short of the full permissions + tag-protection story needed for the release-and-tag step to actually succeed. Any repo scaffolded from `bootstrap` today will hit the same 403 on its first release. And when we fix this here, the fix must land in `skills/bootstrap/templates/**` first and be mirrored into the repo root via the local skill's realignment mode — otherwise the next bootstrapped repo regresses.
+Beyond unblocking this specific release, the `bootstrap` skill is supposed to be the source of truth for every Patina Project repo's baseline config. Today its templates document only the "Allow Actions to create PRs" prerequisite and stop short of the full permissions + tag-protection story needed for the release-and-tag step to actually succeed. Any repo scaffolded from `bootstrap` today will hit the same 403 on its first release. And when we fix this here, the fix must land in `skills/bootstrap/templates/**` first and be mirrored into the repo root via the local skill's realignment mode — otherwise the next bootstrapped repo regresses.
 
 ## Goals
 
@@ -63,7 +63,7 @@ Codify that `skills/bootstrap/templates/**` is the authoritative source of truth
 Two layers together, in order of preference:
 
 1. **Repo + job-level workflow permissions.** Set **Settings → Actions → General → Workflow permissions → Read and write permissions** on `patinaproject/bootstrap`, keep **Allow GitHub Actions to create and approve pull requests** on, and declare `permissions:` at the **job** level in `release.yml` (not only at the workflow level). Workflow-level `permissions:` are an upper bound; job-level `permissions:` are what the runner presents to GitHub. Some org policies cap the workflow-level value below the job-level declaration, and the job-level scope is what release-please actually runs under. Declaring it at both levels removes the ambiguity.
-2. **PAT / GitHub App fallback when org policy caps repo defaults.** If org policy prevents raising repo-level workflow permissions to read + write, the fallback is a dedicated PAT or GitHub App installation token with `contents: write` and `pull-requests: write`, stored as an org-level secret, and passed to `release-please-action` via `with: token:` instead of the default `GITHUB_TOKEN`. This path is documented in `RELEASING.md` but is not the default code path — the default remains `secrets.GITHUB_TOKEN`, because forks in other orgs should not need to provision a Patina-specific secret to release.
+2. **PAT / GitHub App fallback when org policy caps repo defaults.** If org policy prevents raising repo-level workflow permissions to read + write, the fallback is a dedicated PAT or GitHub App installation token with `contents: write` and `pull-requests: write`, stored as an org-level secret, and passed to `release-please-action` via `with: token:` instead of the default `GITHUB_TOKEN`. This path is documented in `RELEASING.md` but is not the default code path — the default remains `secrets.GITHUB_TOKEN`, because forks in other orgs should not need to provision a Patina Project-specific secret to release.
 
 The workflow file changes minimally: add `permissions:` at the job level and a code comment explaining why both levels are set. No behavior change for repos whose org policy already allows read + write.
 
@@ -102,12 +102,12 @@ As in #16, recovery runs once and is not worth automating. Ship it as a manual r
 ## Open questions
 
 - Should this repo use the `GITHUB_TOKEN` + elevated repo/org permissions path, or adopt a GitHub App token as the default? Default path stays `GITHUB_TOKEN` in the design, but if the `patinaproject` org policy is known to cap repo defaults, the plan stage may need to pick the App-token path as primary. Needs confirmation from the org admin.
-- Does `patinaproject/skills` (and any other existing Patina plugin repo) already have repo workflow permissions set to read + write? If not, a companion task may be needed to realign them before their next release — noted as a potential follow-up, not this PR's scope.
+- Does `patinaproject/skills` (and any other existing Patina Project plugin repo) already have repo workflow permissions set to read + write? If not, a companion task may be needed to realign them before their next release — noted as a potential follow-up, not this PR's scope.
 - Does `release-please-action@v4.4.1` need any additional inputs (e.g. `release-type`, `target-branch`) to retry against PR #9's existing merged state, or will a fresh `workflow_dispatch` "just work" once permissions are fixed? Plan stage should validate against release-please docs before declaring the recovery runbook final.
 
 ## Out of scope
 
 - Automating the one-shot v1.0.0 recovery. It ships as a manual runbook in the PR body, consistent with #16's approach.
-- Retroactive realignment of other Patina plugin repos. Tracked as a follow-up.
+- Retroactive realignment of other Patina Project plugin repos. Tracked as a follow-up.
 - Adding tag signing to release-please or to the org ruleset. The design only ensures no ruleset change silently breaks unsigned-tag creation.
 - Auditing non-release workflows for the same job-level `permissions:` pattern. If a follow-up shows other workflows hit the same cap, handle it separately.

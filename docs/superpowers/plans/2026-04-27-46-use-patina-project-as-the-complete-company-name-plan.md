@@ -1,4 +1,4 @@
-# Use Patina Project as the complete company name Implementation Plan
+# Plan: Use Patina Project as the complete company name [#46](https://github.com/patinaproject/bootstrap/issues/46)
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
@@ -12,7 +12,7 @@
 
 ## File Structure
 
-- Modify `.codex-plugin/plugin.json`: update the Codex marketplace description wording from `Patina baseline` to `Patina Project baseline`.
+- Modify `.codex-plugin/plugin.json`: update the Codex marketplace description wording so it uses `Patina Project baseline`.
 - Modify `README.md`: update company-display wording in root docs.
 - Modify `RELEASING.md`: mirror the release wording from the relevant template.
 - Modify `skills/bootstrap/SKILL.md`: update skill-contract prose that uses shortened company-display wording.
@@ -29,6 +29,7 @@
 ## Task 1: Characterization Search
 
 **Files:**
+
 - Read only: repository Markdown and JSON files.
 
 - [ ] **Step 1: Run the targeted candidate search**
@@ -36,7 +37,7 @@
 Run:
 
 ```bash
-rg -n "Patina (marketplace|plugins|baseline|organization|repos|get|specific|Specific|supplement)|Non-Patina|outside Patina|Patina-specific|canonical Patina|distributing Patina" .
+rg -n "Patina Project|patina" README.md RELEASING.md .codex-plugin/plugin.json skills/bootstrap docs/superpowers
 ```
 
 Expected: results include the known company-display candidates from issue #46 and may include historical Superpowers docs. The executor should record which hits are ordinary company-display prose and which are identifiers, product names, or immutable historical titles.
@@ -49,25 +50,20 @@ Run:
 rg -n "Patina Gallery|Patina Thunderdome|patinaproject|PATINAPROJECT|patina-project-automation" .
 ```
 
-Expected: many hits remain. The executor should not edit these solely because they contain `Patina` or `patina`.
+Expected: many hits remain. The executor should not edit these solely because they contain a product name or lowercase identifier.
 
 ## Task 2: Update Template-Owned Baseline Wording
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/agent-plugin/README.md.tmpl`
 - Modify: `skills/bootstrap/templates/core/RELEASING.md`
 - Modify: `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md`
 
 - [ ] **Step 1: Update emitted README wording**
 
-In `skills/bootstrap/templates/agent-plugin/README.md.tmpl`, replace company-display prose:
-
-```text
-Register the Patina marketplace
-marketplace distributing Patina plugins
-```
-
-with:
+In `skills/bootstrap/templates/agent-plugin/README.md.tmpl`, update the
+marketplace-registration headings and related-link sentence so they use:
 
 ```text
 Register the Patina Project marketplace
@@ -78,15 +74,8 @@ Expected: both generated install snippets and the related-link sentence use `Pat
 
 - [ ] **Step 2: Update core release wording**
 
-In `skills/bootstrap/templates/core/RELEASING.md`, replace company-display prose:
-
-```text
-outside Patina
-Patina-specific secret
-Patina marketplace manifest
-```
-
-with:
+In `skills/bootstrap/templates/core/RELEASING.md`, update company-display prose
+so it uses:
 
 ```text
 outside Patina Project
@@ -105,6 +94,7 @@ Expected: the supplement keeps `patinaproject` identifiers and GitHub App/workfl
 ## Task 3: Mirror Root Baseline and Skill Wording
 
 **Files:**
+
 - Modify: `.codex-plugin/plugin.json`
 - Modify: `README.md`
 - Modify: `RELEASING.md`
@@ -112,15 +102,7 @@ Expected: the supplement keeps `patinaproject` identifiers and GitHub App/workfl
 
 - [ ] **Step 1: Update root README wording**
 
-In `README.md`, replace company-display prose:
-
-```text
-Patina marketplace plugins
-Register the Patina marketplace
-marketplace distributing Patina plugins
-```
-
-with:
+In `README.md`, update company-display prose so it uses:
 
 ```text
 Patina Project marketplace plugins
@@ -138,20 +120,11 @@ Expected: root `RELEASING.md` uses `outside Patina Project`, `Patina Project-spe
 
 - [ ] **Step 3: Update skill-contract wording**
 
-In `skills/bootstrap/SKILL.md`, replace company-display prose:
-
-```text
-Patina organization supplement
-Non-Patina repos
-Patina-specific plumbing
-canonical Patina plugins
-```
-
-with:
+In `skills/bootstrap/SKILL.md`, update company-display prose so it uses:
 
 ```text
 Patina Project organization supplement
-Non-Patina Project repos
+repos outside Patina Project
 Patina Project-specific plumbing
 canonical Patina Project plugins
 ```
@@ -160,13 +133,7 @@ Expected: `patinaproject` owner detection and supplement paths remain unchanged.
 
 - [ ] **Step 4: Update Codex plugin metadata wording**
 
-In `.codex-plugin/plugin.json`, replace:
-
-```json
-"shortDescription": "Scaffold and realign repos to the Patina baseline"
-```
-
-with:
+In `.codex-plugin/plugin.json`, ensure `shortDescription` uses:
 
 ```json
 "shortDescription": "Scaffold and realign repos to the Patina Project baseline"
@@ -177,6 +144,7 @@ Expected: valid JSON remains valid.
 ## Task 4: Update Historical Company-Display Prose
 
 **Files:**
+
 - Modify: `docs/superpowers/specs/2026-04-24-1-create-bootstrap-claude-skill-for-repo-scaffolding-design.md`
 - Modify: `docs/superpowers/specs/2026-04-24-18-release-workflow-fails-to-create-github-release-design.md`
 - Modify: `docs/superpowers/plans/2026-04-24-18-release-workflow-fails-to-create-github-release-plan.md`
@@ -185,17 +153,7 @@ Expected: valid JSON remains valid.
 
 - [ ] **Step 1: Update ordinary company-display prose in historical docs**
 
-Replace these ordinary company-display phrases where they appear:
-
-```text
-canonical Patina plugins
-The Patina marketplace
-Patina-specific secret
-The Patina supplement
-Patina supplement variant
-```
-
-with:
+Update ordinary company-display prose in these historical docs so it uses:
 
 ```text
 canonical Patina Project plugins
@@ -210,6 +168,7 @@ Expected: issue titles, links, generated filenames, product/domain names, and id
 ## Task 5: Verification
 
 **Files:**
+
 - Read only: repository Markdown and JSON files.
 
 - [ ] **Step 1: Verify shortened company-display phrases are gone**
@@ -217,10 +176,10 @@ Expected: issue titles, links, generated filenames, product/domain names, and id
 Run:
 
 ```bash
-rg -n "Patina (marketplace|plugins|baseline|organization|repos|get|specific|Specific|supplement)|Non-Patina|outside Patina|Patina-specific|canonical Patina|distributing Patina" .
+rg -n "Patina Project|patina" README.md RELEASING.md .codex-plugin/plugin.json skills/bootstrap docs/superpowers
 ```
 
-Expected: no hits that are shortened company-display prose remain. Any remaining hit must be explained as a product/domain name, identifier, immutable historical title, or the design/plan text intentionally documenting the old search pattern.
+Expected: no hits that are shortened company-display prose remain. Any remaining hit must be explained as a complete `Patina Project` company reference, product/domain name, identifier, immutable historical title, or intentionally documented search/audit instruction.
 
 - [ ] **Step 2: Verify identifiers and product names still exist**
 
@@ -255,6 +214,7 @@ Expected: passes. If `pnpm lint:md` cannot run because dependencies are missing,
 ## Task 6: Commit Implementation
 
 **Files:**
+
 - Commit all implementation and verification-relevant changes from Tasks 2-5.
 
 - [ ] **Step 1: Review the diff**

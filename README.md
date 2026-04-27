@@ -2,7 +2,7 @@
 
 Scaffold a new repository — or realign an existing one — to the Patina Project baseline. One invocation, consistent conventions, portable across every major AI coding tool.
 
-Bootstrap is a Claude Code + Codex plugin distributed through the [`patinaproject/skills`](https://github.com/patinaproject/skills) marketplace. It ships a single skill that scaffolds a complete Patina-baseline repository (commit + PR conventions, PNPM + Husky + markdownlint, agent docs, plugin manifests, release flow, GitHub repo settings) and keeps existing repos aligned with the latest baseline on rerun.
+Bootstrap is a Claude Code + Codex plugin distributed through the [`patinaproject/skills`](https://github.com/patinaproject/skills) marketplace. It ships a single skill that scaffolds a complete Patina Project baseline repository (commit + PR conventions, PNPM + Husky + markdownlint, agent docs, plugin manifests, release flow, GitHub repo settings) and keeps existing repos aligned with the latest baseline on rerun.
 
 ## How bootstrap works
 
@@ -46,7 +46,7 @@ flowchart TD
 - **GitHub Actions SHA pinning** — every `uses:` references a full commit SHA with a version comment; policy documented in `AGENTS.md`.
 - **PNPM toolchain** — `packageManager: pnpm@10.33.2`, `engines.node >=24`, `.nvmrc`, `.gitattributes`, `.editorconfig`.
 - **Agent + repo docs** — `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `SECURITY.md` (public only), `README.md`, `docs/file-structure.md`.
-- **Claude Code project settings** — `.claude/settings.json` with `enabledPlugins` declaring Patina marketplace plugins.
+- **Claude Code project settings** — `.claude/settings.json` with `enabledPlugins` declaring Patina Project marketplace plugins.
 - **CODEOWNERS + issue/PR templates** under `.github/`.
 
 ### AI agent plugin add-ons
@@ -88,7 +88,7 @@ Bootstrap ships as a Claude Code + Codex plugin. Other supported editors read th
 
 ### Claude Code
 
-1. Register the Patina marketplace:
+1. Register the Patina Project marketplace:
 
    ```text
    /plugin marketplace add patinaproject/skills
@@ -108,7 +108,7 @@ Bootstrap ships as a Claude Code + Codex plugin. Other supported editors read th
 
 ### OpenAI Codex CLI
 
-1. Register the Patina marketplace:
+1. Register the Patina Project marketplace:
 
    ```bash
    codex plugin marketplace add patinaproject/skills
@@ -257,4 +257,4 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`AGENTS.md`](./AGENTS.md). The r
 - [`skills/bootstrap/audit-checklist.md`](./skills/bootstrap/audit-checklist.md) — realignment checklist.
 - [`docs/file-structure.md`](./docs/file-structure.md) — layout reference.
 - [`patinaproject/superteam`](https://github.com/patinaproject/superteam) — sibling plugin whose layout bootstrap enforces.
-- [`patinaproject/skills`](https://github.com/patinaproject/skills) — marketplace distributing Patina plugins.
+- [`patinaproject/skills`](https://github.com/patinaproject/skills) — marketplace distributing Patina Project plugins.
