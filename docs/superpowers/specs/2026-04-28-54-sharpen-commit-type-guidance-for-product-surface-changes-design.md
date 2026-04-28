@@ -88,6 +88,16 @@ enforcement, and does not retroactively re-type past commits.
   then it selects a release-triggering type (`feat:` or `fix:`) rather
   than `docs:` or `chore:`.
 
+  **GREEN-phase verification step (the implementer must perform this
+  before claiming AC-54-1):** dispatch at least one cold-context
+  subagent against a synthetic skill-edit diff (e.g. a one-line wording
+  change to `skills/bootstrap/SKILL.md`) and ask it to choose a commit
+  type using only the updated guidance. Record the chosen type and the
+  agent's reasoning verbatim in the PR body. If the cold-context
+  subagent picks `feat:` or `fix:` without prompting, AC-54-1 is met.
+  If it picks `docs:`/`chore:`, the guidance still has a leak; iterate
+  before merge.
+
 - **AC-54-2**: Given the guidance is shipped through
   `skills/bootstrap/templates/**`, when the local `bootstrap` skill is run
   against this repo in realignment mode, then this repo's own root config
@@ -99,9 +109,13 @@ enforcement, and does not retroactively re-type past commits.
   (`.cursor/rules/{{repo}}.mdc`, `.windsurfrules`,
   `.github/copilot-instructions.md`, plus any `agent-plugin` README/AGENTS
   template that summarizes commit rules), when commit-type guidance
-  appears, then each surface names the product-surface rule and points to
-  the canonical decision table in `AGENTS.md` so an agent that only loads
-  one surface still picks the correct type.
+  appears on a surface, then that surface contains all four of the
+  following elements: (a) the verbatim product-surface glob list (matching
+  AC-54-6), (b) the one-sentence path-first rule ("any diff touching one
+  of these globs uses `feat:` or `fix:`"), (c) at least one concrete
+  WRONG → RIGHT example, and (d) a link to the canonical
+  "Commit type selection" section in `AGENTS.md` for the full
+  rationalization table.
 
 - **AC-54-4** (new): Given an agent considers a rationalization (e.g.
   "Markdown only", "wording alignment", "just a template", "non-goals
@@ -119,11 +133,15 @@ enforcement, and does not retroactively re-type past commits.
 
 - **AC-54-6** (new): Given the canonical "Commit type selection" section
   in `AGENTS.md` (and its `CONTRIBUTING.md.tmpl` mirror), when the section
-  is read, then it lists the product surfaces by path glob — `skills/**`,
+  is read, then **the product-surface path-glob list and the
+  one-sentence path-first rule appear FIRST in the section, before the
+  type table**, and the glob list contains: `skills/**`,
   `skills/bootstrap/templates/**`, `.claude-plugin/**`,
   `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`,
   `.github/copilot-instructions.md`, `.github/workflows/**`,
-  `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md` — so the
+  `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`,
+  `.github/LABELS.md`, `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`,
+  `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl` — so the
   agent can match its diff against a concrete list rather than a verbal
   category.
 
@@ -132,9 +150,39 @@ enforcement, and does not retroactively re-type past commits.
   template edit lands first under `skills/bootstrap/templates/**`, root
   files (`AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`,
   `.cursor/rules/*.mdc`, `.windsurfrules`, plus any agent-plugin template
-  README) are realigned via the bootstrap skill in realignment mode, and
-  the realignment commit is tied to the same issue (`#54`) so both sides
-  are visible in one PR.
+  README) are realigned via the bootstrap skill in realignment mode, the
+  realignment commit is tied to the same issue (`#54`) so both sides are
+  visible in one PR, **and** round-trip parity is verified by running the
+  following one-liner and pasting its output (which must be empty) in the
+  PR body's `Validation` section:
+
+  ```bash
+  # Parity check: the canonical glob list must appear verbatim on every
+  # surface. Run from repo root. Empty output = pass.
+  for f in \
+    AGENTS.md \
+    skills/bootstrap/templates/core/AGENTS.md.tmpl \
+    CONTRIBUTING.md \
+    skills/bootstrap/templates/core/CONTRIBUTING.md.tmpl \
+    .github/copilot-instructions.md \
+    skills/bootstrap/templates/agent-plugin/.github/copilot-instructions.md \
+    .cursor/rules/*.mdc \
+    skills/bootstrap/templates/agent-plugin/.cursor/rules/*.mdc \
+    .windsurfrules \
+    skills/bootstrap/templates/agent-plugin/.windsurfrules ; do
+    grep -q 'skills/\*\*' "$f" && \
+    grep -q '\.claude-plugin/\*\*' "$f" && \
+    grep -q '\.codex-plugin/\*\*' "$f" && \
+    grep -q '\.windsurfrules' "$f" && \
+    grep -q 'copilot-instructions\.md' "$f" \
+      || echo "MISSING glob list in: $f"
+  done
+  ```
+
+  This check verifies the glob list is present on all six per-tool
+  surfaces plus their templates. It does not enforce wording of the
+  full canonical sentence (that remains a reviewer judgement), but it
+  closes the leak where a surface silently omits the path list.
 
 - **AC-54-8** (meta-example, new): Given the implementation PR for issue
   #54 itself changes shipped agent-facing instructions in
@@ -142,6 +190,18 @@ enforcement, and does not retroactively re-type past commits.
   authored, then the implementation commits use `feat:` (the very rule
   being sharpened), while a pure design-doc commit such as this one uses
   `docs:`. The PR body must call this out as a worked example.
+
+  **Carve-out justification for `docs/superpowers/specs/**`:** these
+  files are brainstormer-output artifacts. They are read once by a
+  Planner subagent in the same workflow that produced them, never
+  shipped to downstream consumers, never installed by the bootstrap
+  skill, and never referenced by any plugin manifest under
+  `.claude-plugin/` or `.codex-plugin/`. They are not part of any
+  agent-instruction surface that a bootstrapped repo inherits. The
+  path-first rule treats them as non-product, and `docs:` is the
+  correct type for spec edits. (By contrast, `AGENTS.md` IS shipped
+  through the bootstrap templates and IS a product surface; that
+  asymmetry is the whole point.)
 
 ## Failure-mode analysis
 
@@ -151,7 +211,7 @@ modes, with the planted counter:
 | # | Failure mode | Why current guidance fails | Counter required |
 |---|--------------|----------------------------|------------------|
 | 1 | "It's just Markdown" | The table says behavior expressed in Markdown counts, but the agent reads its own diff and sees text changes. | Anchor the rule to **path globs**, not "behavior". If the diff touches one of the listed globs, the type is `feat:` / `fix:` unless a named exception applies. Path is verifiable; "behavior" is judgment. |
-| 2 | "Explanatory-only" escape hatch | The qualifier "unless explanatory-only and does not alter installed behavior" is self-selected. | Replace with a positive test: `docs:` only applies to files that are NOT under a product-surface glob (e.g. `docs/**`, `README.md`). Inside a product-surface glob, `docs:` requires an explicit "explanatory-only" call-out in the PR body and reviewer sign-off. Default is `feat:` / `fix:`. |
+| 2 | "Explanatory-only" escape hatch | The qualifier "unless explanatory-only and does not alter installed behavior" is self-selected. | **Delete the qualifier entirely. There is no escape hatch.** Replace with a hard, path-only rule: `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs. If any file in the diff is under a product-surface glob, the type is `feat:` or `fix:` — full stop, no PR-body call-out, no reviewer sign-off, no "but this one is explanatory" override. Reviewers do not have authority to grant the exception because no exception exists. |
 | 3 | Surface fragmentation | `.cursor`, `.windsurfrules`, `copilot-instructions.md` give a one-line summary that omits the rationalizations and the path-glob list. | Each per-tool surface must include the product-surface glob list and a single WRONG → RIGHT example, or must inline-link to the canonical `AGENTS.md` section with the explicit instruction "read this before classifying any commit that touches a tracked path". |
 
 ## Considered approaches
@@ -219,11 +279,16 @@ should enumerate them as task-level acceptance criteria.
 The current "explanatory-only" qualifier is the primary loophole. The
 design closes it by:
 
-- Inverting the default: inside product-surface globs, `feat:` / `fix:` is
-  the default. `docs:` requires an explicit explanatory-only call-out
-  in the PR body.
-- Removing self-selectable language ("clearly", "does not alter installed
-  skill behavior"). Replace with the path-glob test.
+- **Deleting the qualifier outright.** There is no "default", no
+  "unless", and no PR-body / reviewer override. The rule is a hard
+  path-only test: if the diff touches any product-surface glob, the
+  commit type is `feat:` or `fix:`. Otherwise `docs:` / `chore:` are
+  available.
+- Removing all self-selectable language ("clearly", "does not alter
+  installed skill behavior", "explanatory-only"). The path-glob test is
+  the only test.
+- Removing reviewer-discretion language. Reviewers do not have
+  authority to grant an exception because no exception exists.
 
 ### Rationalization table (planted in canonical section)
 
@@ -233,7 +298,7 @@ design closes it by:
 | "I'm only aligning wording with the source of truth." | If the source of truth is itself a product surface (skill, template, agent instruction), wording IS behavior. Use `feat:`. |
 | "It's just a template change." | Templates under `skills/bootstrap/templates/**` ship to every bootstrapped repo on the next realignment. They are product. Use `feat:` / `fix:`. |
 | "I'm only adding a non-goal or an example to a skill." | Examples and non-goals on a `SKILL.md` change how the skill is interpreted by agents. Product. `feat:`. |
-| "I'm fixing a typo in a skill body." | If the typo affects how the skill is read or executed, `fix:`. If it is a comment-only spelling fix on a non-shipped file, `chore:`. Default to `fix:` when unsure. |
+| "I'm fixing a typo in a skill body." | Path-only rule: any edit inside `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, or `.github/copilot-instructions.md` is `fix:` when correcting wrong shipped content and `feat:` when adding or changing shipped content. Do not assess "whether it affects how the skill is read" — the path test already settled it. `chore:` is only available when the diff touches zero product-surface globs. |
 | "It's a plugin manifest version bump." | Release-please owns version bumps under `chore: release X.Y.Z`. Hand-editing a manifest version outside that flow is a `fix:` (lockstep correction) or a release-PR commit, never `docs:`. |
 | "I'm rewording an agent instruction." | Agent instructions ARE the contract. `feat:`. |
 | "It's a markdown-lint cleanup with no semantic change." | Allowed as `chore:` only if zero product-surface globs are touched. If any product-surface glob is touched, `feat:` (or `fix:` if the lint fix corrected wrong shipped content). |
@@ -248,14 +313,18 @@ The canonical section must end with a STOP block:
 > - You are about to commit `docs:` or `chore:` but `git diff --name-only`
 >   shows a file under `skills/**`, `.claude-plugin/**`,
 >   `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`,
->   `.github/copilot-instructions.md`,
->   `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, or
->   `.github/pull_request_template.md`.
+>   `.github/copilot-instructions.md`, `.github/workflows/**`,
+>   `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`,
+>   `.github/LABELS.md`, `AGENTS.md`, `AGENTS.md.tmpl`,
+>   `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, or
+>   `RELEASING.md.tmpl`.
 > - Your commit message says "align", "standardize", "clarify", "rename",
 >   "rewrite", or "rework" AND the diff touches a product-surface glob.
-> - You are using `docs:` for a change to `AGENTS.md`,
->   `CONTRIBUTING.md`, or `RELEASING.md` that adds or changes a rule
->   (vs. only restating an existing rule).
+> - You are using `docs:` or `chore:` for any change to `AGENTS.md`,
+>   `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`,
+>   `RELEASING.md`, or `RELEASING.md.tmpl`. These files are agent-facing
+>   and contributor-facing contracts — every edit is `feat:` (new or
+>   changed rule) or `fix:` (corrected wrong rule).
 
 ### Token-efficiency targets
 
@@ -274,7 +343,8 @@ The canonical section must end with a STOP block:
 |---------|------|
 | `skills/bootstrap/templates/core/AGENTS.md.tmpl` | Canonical decision table, rationalization table, red flags, WRONG → RIGHT pairs, product-surface glob list. |
 | `skills/bootstrap/templates/core/CONTRIBUTING.md.tmpl` | Mirror of the canonical decision table + product-surface glob list (CONTRIBUTING is contributor-facing, AGENTS is agent-facing; both ship). |
-| `skills/bootstrap/templates/core/RELEASING.md` | Cross-link to AGENTS / CONTRIBUTING; explain that mistyped commits silently suppress releases. |
+| `skills/bootstrap/templates/core/RELEASING.md` (and `RELEASING.md.tmpl`) | Cross-link to AGENTS / CONTRIBUTING; explain that mistyped commits silently suppress releases. |
+| `.github/LABELS.md` (and its template under `skills/bootstrap/templates/**`) | Listed in the product-surface glob set. Edits use `feat:`/`fix:` per the path-only rule. No special ownership beyond inclusion. |
 | `skills/bootstrap/templates/agent-plugin/.cursor/rules/{{repo}}.mdc` | Short rule + glob list + one WRONG → RIGHT + link to canonical. |
 | `skills/bootstrap/templates/agent-plugin/.windsurfrules` | Same as cursor. |
 | `skills/bootstrap/templates/agent-plugin/.github/copilot-instructions.md` | Same as cursor. |
@@ -289,8 +359,8 @@ counter:
 |--------|---------|
 | Agent commits with `docs:` and squashes into a PR titled `feat:`. | PR-title-lint already exists. Squash inherits PR title. Acceptable. |
 | Agent commits multiple changes, types the commit by the "biggest" change. | Commit-by-impact rule already in place. Add explicit guidance: if any file in the diff is on a product-surface glob, the commit type is at least `feat:`. |
-| Agent uses `docs:` and adds an explanatory-only call-out in PR body even though the change is behavioral. | Reviewer responsibility. Document in PR template guidance: explanatory-only call-out requires the PR reviewer to confirm the diff does not change shipped behavior. (If we add a checkbox, it stays human-judged — no CI.) |
-| Agent edits root `AGENTS.md` directly without round-tripping through the template. | Already covered by the templates-first rule in `AGENTS.md`. The Planner must add a verification step: every implementation task that touches a templated root file must show a corresponding template edit in the same commit set. |
+| Agent uses `docs:` and adds an explanatory-only call-out in PR body even though the change is behavioral. | Not available. The escape hatch is deleted; there is no "explanatory-only call-out" option. PR template MUST NOT include any reviewer-grant checkbox for this — see LOW-3 disposition. |
+| Agent edits root `AGENTS.md` directly without round-tripping through the template. | Round-trip parity is verified by the AC-54-7 grep one-liner, whose output must be pasted in the PR body's `Validation` section. An empty grep output is the verification artifact; the Planner does not need to invent a separate check. |
 
 ## Round-trip discipline
 
@@ -303,6 +373,10 @@ For AC-54-2 and AC-54-7:
    referencing `#54`.
 5. PR body explicitly references the templates-first / realignment loop
    so reviewers see both halves.
+6. Run the AC-54-7 parity grep one-liner from the repo root and paste
+   its output (which must be empty) into the PR body's `Validation`
+   section. Non-empty output is a hard blocker — the listed surface(s)
+   missed the glob list and must be updated before merge.
 
 The implementation commits are themselves a worked example of the rule
 they ship: the template edit and the root mirror both touch product
@@ -445,6 +519,138 @@ adversarial_review_findings:
       baseline as part of the verification narrative for AC-54-1.
 ```
 
-**Adversarial review status:** `findings dispositioned`. All seven
-findings are addressed in the requirements / rationalization table /
-round-trip discipline sections. No blockers.
+```yaml
+adversarial_review_findings_round_2:
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: high
+    location: failure-mode-counter-row-2 + rationalization-typo-row
+    finding: |
+      Design claimed to remove the "explanatory-only" escape hatch but
+      reintroduced it twice: (a) failure-mode row 2 said docs: inside
+      product-surface globs requires "explanatory-only call-out + reviewer
+      sign-off", which IS the escape hatch relabeled; (b) the typo
+      rationalization-table row preserved agent judgement ("if the typo
+      affects how the skill is read") on the very file class the
+      design's path-first thesis covers.
+    disposition: |
+      Closed both. Failure-mode row 2 now states explicitly: docs:/chore:
+      apply iff the diff touches zero product-surface globs; no PR-body
+      call-out, no reviewer override, no exception exists. Loophole-closure
+      section rewritten to match. Rationalization typo row tightened to a
+      pure path-only rule: any edit inside skills/**, .claude-plugin/**,
+      .codex-plugin/**, .cursor/**, .windsurfrules, or
+      .github/copilot-instructions.md is fix: when correcting wrong shipped
+      content and feat: when adding/changing it; the "affects how skill is
+      read" qualifier is removed. Stage-gate-bypass row 3 ("agent uses docs:
+      with explanatory call-out") updated to "Not available."
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: high
+    location: AC-54-7
+    finding: |
+      AC-54-7 named a verification mechanism (round-trip parity) but did
+      not design one. An implementer could satisfy AC-54-7 by writing the
+      words "templates-first loop" in the PR body while still missing the
+      glob list on one of the four per-tool surfaces.
+    disposition: |
+      Closed. AC-54-7 now embeds a concrete grep-based parity one-liner
+      that checks every per-tool surface and template for the verbatim
+      glob list. Empty output is the verification artifact; the
+      implementer must paste it in the PR body's Validation section. The
+      Round-trip discipline section adds step 6 making this mandatory and
+      a hard blocker.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: medium
+    location: AC-54-3
+    finding: |
+      AC-54-3 only required per-tool surfaces to "name the rule and point
+      to canonical." An implementer could satisfy it by leaving the
+      existing one-liner and adding a link, which the failure-mode
+      analysis says is insufficient.
+    disposition: |
+      Closed. AC-54-3 now enumerates four required elements per surface:
+      (a) verbatim product-surface glob list, (b) one-sentence path-first
+      rule, (c) at least one WRONG -> RIGHT example, (d) link to canonical
+      AGENTS.md section. This matches the Role-ownership table.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: medium
+    location: AC-54-6
+    finding: |
+      AC-54-6 omitted .github/LABELS.md (touched by RED-baseline commits
+      0b6ebf0 and d6fe7d5) and AGENTS.md / CONTRIBUTING.md / RELEASING.md
+      and their .tmpl counterparts. Red-flags bullet 3 partially patched
+      this but reintroduced "adds or changes a rule" judgement,
+      inconsistent with the path-first thesis.
+    disposition: |
+      Closed. AC-54-6 glob list extended to include .github/LABELS.md,
+      AGENTS.md, AGENTS.md.tmpl, CONTRIBUTING.md, CONTRIBUTING.md.tmpl,
+      RELEASING.md, RELEASING.md.tmpl. Red-flags bullet 3 rewritten to
+      drop the "adds or changes a rule" qualifier — every edit to those
+      files is feat: or fix: by path. Role-ownership table extended to
+      include LABELS.md.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: medium
+    location: AC-54-8
+    finding: |
+      The design types its own commit docs: under
+      docs/superpowers/specs/**, but per the path-first thesis design docs
+      themselves are agent-instruction product. The carve-out was implied
+      but not justified.
+    disposition: |
+      Justified explicitly under AC-54-8. Spec files are
+      brainstormer-output artifacts, read once by a Planner subagent in
+      the same workflow, never shipped to consumers, never installed by
+      bootstrap, never referenced by any plugin manifest. They are not on
+      any agent-instruction surface a bootstrapped repo inherits. The
+      path-first rule treats them as non-product; docs: is correct.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: low
+    location: canonical-section-ordering
+    finding: |
+      No explicit ordering requirement for where the glob list and
+      path-first rule appear in the canonical section.
+    disposition: |
+      Closed. AC-54-6 now requires the glob list and one-sentence
+      path-first rule to appear FIRST in the "Commit type selection"
+      section, before the type table.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: low
+    location: GREEN-followup
+    finding: |
+      No GREEN follow-up for the cold-context subagent pressure test.
+    disposition: |
+      Closed. AC-54-1 now includes a GREEN-phase verification step: the
+      implementer dispatches at least one cold-context subagent against a
+      synthetic skill-edit diff and records the chosen commit type and
+      reasoning in the PR body.
+  - source: adversarial-review
+    reviewer_context: fresh subagent
+    severity: low
+    location: PR-template-language
+    finding: |
+      The earlier disposition softly suggested "Planner should consider"
+      a PR-template addition. Ambiguous given the no-escape-hatch posture.
+    disposition: |
+      Closed by removing the suggestion implicitly: with the escape hatch
+      deleted, no PR-template checkbox is needed or wanted. Stage-gate-
+      bypass row 3 explicitly forbids any reviewer-grant checkbox. The
+      PR template's existing Validation section already accommodates
+      pasting the AC-54-7 grep output; no new template field is added.
+```
+
+**Adversarial review status:** `findings dispositioned`.
+**Reviewer context:** fresh subagent.
+**Dimensions re-checked:** loophole closure, rationalization-table
+internal consistency, glob-list completeness vs. RED-baseline commits,
+canonical-section ordering, AC-54-7 verification mechanism, AC-54-8
+carve-out justification, PR-template alignment with the no-escape-hatch
+posture. All seven original brainstormer findings remain dispositioned;
+all eight new fresh-context findings are closed (six material + two
+LOW). Two HIGH findings (escape-hatch leakage, AC-54-7 mechanism) are
+fully closed in the requirements / failure-mode / round-trip sections.
