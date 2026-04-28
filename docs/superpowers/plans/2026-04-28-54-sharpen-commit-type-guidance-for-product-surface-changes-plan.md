@@ -99,7 +99,7 @@ Example — wording standardization across plugin manifests, skill bodies, and t
 Full rationalization table and red flags: see [`AGENTS.md` "Commit type selection"](/AGENTS.md#commit-type-selection).
 ````
 
-The `{{repo}}.mdc` template uses `[\`AGENTS.md\` "Commit type selection"](/AGENTS.md#commit-type-selection)` as the link form. The `.windsurfrules` and `.github/copilot-instructions.md` templates use the same anchor with their existing relative paths (`AGENTS.md` and `../AGENTS.md` respectively). The verbatim glob bullet list is identical across all three surfaces — the AC-54-7 grep parity check enforces this.
+The `{{repo}}.mdc` template uses `[\`AGENTS.md\` "Commit type selection"](/AGENTS.md#commit-type-selection)` as the link form. The `.windsurfrules` and `.github/copilot-instructions.md`templates use the same anchor with their existing relative paths (`AGENTS.md` and `../AGENTS.md` respectively). The verbatim glob bullet list is identical across all three surfaces — the AC-54-7 grep parity check enforces this.
 
 ## Round-trip parity grep (AC-54-7)
 
@@ -181,6 +181,7 @@ Workstreams W1 → W5 run sequentially because the round-trip discipline require
 ### Task T1.1: RED — write the parity-check grep and confirm it currently fails
 
 **Files:**
+
 - Read: `skills/bootstrap/templates/core/AGENTS.md.tmpl` (current state, lacks lead glob list).
 
 - [ ] **Step 1: Run the AC-54-7 grep one-liner against current `main`-equivalent state**
@@ -217,6 +218,7 @@ Save the grep output to a scratch file or paste into the eventual PR body's `Val
 ### Task T1.2: GREEN — rewrite canonical section in `AGENTS.md.tmpl`
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/core/AGENTS.md.tmpl` (replace lines 104-117 inclusive — the existing "Commit type selection" subsection).
 
 - [ ] **Step 1: Replace the section body**
@@ -242,6 +244,7 @@ Expected: empty output. Any hit means the loophole is still present and the file
 ### Task T1.3: GREEN — mirror lead block in `CONTRIBUTING.md.tmpl`
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/core/CONTRIBUTING.md.tmpl` (existing "Choose the commit type by product impact" block at line 26).
 
 - [ ] **Step 1: Replace the section**
@@ -259,6 +262,7 @@ Expected: empty.
 ### Task T1.4: GREEN — mirror canonical section in `skills/bootstrap/SKILL.md`
 
 **Files:**
+
 - Modify: `skills/bootstrap/SKILL.md` (lines 104-117).
 
 - [ ] **Step 1: Replace the section**
@@ -276,6 +280,7 @@ Expected: empty.
 ### Task T1.5: GREEN — per-tool surface templates (AC-54-3, four-element block)
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/agent-plugin/.cursor/rules/{{repo}}.mdc`
 - Modify: `skills/bootstrap/templates/agent-plugin/.windsurfrules`
 - Modify: `skills/bootstrap/templates/agent-plugin/.github/copilot-instructions.md`
@@ -309,6 +314,7 @@ Expected: each file outputs `3` (or higher if globs appear elsewhere). Mismatche
 ### Task T1.6: GREEN — bootstrap skill audit-checklist + pr-body-template
 
 **Files:**
+
 - Modify: `skills/bootstrap/audit-checklist.md`
 - Modify: `skills/bootstrap/pr-body-template.md`
 
@@ -331,6 +337,7 @@ Add a Validation-section reminder line:
 ### Task T1.7: GREEN — `RELEASING.md` cross-link
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/core/RELEASING.md` (near line 124, "Determined from releasable Conventional Commit types — no human choice").
 
 - [ ] **Step 1: Add a one-sentence cross-link**
