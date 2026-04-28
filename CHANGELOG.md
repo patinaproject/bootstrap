@@ -1,5 +1,14 @@
 # Changelog
 
+## [1.4.0](https://github.com/patinaproject/bootstrap/compare/v1.3.0...v1.4.0) (2026-04-28)
+
+
+### Features
+
+* [#54](https://github.com/patinaproject/bootstrap/issues/54) sharpen commit-type guidance for product surfaces ([#59](https://github.com/patinaproject/bootstrap/issues/59)) ([9878cdc](https://github.com/patinaproject/bootstrap/commit/9878cdc2976ca6683468961f0eadb281ccbaef63))
+* [#55](https://github.com/patinaproject/bootstrap/issues/55) sharpen bootstrap skill via skill-improver loop ([#60](https://github.com/patinaproject/bootstrap/issues/60)) ([54c6e25](https://github.com/patinaproject/bootstrap/commit/54c6e25ecc0191bbc332001d1cb4647f4397327d))
+* [#56](https://github.com/patinaproject/bootstrap/issues/56) remove LABELS.md from bootstrap baseline ([#57](https://github.com/patinaproject/bootstrap/issues/57)) ([8d69e27](https://github.com/patinaproject/bootstrap/commit/8d69e2747f4b1bdd617630ec635bce746f311d59))
+
 ## [1.3.0](https://github.com/patinaproject/bootstrap/compare/v1.2.0...v1.3.0) (2026-04-27)
 
 
