@@ -23,7 +23,7 @@ Examples:
 - `feat: #42 add audit mode`
 - `docs: #17 clarify install steps`
 
-Pick the commit type by **path**, not by file extension. If any file in the diff matches one of the product-surface globs below, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`.
+Pick the commit type by **path**, not by file extension. If any file in the diff matches one of the product-surface globs below, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`.
 
 **Product-surface globs:**
 
@@ -34,7 +34,7 @@ Pick the commit type by **path**, not by file extension. If any file in the diff
 - `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`
 - `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl`
 
-**Path-first rule:** If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`. `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs.
+**Path-first rule:** If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`. `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs.
 
 | Change | Type |
 |--------|------|
@@ -61,10 +61,10 @@ pnpm lint:md
 
 - Keep the PR title in commitlint format.
 - Fill in the [PR template](./.github/pull_request_template.md).
-- Include an `Acceptance Criteria` section when the linked issue defines ACs.
+- Include an `Acceptance criteria` section when the linked issue defines ACs.
 
 ## Further reading
 
-- [`AGENTS.md`](./AGENTS.md) — shared workflow contract.
-- [`CLAUDE.md`](./CLAUDE.md) — Claude Code–specific guidance.
-- [`docs/file-structure.md`](./docs/file-structure.md) — repository layout reference.
+- [`AGENTS.md`](./AGENTS.md) – shared workflow contract.
+- [`CLAUDE.md`](./CLAUDE.md) – Claude Code–specific guidance.
+- [`docs/file-structure.md`](./docs/file-structure.md) – repository layout reference.

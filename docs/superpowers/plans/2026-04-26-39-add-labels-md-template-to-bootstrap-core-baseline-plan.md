@@ -4,21 +4,21 @@
 
 **Goal:** Ship a parser-compatible `.github/LABELS.md` from the `bootstrap` skill (core + agent-plugin variants) and reconcile this repo's own root file via realignment, in one PR.
 
-**Architecture:** Two whole-file templates at the conventional locations. The core template covers non-plugin repos. The agent-plugin variant is a whole-file override (same shape + a `### Release-please (tool-managed)` subsection inserted between the `## Labels` table and `## Adding or changing labels`). The bootstrap emitter already resolves agent-plugin overrides as whole-file replacements — see `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` and the agent-plugin `.github/workflows/release.yml` for the existing precedent. The audit checklist gains one row for parser-shape compliance. The repo-root `AGENTS.md` "Source of truth for repo baseline" list gains `.github/LABELS.md`. Finally, the local skill is run in realignment mode against this repo so the root `.github/LABELS.md` is regenerated from the new template.
+**Architecture:** Two whole-file templates at the conventional locations. The core template covers non-plugin repos. The agent-plugin variant is a whole-file override (same shape + a `### Release-please (tool-managed)` subsection inserted between the `## Labels` table and `## Adding or changing labels`). The bootstrap emitter already resolves agent-plugin overrides as whole-file replacements – see `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` and the agent-plugin `.github/workflows/release.yml` for the existing precedent. The audit checklist gains one row for parser-shape compliance. The repo-root `AGENTS.md` "Source of truth for repo baseline" list gains `.github/LABELS.md`. Finally, the local skill is run in realignment mode against this repo so the root `.github/LABELS.md` is regenerated from the new template.
 
 **Tech Stack:** Markdown templates, husky + markdownlint-cli2, `gh` CLI for label inventory verification, the local `bootstrap` skill for self-realignment.
 
-**Composition mechanism note:** Design doc D2 specifies mid-file composition for the agent-plugin overlay. The existing bootstrap emitter does not implement mid-file composition or sentinel-marker inserts — every "supplement" in `skills/bootstrap/templates/` (the only precedent being `patinaproject-supplement/`) is a whole-file replacement at the same relative path. This plan therefore implements the agent-plugin overlay as **option (c) whole-file override** at `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl`. The duplication is one nine-row table; acceptable per the parent's guidance. The agent-plugin file embeds the Release-please subsection between the table and the trailing section, satisfying AC-39-3's structural requirements.
+**Composition mechanism note:** Design doc D2 specifies mid-file composition for the agent-plugin overlay. The existing bootstrap emitter does not implement mid-file composition or sentinel-marker inserts – every "supplement" in `skills/bootstrap/templates/` (the only precedent being `patinaproject-supplement/`) is a whole-file replacement at the same relative path. This plan therefore implements the agent-plugin overlay as **option (c) whole-file override** at `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl`. The duplication is one nine-row table; acceptable per the parent's guidance. The agent-plugin file embeds the Release-please subsection between the table and the trailing section, satisfying AC-39-3's structural requirements.
 
 ---
 
 ## File map
 
-- Create: `skills/bootstrap/templates/core/.github/LABELS.md.tmpl` — parser-compatible LABELS.md for non-plugin repos. (T-39-1)
-- Create: `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl` — whole-file override for agent-plugin repos; identical to the core file plus a `### Release-please (tool-managed)` subsection. (T-39-2)
-- Modify: `skills/bootstrap/audit-checklist.md` — add a parser-shape row under "Area 2 — GitHub metadata". (T-39-3)
-- Modify: `AGENTS.md` (repo root) — add `.github/LABELS.md` to the "Covered files" bullet list under "Source of truth for repo baseline". (T-39-4)
-- Modify: `.github/LABELS.md` (repo root) — regenerate from the new agent-plugin template via the local bootstrap skill in realignment mode. (T-39-5)
+- Create: `skills/bootstrap/templates/core/.github/LABELS.md.tmpl` – parser-compatible LABELS.md for non-plugin repos. (T-39-1)
+- Create: `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl` – whole-file override for agent-plugin repos; identical to the core file plus a `### Release-please (tool-managed)` subsection. (T-39-2)
+- Modify: `skills/bootstrap/audit-checklist.md` – add a parser-shape row under "Area 2 – GitHub metadata". (T-39-3)
+- Modify: `AGENTS.md` (repo root) – add `.github/LABELS.md` to the "Covered files" bullet list under "Source of truth for repo baseline". (T-39-4)
+- Modify: `.github/LABELS.md` (repo root) – regenerate from the new agent-plugin template via the local bootstrap skill in realignment mode. (T-39-5)
 - Verify: `.github/LABELS.md` (repo root) parser shape per the audit-checklist row added in T-39-3. (T-39-6)
 
 Per-task ATDD detail follows. Tasks are ordered so each one is independently verifiable; commit at the end of each task.
@@ -77,7 +77,7 @@ Expected:
 
 - `## Labels` appears exactly once.
 - `| Name | Description |` appears exactly once.
-- The third command prints the first column values in order: `bug`, `documentation`, `duplicate`, `enhancement`, `goodfirstissue`, `helpwanted`, `invalid`, `question`, `wontfix` — alphabetically sorted, with `bug` and `enhancement` both present.
+- The third command prints the first column values in order: `bug`, `documentation`, `duplicate`, `enhancement`, `goodfirstissue`, `helpwanted`, `invalid`, `question`, `wontfix` – alphabetically sorted, with `bug` and `enhancement` both present.
 
 - [ ] **Step 3: Lint the file with markdownlint**
 
@@ -106,7 +106,7 @@ git commit -m "feat: #39 add core LABELS.md template for bootstrap"
 
 - Create: `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl`
 
-**Why this file:** The agent-plugin tree gets its own LABELS.md so the Release-please subsection ships only for repos that actually run release-please. The bootstrap emitter resolves this as a whole-file replacement of the core file (precedent: `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` replaces the core RELEASING.md whole-file). The structural shape — single `## Labels` heading, single `| Name |` table, alphabetical first column, `### Release-please (tool-managed)` subsection placed after the table and before `## Adding or changing labels` — satisfies AC-39-3 without breaking the parser.
+**Why this file:** The agent-plugin tree gets its own LABELS.md so the Release-please subsection ships only for repos that actually run release-please. The bootstrap emitter resolves this as a whole-file replacement of the core file (precedent: `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` replaces the core RELEASING.md whole-file). The structural shape – single `## Labels` heading, single `| Name |` table, alphabetical first column, `### Release-please (tool-managed)` subsection placed after the table and before `## Adding or changing labels` – satisfies AC-39-3 without breaking the parser.
 
 - [ ] **Step 1: Write the template file**
 
@@ -155,7 +155,7 @@ grep -n "^## Labels$\|^### Release-please (tool-managed)$\|^## Adding or changin
 
 Expected:
 
-- First two commands each print `1` (single `## Labels` heading and single `| Name |` header row — parser invariant preserved).
+- First two commands each print `1` (single `## Labels` heading and single `| Name |` header row – parser invariant preserved).
 - Third command prints three lines whose line numbers are strictly increasing in this order: `## Labels`, `### Release-please (tool-managed)`, `## Adding or changing labels`.
 
 - [ ] **Step 3: Lint the file with markdownlint**
@@ -185,11 +185,11 @@ git commit -m "feat: #39 add agent-plugin LABELS.md template with release-please
 
 - Modify: `skills/bootstrap/audit-checklist.md`
 
-**Why this file:** The audit checklist is the canonical source for what realignment mode walks. AC-39-5 requires `.github/LABELS.md` presence and parser-shape compliance to be a checked item under "Area 2 — GitHub metadata". Per design D3, the check is shape compliance, not row-content equivalence.
+**Why this file:** The audit checklist is the canonical source for what realignment mode walks. AC-39-5 requires `.github/LABELS.md` presence and parser-shape compliance to be a checked item under "Area 2 – GitHub metadata". Per design D3, the check is shape compliance, not row-content equivalence.
 
 - [ ] **Step 1: Insert the new row into Area 2**
 
-In `skills/bootstrap/audit-checklist.md`, locate the "Area 2 — GitHub metadata" table. Insert a new row immediately after the `.github/CODEOWNERS` row (so all `.github/*.md` and `.github/*.yaml`-style metadata files stay grouped before the `workflows/` rows).
+In `skills/bootstrap/audit-checklist.md`, locate the "Area 2 – GitHub metadata" table. Insert a new row immediately after the `.github/CODEOWNERS` row (so all `.github/*.md` and `.github/*.yaml`-style metadata files stay grouped before the `workflows/` rows).
 
 The exact line to insert (using the table's existing column layout):
 
@@ -234,7 +234,7 @@ git commit -m "docs: #39 audit LABELS.md presence and parser shape"
 
 - Modify: `AGENTS.md` (repo root)
 
-**Why this file:** Per design D5, `.github/LABELS.md` must be in the "Covered files" bullet list under `## Source of truth for repo baseline` so future hand-edits to the root file are blocked by the workflow contract. Note: `skills/bootstrap/templates/core/AGENTS.md.tmpl` does **not** currently contain this section — the "Source of truth" block is bootstrap-repo-specific and lives only at the repo root. (Verified via `grep -n "Source of truth" skills/bootstrap/templates/core/AGENTS.md.tmpl` returning no matches.) So the only edit needed for D5 is at the root `AGENTS.md`.
+**Why this file:** Per design D5, `.github/LABELS.md` must be in the "Covered files" bullet list under `## Source of truth for repo baseline` so future hand-edits to the root file are blocked by the workflow contract. Note: `skills/bootstrap/templates/core/AGENTS.md.tmpl` does **not** currently contain this section – the "Source of truth" block is bootstrap-repo-specific and lives only at the repo root. (Verified via `grep -n "Source of truth" skills/bootstrap/templates/core/AGENTS.md.tmpl` returning no matches.) So the only edit needed for D5 is at the root `AGENTS.md`.
 
 - [ ] **Step 1: Read the current "Covered files" block**
 
@@ -262,7 +262,7 @@ Run:
 grep -n "^- \`.github/" AGENTS.md
 ```
 
-Expected: four lines, in order — `.github/workflows/*`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.github/copilot-instructions.md`, `.github/LABELS.md`. (Five total `.github/*` bullets.)
+Expected: four lines, in order – `.github/workflows/*`, `.github/ISSUE_TEMPLATE/*`, `.github/pull_request_template.md`, `.github/copilot-instructions.md`, `.github/LABELS.md`. (Five total `.github/*` bullets.)
 
 - [ ] **Step 4: Lint the file with markdownlint**
 
@@ -289,7 +289,7 @@ git commit -m "docs: #39 add LABELS.md to source-of-truth covered files"
 
 **Files:**
 
-- Modify: `.github/LABELS.md` (repo root) — replace the current bullet-list shape with the table shape emitted by `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl`. This repo is itself an agent plugin (it ships `.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`), so the agent-plugin variant is the correct source.
+- Modify: `.github/LABELS.md` (repo root) – replace the current bullet-list shape with the table shape emitted by `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl`. This repo is itself an agent plugin (it ships `.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`), so the agent-plugin variant is the correct source.
 
 **Why this file:** The "Source of truth for repo baseline" rule requires the template change and the mirrored root change to ship in the same PR. The current root file is a bullet list and would itself trip the `/github-flows:new-issue` parser; D4 makes converting it to the table shape part of this issue.
 
@@ -308,7 +308,7 @@ Then answer prompts as follows:
 - When prompted with `Action? (accept / skip / defer)` for the `.github/LABELS.md` recommendation, answer `accept`.
 - For all other files in this realignment pass, answer `skip` (this PR is scoped to issue #39; out-of-scope baseline drift is not in scope here).
 
-If the skill asks for `<owner>` / `<repo>` / agent-plugin detection, accept the autodetected values (`patinaproject` / `bootstrap` / yes — verifiable with `git remote get-url origin` and the presence of `.claude-plugin/`).
+If the skill asks for `<owner>` / `<repo>` / agent-plugin detection, accept the autodetected values (`patinaproject` / `bootstrap` / yes – verifiable with `git remote get-url origin` and the presence of `.claude-plugin/`).
 
 If `/bootstrap` is unavailable or the skill cannot be invoked from this Claude Code session, fall back to manually copying the agent-plugin template into place:
 
@@ -316,7 +316,7 @@ If `/bootstrap` is unavailable or the skill cannot be invoked from this Claude C
 cp skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl .github/LABELS.md
 ```
 
-The template currently contains no `{{...}}` placeholders that need substitution at emit time, so a literal copy is byte-for-byte equivalent to what the skill would emit for this repo. (Verify with `grep -c '{{' skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl` — expected output: `0`.)
+The template currently contains no `{{...}}` placeholders that need substitution at emit time, so a literal copy is byte-for-byte equivalent to what the skill would emit for this repo. (Verify with `grep -c '{{' skills/bootstrap/templates/agent-plugin/.github/LABELS.md.tmpl` – expected output: `0`.)
 
 - [ ] **Step 2: Verify the regenerated root file matches the template**
 
@@ -373,7 +373,7 @@ Expected:
 - First line: `present: yes`.
 - Second command: `1` (exactly one `## Labels` heading).
 - Third command: one match whose row text begins with `| Name |`.
-- Fourth command: prints the first-column names in order — `bug`, `documentation`, `duplicate`, `enhancement`, `goodfirstissue`, `helpwanted`, `invalid`, `question`, `wontfix`. The list is alphabetical and includes both `bug` and `enhancement`.
+- Fourth command: prints the first-column names in order – `bug`, `documentation`, `duplicate`, `enhancement`, `goodfirstissue`, `helpwanted`, `invalid`, `question`, `wontfix`. The list is alphabetical and includes both `bug` and `enhancement`.
 
 If any check fails, STOP. Re-run T-39-5 to regenerate, then redo this step. Do not paper over a failure by hand-editing the root file.
 
@@ -396,7 +396,7 @@ grep -c "^## Labels$" .github/LABELS.md
 grep -c "^| Name |" .github/LABELS.md
 ```
 
-Expected: both print `1`. (The Release-please subsection must not introduce a duplicate `## Labels` heading or a second table — this is the parser invariant from AC-39-3.)
+Expected: both print `1`. (The Release-please subsection must not introduce a duplicate `## Labels` heading or a second table – this is the parser invariant from AC-39-3.)
 
 - [ ] **Step 4: Manual AC-39-2 spot-check (optional but recommended)**
 

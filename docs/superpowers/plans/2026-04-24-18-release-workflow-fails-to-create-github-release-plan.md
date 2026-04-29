@@ -16,9 +16,9 @@ This plan implements the design at [`docs/superpowers/specs/2026-04-24-18-releas
 
 ## Resolutions to open questions
 
-1. **Default token path (AC-18-1, AC-18-4).** Keep `secrets.GITHUB_TOKEN` as the default path. The current repo default (`gh api repos/patinaproject/bootstrap/actions/permissions/workflow` → `{"default_workflow_permissions":"read"}`) is repo-scoped, not org-policy-capped — a repo admin can raise it. The PAT/App fallback stays documented in `RELEASING.md` for restrictive orgs. **Caveat — needs operator confirmation before execution:** if `patinaproject` org policy later caps the repo default, Executor must switch the default to an App token; record this decision in the PR body's Validation section if it applies.
-2. **`release-please-action` retry semantics.** The action is manifest-driven: `.release-please-manifest.json` already reads `{".":"1.0.0"}` (written by merged PR #9), so a fresh `workflow_dispatch` will **not** re-create `v1.0.0` — release-please believes `1.0.0` is already released. Recovery is a one-shot manual step: create the `v1.0.0` tag + GitHub Release directly (using the merge commit of PR #9 as the target) and relabel PR #9 from `autorelease: pending` to `autorelease: tagged`. No manifest rollback — that would diverge from the CHANGELOG and produce a confusing second `v1.0.0` PR. Recovery runbook lives in the PR body's Validation section (Task R1).
-3. **AC-18-9 ownership.** Audit phase, not realignment phase. The static checks (`default_workflow_permissions == read`, tag-ruleset signature requirement) are classification-time reads against GitHub state, which belongs in `skills/bootstrap/audit-checklist.md` (Area 2 — GitHub metadata) and surfaces through the existing realignment batch for "GitHub metadata". This matches how Area 7 (repo merge settings) is already structured.
+1. **Default token path (AC-18-1, AC-18-4).** Keep `secrets.GITHUB_TOKEN` as the default path. The current repo default (`gh api repos/patinaproject/bootstrap/actions/permissions/workflow` → `{"default_workflow_permissions":"read"}`) is repo-scoped, not org-policy-capped – a repo admin can raise it. The PAT/App fallback stays documented in `RELEASING.md` for restrictive orgs. **Caveat – needs operator confirmation before execution:** if `patinaproject` org policy later caps the repo default, Executor must switch the default to an App token; record this decision in the PR body's Validation section if it applies.
+2. **`release-please-action` retry semantics.** The action is manifest-driven: `.release-please-manifest.json` already reads `{".":"1.0.0"}` (written by merged PR #9), so a fresh `workflow_dispatch` will **not** re-create `v1.0.0` – release-please believes `1.0.0` is already released. Recovery is a one-shot manual step: create the `v1.0.0` tag + GitHub Release directly (using the merge commit of PR #9 as the target) and relabel PR #9 from `autorelease: pending` to `autorelease: tagged`. No manifest rollback – that would diverge from the CHANGELOG and produce a confusing second `v1.0.0` PR. Recovery runbook lives in the PR body's Validation section (Task R1).
+3. **AC-18-9 ownership.** Audit phase, not realignment phase. The static checks (`default_workflow_permissions == read`, tag-ruleset signature requirement) are classification-time reads against GitHub state, which belongs in `skills/bootstrap/audit-checklist.md` (Area 2 – GitHub metadata) and surfaces through the existing realignment batch for "GitHub metadata". This matches how Area 7 (repo merge settings) is already structured.
 
 ## Covered-files list (for AC-18-6 and AC-18-7)
 
@@ -50,15 +50,15 @@ The following paths are ships-from-template and must be named in `AGENTS.md`'s "
 
 Ordered, independently applicable batches. Each workstream lists its tasks, ACs, and verification.
 
-- **W1 — Template release workflow (AC-18-4).** Add job-level `permissions:` to `templates/agent-plugin/.github/workflows/release.yml` and `templates/patinaproject-supplement/.github/workflows/release.yml`.
-- **W2 — Template `RELEASING.md` prerequisites (AC-18-3).** Expand the "Prerequisites" section in `skills/bootstrap/templates/core/RELEASING.md`.
-- **W3 — Repo-root release workflow realignment (AC-18-1, AC-18-2, AC-18-4).** Mirror W1 into `.github/workflows/release.yml` via the skill's realignment loop.
-- **W4 — Audit checklist end-to-end row (AC-18-5).** Add an outcome-based release-flow verification row to `skills/bootstrap/audit-checklist.md`.
-- **W5 — Audit checklist proactive static checks (AC-18-9).** Add `default_workflow_permissions` and tag-ruleset-signature check rows to `skills/bootstrap/audit-checklist.md`.
-- **W6 — `AGENTS.md` source-of-truth section (AC-18-6).** Add the new section naming the covered-files list and the templates-first rule. `CLAUDE.md` inherits via `@AGENTS.md`.
-- **W7 — Skill realignment coverage (AC-18-7).** Update `skills/bootstrap/SKILL.md` realignment-mode batches so every covered file has a batch and there is no self-exclusion clause.
-- **W8 — PR body demonstrates the loop (AC-18-8).** Structure the PR body to link template diff → realignment output → root diff, and cross-reference `AGENTS.md`.
-- **W9 — Stuck-state recovery runbook (AC-18-1, AC-18-2).** Put the manual `v1.0.0` recovery steps in the PR body's Validation section.
+- **W1 – Template release workflow (AC-18-4).** Add job-level `permissions:` to `templates/agent-plugin/.github/workflows/release.yml` and `templates/patinaproject-supplement/.github/workflows/release.yml`.
+- **W2 – Template `RELEASING.md` prerequisites (AC-18-3).** Expand the "Prerequisites" section in `skills/bootstrap/templates/core/RELEASING.md`.
+- **W3 – Repo-root release workflow realignment (AC-18-1, AC-18-2, AC-18-4).** Mirror W1 into `.github/workflows/release.yml` via the skill's realignment loop.
+- **W4 – Audit checklist end-to-end row (AC-18-5).** Add an outcome-based release-flow verification row to `skills/bootstrap/audit-checklist.md`.
+- **W5 – Audit checklist proactive static checks (AC-18-9).** Add `default_workflow_permissions` and tag-ruleset-signature check rows to `skills/bootstrap/audit-checklist.md`.
+- **W6 – `AGENTS.md` source-of-truth section (AC-18-6).** Add the new section naming the covered-files list and the templates-first rule. `CLAUDE.md` inherits via `@AGENTS.md`.
+- **W7 – Skill realignment coverage (AC-18-7).** Update `skills/bootstrap/SKILL.md` realignment-mode batches so every covered file has a batch and there is no self-exclusion clause.
+- **W8 – PR body demonstrates the loop (AC-18-8).** Structure the PR body to link template diff → realignment output → root diff, and cross-reference `AGENTS.md`.
+- **W9 – Stuck-state recovery runbook (AC-18-1, AC-18-2).** Put the manual `v1.0.0` recovery steps in the PR body's Validation section.
 
 ## Tasks
 
@@ -118,11 +118,11 @@ Same check as W1-1.
 
 Under `## Prerequisites (one-time settings)`, reorganize into these subsections in order:
 
-1. **Workflow permissions: read and write** — explain `Settings → Actions → General → Workflow permissions → Read and write permissions`. Note that repo-level default of `read` causes `release-please-action` to fail with `Resource not accessible by integration` on `POST /repos/.../releases`. Include the one-line verification: `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` should print `write`.
-2. **Allow Actions to create and approve pull requests** — existing content, kept.
-3. **Recognizing an org-policy cap** — describe the "greyed-out checkbox" symptom and that org-level `Settings → Actions → General → Workflow permissions` overrides repo-level defaults. Link the verification command above.
-4. **PAT / GitHub App token fallback** — when to use (org caps repo-level workflow permissions below read+write), what scopes are required (`contents: write`, `pull-requests: write`), how to store it (org or repo secret, suggested name `RELEASE_PLEASE_TOKEN`), and how to wire it: change `token: ${{ secrets.GITHUB_TOKEN }}` to `token: ${{ secrets.RELEASE_PLEASE_TOKEN }}` in the `release-please-action` step. Note that the default code path remains `GITHUB_TOKEN` so forks outside Patina Project don't need to provision a Patina Project-specific secret.
-5. **Tag ruleset caution** — explicitly warn that adding a tag-scoped ruleset requiring signed tags will break `release-please-action`, which cannot sign tags. If signature enforcement is desired, scope the ruleset to branches only, or to specific non-release tag refs.
+1. **Workflow permissions: read and write** – explain `Settings → Actions → General → Workflow permissions → Read and write permissions`. Note that repo-level default of `read` causes `release-please-action` to fail with `Resource not accessible by integration` on `POST /repos/.../releases`. Include the one-line verification: `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` should print `write`.
+2. **Allow Actions to create and approve pull requests** – existing content, kept.
+3. **Recognizing an org-policy cap** – describe the "greyed-out checkbox" symptom and that org-level `Settings → Actions → General → Workflow permissions` overrides repo-level defaults. Link the verification command above.
+4. **PAT / GitHub App token fallback** – when to use (org caps repo-level workflow permissions below read+write), what scopes are required (`contents: write`, `pull-requests: write`), how to store it (org or repo secret, suggested name `RELEASE_PLEASE_TOKEN`), and how to wire it: change `token: ${{ secrets.GITHUB_TOKEN }}` to `token: ${{ secrets.RELEASE_PLEASE_TOKEN }}` in the `release-please-action` step. Note that the default code path remains `GITHUB_TOKEN` so forks outside Patina Project don't need to provision a Patina Project-specific secret.
+5. **Tag ruleset caution** – explicitly warn that adding a tag-scoped ruleset requiring signed tags will break `release-please-action`, which cannot sign tags. If signature enforcement is desired, scope the ruleset to branches only, or to specific non-release tag refs.
 
 Keep the existing "Require SHA-pinned actions" subsection as the final prerequisite.
 
@@ -175,7 +175,7 @@ Standard squash merge. This lands the template + root workflow changes on `main`
 
 - [ ] **Step 3: Manually create the `v1.0.0` tag and GitHub Release**
 
-`.release-please-manifest.json` already reads `{".":"1.0.0"}` from merged PR #9, so re-running `Release` will not retry the release — release-please believes `1.0.0` is already published. Recovery is a one-shot:
+`.release-please-manifest.json` already reads `{".":"1.0.0"}` from merged PR #9, so re-running `Release` will not retry the release – release-please believes `1.0.0` is already published. Recovery is a one-shot:
 
 ```bash
 # Tag the merge commit of PR #9 (commit 270d51a per `git log`).
@@ -219,13 +219,13 @@ For the next release (e.g. 1.0.1), the job-level `permissions:` block lets the w
 
 **AC:** AC-18-5.
 
-- [ ] **Step 1: Add a new row under "Area 2 — GitHub metadata"**
+- [ ] **Step 1: Add a new row under "Area 2 – GitHub metadata"**
 
 Insert below the existing `.github/actionlint.yaml` row:
 
 | File | Required | Check |
 |---|---|---|
-| End-to-end release smoke | yes | After realignment, run `gh workflow run Release --repo <owner>/<repo>` on a repo seeded with at least one `feat:` or `fix:` commit since its last tag. Verify release-please opens/updates a release PR; on merge, a tag and GitHub Release appear, and — when `<owner> == patinaproject` — a `bump-plugin-tags.yml` dispatch fires on `patinaproject/skills`. Report a gap if the target has no prior release **and** `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` returns `read`. |
+| End-to-end release smoke | yes | After realignment, run `gh workflow run Release --repo <owner>/<repo>` on a repo seeded with at least one `feat:` or `fix:` commit since its last tag. Verify release-please opens/updates a release PR; on merge, a tag and GitHub Release appear, and – when `<owner> == patinaproject` – a `bump-plugin-tags.yml` dispatch fires on `patinaproject/skills`. Report a gap if the target has no prior release **and** `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` returns `read`. |
 
 - [ ] **Step 2: Run markdown lint**
 
@@ -239,7 +239,7 @@ Run: `pnpm lint:md`.
 
 **AC:** AC-18-9.
 
-- [ ] **Step 1: Add two new rows under "Area 2 — GitHub metadata", below the row added in Task W4-1**
+- [ ] **Step 1: Add two new rows under "Area 2 – GitHub metadata", below the row added in Task W4-1**
 
 | File | Required | Check |
 |---|---|---|
@@ -256,7 +256,7 @@ Run: `pnpm lint:md`.
 
 - Modify: `AGENTS.md`
 
-**AC:** AC-18-6. `CLAUDE.md` inherits via its existing `@AGENTS.md` import — no separate edit needed.
+**AC:** AC-18-6. `CLAUDE.md` inherits via its existing `@AGENTS.md` import – no separate edit needed.
 
 - [ ] **Step 1: Insert a new H2 section immediately after "Project Structure & Module Organization"**
 
@@ -324,7 +324,7 @@ Locate the bullet inside `### Realignment mode` that currently reads:
 Replace with:
 
 ```text
-- Group recommendations into ordered batches that can be applied independently. Each batch below must cover its listed files; no file from the "Source of truth for repo baseline" list in `AGENTS.md` may be skipped. `patinaproject/bootstrap` is a normal realignment target — the skill must not self-exclude when run against it.
+- Group recommendations into ordered batches that can be applied independently. Each batch below must cover its listed files; no file from the "Source of truth for repo baseline" list in `AGENTS.md` may be skipped. `patinaproject/bootstrap` is a normal realignment target – the skill must not self-exclude when run against it.
   1. Plugin manifests: `.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`, `.release-please-manifest.json`.
   2. Commit / PR conventions: `commitlint.config.js`, `.husky/*`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/*`.
   3. PNPM tooling: `package.json`, `.markdownlint.jsonc`, `scripts/check-plugin-versions.mjs`, `scripts/sync-plugin-versions.mjs`.
@@ -371,29 +371,29 @@ Link to each file for reviewer convenience.
 
 | AC | Mechanical test | Manual verification |
 |---|---|---|
-| AC-18-1 | None — inherently manual (human-merged release PR). | Task R1 Steps 1–3. |
-| AC-18-2 | None — inherently manual (cross-repo dispatch). | Task R1 Step 4. |
+| AC-18-1 | None – inherently manual (human-merged release PR). | Task R1 Steps 1–3. |
+| AC-18-2 | None – inherently manual (cross-repo dispatch). | Task R1 Step 4. |
 | AC-18-3 | `pnpm lint:md` on `skills/bootstrap/templates/core/RELEASING.md`. | Reviewer reads all five new sub-sections. |
 | AC-18-4 | `grep -A2 'release-please:' skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml .github/workflows/release.yml` returns the job-level `permissions:` block in all three files. | None. |
 | AC-18-5 | `grep -n 'End-to-end release smoke' skills/bootstrap/audit-checklist.md` returns one hit. | Reviewer confirms the row's check text names tag + Release + `skills` dispatch. |
 | AC-18-6 | `grep -n 'Source of truth for repo baseline' AGENTS.md` returns one hit; the covered-files bullet list is complete (21 entries). | Reviewer confirms the invariant wording. |
 | AC-18-7 | `grep -n 'self-exclude' skills/bootstrap/SKILL.md` returns zero hits; the new numbered batch list is present. | Reviewer confirms every file in the AGENTS.md covered-files list maps to a batch. |
-| AC-18-8 | None — PR body is the artifact. | Reviewer inspects the PR body for template diff link + realignment output + root diff link. |
+| AC-18-8 | None – PR body is the artifact. | Reviewer inspects the PR body for template diff link + realignment output + root diff link. |
 | AC-18-9 | `grep -n 'default_workflow_permissions' skills/bootstrap/audit-checklist.md` and `grep -n 'required_signatures' skills/bootstrap/audit-checklist.md` each return a hit. | Reviewer confirms both new rows exist under Area 2. |
 
 All "manual" cells are labeled manual because GitHub UI interactions and cross-repo dispatches cannot be stubbed from this repo.
 
 ## Risks and rollback
 
-- **Risk R1 — permissions-only fix without raising repo/org setting.** If a future operator applies the workflow job-level `permissions:` change but does not raise `Settings → Actions → General → Workflow permissions` to read + write, the 403 persists: workflow-level declarations are capped by the repo default. **Mitigation:** Executor must sequence the settings change first (Task R1 Step 1) and verify with the `gh api ... --jq .default_workflow_permissions` command before merging the PR. The PR body's Validation section makes this ordering explicit.
-- **Risk R2 — PAT fallback not needed here but plan documents it.** If Executor discovers org policy actually caps repo defaults, switch the default `token:` in `.github/workflows/release.yml` to the Patina Project App/PAT secret and note the decision in the PR body. Do not silently leave `GITHUB_TOKEN` in place when it cannot succeed.
-- **Risk R3 — manual recovery drift.** Creating `v1.0.0` via `gh release create` (Task R1 Step 3) bypasses the workflow, so `notify-patinaproject-skills` does not fire automatically for this one release. **Mitigation:** Task R1 Step 4 dispatches `bump-plugin-tags.yml` manually; verify the marketplace PR opens on `patinaproject/skills`.
-- **Rollback path.** All template and doc changes are single-commit, file-level edits; revert is `git revert <sha>`. The manual recovery (tag + release) is idempotent — if anything looks wrong, delete the tag and release (`gh release delete v1.0.0 --cleanup-tag`) and redo.
+- **Risk R1 – permissions-only fix without raising repo/org setting.** If a future operator applies the workflow job-level `permissions:` change but does not raise `Settings → Actions → General → Workflow permissions` to read + write, the 403 persists: workflow-level declarations are capped by the repo default. **Mitigation:** Executor must sequence the settings change first (Task R1 Step 1) and verify with the `gh api ... --jq .default_workflow_permissions` command before merging the PR. The PR body's Validation section makes this ordering explicit.
+- **Risk R2 – PAT fallback not needed here but plan documents it.** If Executor discovers org policy actually caps repo defaults, switch the default `token:` in `.github/workflows/release.yml` to the Patina Project App/PAT secret and note the decision in the PR body. Do not silently leave `GITHUB_TOKEN` in place when it cannot succeed.
+- **Risk R3 – manual recovery drift.** Creating `v1.0.0` via `gh release create` (Task R1 Step 3) bypasses the workflow, so `notify-patinaproject-skills` does not fire automatically for this one release. **Mitigation:** Task R1 Step 4 dispatches `bump-plugin-tags.yml` manually; verify the marketplace PR opens on `patinaproject/skills`.
+- **Rollback path.** All template and doc changes are single-commit, file-level edits; revert is `git revert <sha>`. The manual recovery (tag + release) is idempotent – if anything looks wrong, delete the tag and release (`gh release delete v1.0.0 --cleanup-tag`) and redo.
 
-## Appendix A — v1.0.0 recovery runbook (paste into PR body Validation)
+## Appendix A – v1.0.0 recovery runbook (paste into PR body Validation)
 
 The ready-to-paste Markdown for the PR body's `Validation` section lives in [`2026-04-24-18-release-workflow-fails-to-create-github-release-recovery-runbook.md`](./2026-04-24-18-release-workflow-fails-to-create-github-release-recovery-runbook.md). Finisher copies that file's contents verbatim into the PR body under `Validation`.
 
 ## Blockers
 
-- None. All three Brainstormer open questions are resolved above from repo state. If Executor observes `default_workflow_permissions` still reads `read` after toggling the UI setting — indicating an actual org-policy cap rather than a repo-level default — halt and switch to the PAT/App-token fallback path per Risk R2 before merging.
+- None. All three Brainstormer open questions are resolved above from repo state. If Executor observes `default_workflow_permissions` still reads `read` after toggling the UI setting – indicating an actual org-policy cap rather than a repo-level default – halt and switch to the PAT/App-token fallback path per Risk R2 before merging.

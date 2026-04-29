@@ -14,21 +14,21 @@
 
 - AC-10-1 → T1, T2 (title-pattern in live + template config)
 - AC-10-2 → T3, T4, T5 (label-gate three jobs in live + template lint-pr.yml)
-- AC-10-3 → T6 (live `gh label edit` — operator-gated)
+- AC-10-3 → T6 (live `gh label edit` – operator-gated)
 - AC-10-4 → T7, T8, T9, T10 (docs + audit-checklist row + skill audit step, in live + template surfaces)
 
 **Sequencing:**
 
-- Workstream A (Config) — T1, T2 — independent, can run in parallel.
-- Workstream B (Workflows) — T3, T4, T5 — T3 first so the live workflow is the source of truth; T4 mirrors; T5 verifies parity.
-- Workstream C (Docs) — T7, T8, T9, T10 — can run after A + B land; internally can run in any order but commit together per workstream for clean history.
-- Workstream D (Label backfill) — T6 — **operator-gated live write**. Executor prepares exact command; Team Lead / operator runs it. Can be scheduled any time after the repo rules in T7 are agreed; prefer doing it alongside docs so the verifying `gh label list` command passes on the same pass.
+- Workstream A (Config) – T1, T2 – independent, can run in parallel.
+- Workstream B (Workflows) – T3, T4, T5 – T3 first so the live workflow is the source of truth; T4 mirrors; T5 verifies parity.
+- Workstream C (Docs) – T7, T8, T9, T10 – can run after A + B land; internally can run in any order but commit together per workstream for clean history.
+- Workstream D (Label backfill) – T6 – **operator-gated live write**. Executor prepares exact command; Team Lead / operator runs it. Can be scheduled any time after the repo rules in T7 are agreed; prefer doing it alongside docs so the verifying `gh label list` command passes on the same pass.
 
 **ATDD entry point:** There is no runtime test harness. The acceptance check is a set of deterministic repo-state assertions: `jq` and `rg` against the config/workflow files, `pnpm lint:md` for docs, `actionlint` for workflow edits, and `gh label list --json ... --jq ...` for the live label. Each task below begins with a failing assertion (grep/jq command that returns non-zero or empty before the change) and ends with the same assertion passing.
 
 ---
 
-## Workstream A — Release Please title pattern
+## Workstream A – Release Please title pattern
 
 ### Task T1: Add `pull-request-title-pattern` to repo `release-please-config.json`
 
@@ -140,9 +140,9 @@ git commit -m "chore: #10 mirror release-please title pattern to template"
 
 ---
 
-## Workstream B — `lint-pr.yml` label guard
+## Workstream B – `lint-pr.yml` label guard
 
-Shared fragment used in this workstream — the skip expression:
+Shared fragment used in this workstream – the skip expression:
 
 ```yaml
 if: ${{ !contains(github.event.pull_request.labels.*.name, 'autorelease: pending') }}
@@ -265,7 +265,7 @@ Use the same edit content from T3 steps 2-4. The template file's structure match
 diff .github/workflows/lint-pr.yml skills/bootstrap/templates/core/.github/workflows/lint-pr.yml
 ```
 
-Expected: no output (files identical — this is currently true for the base file; the mirrored edits must preserve that).
+Expected: no output (files identical – this is currently true for the base file; the mirrored edits must preserve that).
 
 - [ ] **Step 4: Run actionlint**
 
@@ -309,7 +309,7 @@ Expected: each prints `3`.
 
 ---
 
-## Workstream D — Live label backfill (operator-gated)
+## Workstream D – Live label backfill (operator-gated)
 
 ### Task T6: Backfill description on `autorelease: pending` label
 
@@ -363,7 +363,7 @@ This task produces no repo diff. Record the post-write `gh label list` output in
 
 ---
 
-## Workstream C — Docs, skill guidance, audit checklist
+## Workstream C – Docs, skill guidance, audit checklist
 
 ### Task T7: Document reserved labels in live `AGENTS.md`
 
@@ -466,7 +466,7 @@ git commit -m "docs: #10 reserve autorelease labels in AGENTS template"
 
 - [ ] **Step 1: Read the file and pick the right section**
 
-Read `skills/bootstrap/SKILL.md` end-to-end. Pick the section that describes audit behaviour for labels or GitHub metadata. If no label-specific section exists, add a short `### Reserved labels` subsection under the existing audit guidance (e.g. under the "GitHub repository settings" or "Realignment" section — whichever exists; locate via `grep -n '^##' skills/bootstrap/SKILL.md`).
+Read `skills/bootstrap/SKILL.md` end-to-end. Pick the section that describes audit behaviour for labels or GitHub metadata. If no label-specific section exists, add a short `### Reserved labels` subsection under the existing audit guidance (e.g. under the "GitHub repository settings" or "Realignment" section – whichever exists; locate via `grep -n '^##' skills/bootstrap/SKILL.md`).
 
 - [ ] **Step 2: Failing assertion**
 
@@ -515,7 +515,7 @@ git commit -m "docs: #10 document reserved autorelease labels in SKILL.md"
 
 **Files:**
 
-- Modify: `skills/bootstrap/audit-checklist.md` — extend Area 2 (GitHub metadata) with a new row, or add a dedicated sub-table for labels below the Area 2 table.
+- Modify: `skills/bootstrap/audit-checklist.md` – extend Area 2 (GitHub metadata) with a new row, or add a dedicated sub-table for labels below the Area 2 table.
 
 - [ ] **Step 1: Failing assertion**
 
@@ -566,7 +566,7 @@ git commit -m "docs: #10 audit autorelease pending label in checklist"
 
 Run these from the repo root after all tasks land. A reviewer uses this block to confirm every AC.
 
-- [ ] **AC-10-1 — title pattern in both configs**
+- [ ] **AC-10-1 – title pattern in both configs**
 
 ```bash
 jq -e '."pull-request-title-pattern" == "chore: release ${version}"' release-please-config.json
@@ -576,7 +576,7 @@ diff release-please-config.json skills/bootstrap/templates/agent-plugin/release-
 
 Expected: both `jq -e` print `true`, `diff` shows no output.
 
-- [ ] **AC-10-2 — lint-pr guarded in both workflows**
+- [ ] **AC-10-2 – lint-pr guarded in both workflows**
 
 ```bash
 grep -c "autorelease: pending" .github/workflows/lint-pr.yml
@@ -588,7 +588,7 @@ actionlint .github/workflows/lint-pr.yml skills/bootstrap/templates/core/.github
 
 Expected: both `grep -c "autorelease: pending"` print `3`; `diff` shows no output; dependabot guard count is `1`; `actionlint` exits `0`. After the next Release Please PR opens, confirm in the GitHub Actions UI that `title-format`, `closing-keyword`, and `mark-breaking-change` report "skipped" on it.
 
-- [ ] **AC-10-3 — label description present**
+- [ ] **AC-10-3 – label description present**
 
 ```bash
 gh label list --repo patinaproject/bootstrap --json name,color,description \
@@ -599,7 +599,7 @@ gh label list --repo patinaproject/bootstrap --json name,description \
 
 Expected: first command shows `color` `c5def5` and a non-empty `description`; second command produces no row containing `"name":"autorelease: pending"`.
 
-- [ ] **AC-10-4 — docs + audit checklist carry the reservation**
+- [ ] **AC-10-4 – docs + audit checklist carry the reservation**
 
 ```bash
 grep -l "autorelease: pending" \
@@ -616,8 +616,8 @@ Expected: all four paths print; `pnpm lint:md` exits `0`.
 
 ## Notes for the Executor
 
-- Start with Workstream A (cheapest, unlocks nothing else) or Workstream B (most risk — get actionlint feedback early). Both are independent.
-- T6 (label backfill) is a live GitHub write — do not run `gh label edit` yourself. Prepare the exact command and wait for operator confirmation.
+- Start with Workstream A (cheapest, unlocks nothing else) or Workstream B (most risk – get actionlint feedback early). Both are independent.
+- T6 (label backfill) is a live GitHub write – do not run `gh label edit` yourself. Prepare the exact command and wait for operator confirmation.
 - Commit frequently using `type: #10 short description` (≤72 chars, no scope). See the per-task commit commands.
 - If `pnpm lint:md` fails on any doc task, fix the markdown (list spacing, table pipes, trailing newline) and re-run before committing.
-- Do not modify `release.yml`, `.release-please-manifest.json`, or `CHANGELOG.md` — this plan deliberately leaves the Release Please workflow and manifest untouched.
+- Do not modify `release.yml`, `.release-please-manifest.json`, or `CHANGELOG.md` – this plan deliberately leaves the Release Please workflow and manifest untouched.

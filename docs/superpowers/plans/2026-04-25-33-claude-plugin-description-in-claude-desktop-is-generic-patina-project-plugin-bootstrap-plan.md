@@ -4,7 +4,7 @@
 
 **Goal:** Replace the generic auto-generated Claude Desktop plugin description with authored copy, propagated through the template-first round-trip required by AGENTS.md.
 
-**Architecture:** Edit the template (`plugin.json.tmpl`) first — it is the single source of truth. Then manually mirror the change to the repo-root `.claude-plugin/plugin.json` (equivalent to running the bootstrap skill in realignment mode). Commit both sides together. The `{{repo-description}}` placeholder in the template is preserved for generated repos; only the root `plugin.json` (which is this repo's own installed manifest, not a generated file) receives the literal new copy.
+**Architecture:** Edit the template (`plugin.json.tmpl`) first – it is the single source of truth. Then manually mirror the change to the repo-root `.claude-plugin/plugin.json` (equivalent to running the bootstrap skill in realignment mode). Commit both sides together. The `{{repo-description}}` placeholder in the template is preserved for generated repos; only the root `plugin.json` (which is this repo's own installed manifest, not a generated file) receives the literal new copy.
 
 **Tech Stack:** JSON, Markdown, `jq`, `pnpm lint:md`, `git`
 
@@ -16,8 +16,8 @@
 
 | File | Role | Action |
 |---|---|---|
-| `skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` | Source of truth — template for generated repos | Modify: add a comment block above the `description` line guiding maintainers; the `{{repo-description}}` placeholder itself is preserved (AC-33-4) |
-| `.claude-plugin/plugin.json` | Root mirror — this repo's own installed manifest | Modify: update the `description` field to the new agreed copy (AC-33-2) |
+| `skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` | Source of truth – template for generated repos | Modify: add a comment block above the `description` line guiding maintainers; the `{{repo-description}}` placeholder itself is preserved (AC-33-4) |
+| `.claude-plugin/plugin.json` | Root mirror – this repo's own installed manifest | Modify: update the `description` field to the new agreed copy (AC-33-2) |
 
 No other files are touched in this PR.
 
@@ -31,7 +31,7 @@ No other files are touched in this PR.
 
 - Modify: `skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl`
 
-The template's `description` field already uses `{{repo-description}}`. No structural change is needed — the placeholder is already the right convention (AC-33-4). However, the template has no guidance on what good copy looks like, so adding an inline comment above the field makes the convention explicit for maintainers of generated repos.
+The template's `description` field already uses `{{repo-description}}`. No structural change is needed – the placeholder is already the right convention (AC-33-4). However, the template has no guidance on what good copy looks like, so adding an inline comment above the field makes the convention explicit for maintainers of generated repos.
 
 Because JSON does not support comments, represent the guidance as a sibling field using a `_description_hint` key that bootstrap's realignment step is expected to strip, or simply leave the template as-is and accept that the placeholder is self-documenting. Per the design doc: "The existing convention is sufficient for AC-33-4." No structural change is required.
 
@@ -73,7 +73,7 @@ Expected: `jq` parses without error and pretty-prints the object. If it errors, 
 
 - Modify: `.claude-plugin/plugin.json`
 
-This is the manual realignment step — equivalent to running the bootstrap skill in realignment mode on this repo. Update the `description` field to the agreed copy from the design doc.
+This is the manual realignment step – equivalent to running the bootstrap skill in realignment mode on this repo. Update the `description` field to the agreed copy from the design doc.
 
 Agreed copy (shorter form, preferred for `plugin.json` where space is constrained, 124 chars):
 
@@ -127,7 +127,7 @@ Expected:
 
 ### T3: Verify AC-33-2 (no drift between template and root)
 
-AC-33-2 requires confirming that the template uses its placeholder and the root uses the literal agreed copy — and that neither has drifted from what was intended.
+AC-33-2 requires confirming that the template uses its placeholder and the root uses the literal agreed copy – and that neither has drifted from what was intended.
 
 - [ ] **Step 1: Check template placeholder is still intact**
 
@@ -226,7 +226,7 @@ Claude Desktop visual verification (AC-33-1) requires both this PR and the separ
 
 ## Workstreams
 
-Single small batch — all tasks are sequential and can be executed in one session:
+Single small batch – all tasks are sequential and can be executed in one session:
 
 **Batch 1 (sequential):** T1 → T2 → T3 → T4
 

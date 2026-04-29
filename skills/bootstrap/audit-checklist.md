@@ -4,13 +4,13 @@ Canonical checklist the `bootstrap` skill walks in realignment mode. Each row sp
 
 Classification:
 
-- `missing` — file does not exist.
-- `stale` — file exists but its version predates the current baseline shape (e.g. scripts or dependencies out of date, AGENTS.md sections absent).
-- `divergent` — file exists with a meaningfully different structure and needs reconciliation rather than overwrite.
+- `missing` – file does not exist.
+- `stale` – file exists but its version predates the current baseline shape (e.g. scripts or dependencies out of date, AGENTS.md sections absent).
+- `divergent` – file exists with a meaningfully different structure and needs reconciliation rather than overwrite.
 
 For every gap, produce a concrete recommendation and show a diff preview. Never overwrite without explicit user confirmation. No flags or escape hatches; realignment is always interactive.
 
-## Area 1 — Core repo tooling
+## Area 1 – Core repo tooling
 
 | File | Required | Check |
 |---|---|---|
@@ -30,7 +30,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `CHANGELOG.md` | yes | present; compatible with release-please (no hand-edits to released sections) |
 | `RELEASING.md` | yes | present; documents the release-please flow |
 
-## Area 2 — GitHub metadata
+## Area 2 – GitHub metadata
 
 | File | Required | Check |
 |---|---|---|
@@ -42,7 +42,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `.github/workflows/lint-md.yml` | yes | present; runs `DavidAnson/markdownlint-cli2-action` on PRs |
 | `.github/workflows/lint-actions.yml` | yes | present; runs `actionlint` on PRs touching `.github/workflows/**` |
 | `.github/actionlint.yaml` | yes | present; lists permitted self-hosted-runner labels |
-| End-to-end release smoke | yes | After realignment, run `gh workflow run Release --repo <owner>/<repo>` on a repo seeded with at least one `feat:` or `fix:` commit since its last tag. Verify release-please opens/updates a release PR; on merge, a tag and GitHub Release appear, and — when `<owner> == patinaproject` — a `plugin-release-bump.yml` dispatch fires on `patinaproject/skills`. Report a gap if the target has no prior release **and** `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` returns `read`. |
+| End-to-end release smoke | yes | After realignment, run `gh workflow run Release --repo <owner>/<repo>` on a repo seeded with at least one `feat:` or `fix:` commit since its last tag. Verify release-please opens/updates a release PR; on merge, a tag and GitHub Release appear, and – when `<owner> == patinaproject` – a `plugin-release-bump.yml` dispatch fires on `patinaproject/skills`. Report a gap if the target has no prior release **and** `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` returns `read`. |
 | Default workflow permissions | yes | `gh api repos/<owner>/<repo>/actions/permissions/workflow --jq .default_workflow_permissions` must return `write`. When it returns `read`, emit a realignment-gap warning entry recommending **Settings → Actions → General → Workflow permissions → Read and write permissions**. This check runs regardless of whether the repo has ever cut a release, so the problem surfaces before the first 403. |
 | Tag rulesets do not require signatures | yes | `gh api repos/<owner>/<repo>/rulesets --jq '.[] \| select(.target=="tag")'` must not return any ruleset whose `rules[].type == "required_signatures"` applies to the release-tag pattern. When it does, emit a realignment-gap warning entry: signed tags break `release-please-action`, which cannot sign; scope the signature rule to branches or to non-release tag refs. |
 
@@ -52,7 +52,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 |---|---|---|
 | `autorelease: pending` | yes | present; color `ededed`; description non-empty and documents that the label is reserved for Release Please automation; confirm via `gh label list --repo <owner>/<repo> --json name,color,description --jq '.[] \| select(.name=="autorelease: pending")'` |
 
-## Area 3 — Agent + repo docs
+## Area 3 – Agent + repo docs
 
 | File | Required | Check |
 |---|---|---|
@@ -63,7 +63,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 | `README.md` | yes | present; includes repo name, description, and conventions summary |
 | `docs/file-structure.md` | yes | present |
 
-## Area 4 — Claude Code configuration
+## Area 4 – Claude Code configuration
 
 | File | Required | Check |
 |---|---|---|
@@ -71,7 +71,7 @@ For every gap, produce a concrete recommendation and show a diff preview. Never 
 
 For agent plugins, `enabledPlugins` should include `superteam@patinaproject-skills` and `superpowers@claude-plugins-official` unless the user has explicitly opted out.
 
-## Area 5 — AI agent plugin surfaces
+## Area 5 – AI agent plugin surfaces
 
 Detection: this repo is an AI agent plugin if **any** of these exist: `.claude-plugin/`, `.codex-plugin/`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`, `skills/`.
 
@@ -91,7 +91,7 @@ When detected, the following surfaces should all be present. Missing platforms a
 
 Author URLs in `package.json`, `.claude-plugin/plugin.json`, and `.codex-plugin/plugin.json` must point to the resolved `https://github.com/<author-handle>`, not the repository owner URL. Repository-level URLs such as `homepage`, `repository`, and Codex interface URLs stay on `https://github.com/<owner>/<repo>`.
 
-## Area 6 — Superpowers opt-in
+## Area 6 – Superpowers opt-in
 
 Detection: look for `docs/superpowers/`. When present, verify both subdirectories exist.
 
@@ -100,7 +100,7 @@ Detection: look for `docs/superpowers/`. When present, verify both subdirectorie
 | `docs/superpowers/specs/` | yes | directory exists (may contain only `.gitkeep`) |
 | `docs/superpowers/plans/` | yes | directory exists (may contain only `.gitkeep`) |
 
-## Area 7 — GitHub repository merge settings
+## Area 7 – GitHub repository merge settings
 
 Check path priority (see `SKILL.md` → "GitHub repository settings" for full guidance):
 
@@ -121,7 +121,7 @@ Writes always go through the UI (or `gh api -X PATCH`). Deep-link: `https://gith
 | `allow_update_branch` | true |
 | Release immutability (UI-only) | enabled |
 
-## Area 8 — Commit / PR title hygiene
+## Area 8 – Commit / PR title hygiene
 
 Sampled, not exhaustive:
 
@@ -133,7 +133,7 @@ Sampled, not exhaustive:
 For each gap, emit:
 
 ```text
-[<area>] <file> — <classification>
+[<area>] <file> – <classification>
   Recommendation: <one-line change>
   Diff preview:
     <unified diff against the template or current baseline>

@@ -1,25 +1,48 @@
 # Pull Request
 
-PR title rule for squash merges: use the exact commitlint/commitizen format for the PR title so the squash commit can be reused unchanged.
-
-`type: #123 short description`
-
-Examples:
-
-- `docs: #12 add bootstrap skill guide`
-- `chore: #34 bootstrap commit hooks`
-
-This title rule applies to pull requests only. GitHub issue titles should stay plain-language and should not use conventional-commit prefixes.
-
-## Summary
-
--
+<!--
+  PR title rule for squash merges: use the exact commitlint/commitizen format
+  for the PR title so the squash commit can be reused unchanged.
+  Pattern: `type: \#123 short description`
+  Examples:
+  - `docs: \#12 add bootstrap skill guide`
+  - `chore: \#34 bootstrap commit hooks`
+  This title rule applies to pull requests only. GitHub issue titles should stay
+  plain-language and should not use conventional-commit prefixes.
+-->
 
 ## Linked issue
 
 - `Closes #<issue>` when this PR is intended to complete the issue
 - Otherwise: `Related to #<issue>` plus a short explanation of why this PR does not close it yet
-- Omit this section when no issue applies
+- `None` when no issue applies
+
+## What changed
+
+-
+
+## Do before merging
+
+<!--
+  Add checklist items only for work-specific operator steps that must happen
+  after review and before merge. Omit this section's checklist when no
+  work-specific pre-merge steps are required.
+  Example: - [ ] Rotate the production secret after deploy.
+-->
+
+## Test coverage
+
+<!--
+  Include one row per in-scope AC. Keep the `Unit` column, then add one column
+  per supported platform for this project. Remove unsupported platform columns
+  before opening the PR. Use:
+  ✅ covered/passing
+  ❌ required but missing/failing
+  ➖ not applicable for this AC
+-->
+| AC | Title | Unit | <Platform> |
+| --- | --- | --- | --- |
+| AC-<issue>-<n> | <short title> | ➖ | ➖ |
 
 ## Acceptance criteria
 
@@ -30,36 +53,26 @@ This title rule applies to pull requests only. GitHub issue titles should stay p
 Short outcome summary.
 
 <!--
-  Evidence rows: one per required platform. Fields are pipe-separated in fixed order:
-  runner | env | verifier | ISO (UTC timestamp). Omit evidence rows only for ACs
-  explicitly marked `[platform: none]`. Do not use detached `- Evidence:` bullets.
+  Test rows: one per covered Unit/platform target. Fields are pipe-separated
+  in fixed order: runner | env | verifier | ISO (UTC timestamp). Omit test
+  rows only for ACs explicitly marked `[platform: none]`. Do not use detached
+  `- Test:` bullets.
 -->
-- [ ] <Platform> evidence — <runner> | <env> | <verifier> | <ISO>
+- <Unit-or-platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  E2E gap row: INCLUDE ONLY when automated coverage has a real gap that a reviewer
-  must consciously accept. When present, the row must sit directly above the
-  Manual test row and Reviewer MUST check it before merging.
-  If automated coverage is comprehensive, OMIT this row entirely — do not use
-  placeholder phrases like `no known gap`, `none required`, `n/a`,
-  `not applicable`, or `automated coverage is sufficient`.
+  Manual test row uses the literal prefix `Manual test:` and concrete numbered
+  steps. Do not use a checkbox unless the row is an operator action that must be
+  performed before merge.
 -->
-- [ ] ⚠️ E2E gap: <what automated coverage does not verify>
+- Manual test: <concrete numbered steps; observed outcome>
 <!--
-  Manual test row uses the literal prefix `Manual test:`, concrete numbered steps,
-  and stays unchecked until a human reviewer performs the steps and flips the box
-  in the GitHub UI. Reviewer MUST check this box before merging.
+  Add a visible Test gap row only when automated coverage has a real gap that a
+  reviewer must consciously accept. When automated coverage is comprehensive,
+  omit the row entirely – do not use placeholder phrases like `no known gap`,
+  `none required`, `n/a`, `not applicable`, or `automated coverage is sufficient`.
+  Example: - ⚠️ Test gap: <what automated coverage does not verify>
 -->
-- [ ] Manual test: <concrete numbered steps; observed outcome>
 
 ### AC-<issue>-<n>
 
 Deferred to `<repo-or-follow-up>`.
-
-## Validation
-
-- Additional validation not tied to a single AC, if any
-
-## Docs updated
-
-- [ ] Not needed
-- [ ] Updated in this PR

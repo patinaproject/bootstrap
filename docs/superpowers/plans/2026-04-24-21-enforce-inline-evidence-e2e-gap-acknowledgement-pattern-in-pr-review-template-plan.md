@@ -22,7 +22,7 @@ Short outcome summary.
   runner | env | @handle | ISO (UTC). Omit the evidence rows only for ACs marked [platform: none].
   Do not use detached `- Evidence:` bullets.
 -->
-- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>
+- [ ] <Platform> evidence – <runner> | <env> | @<handle> | <ISO>
 <!--
   E2E gap row is REQUIRED on every AC. If automated coverage is comprehensive,
   state that explicitly: `no known gap: <reason>`.
@@ -49,15 +49,15 @@ Make the `## Acceptance criteria` section byte-identical to the template-source 
 
 **File**: `docs/ac-traceability.md`
 
-Extend §"From issue to PR" with one short paragraph pointing at the PR template as the canonical per-AC grammar for inline evidence rows and the `⚠️ E2E gap:` row. Do not duplicate the grammar here — refer the reader to the template comments. Do not invent new rules; this file only adds a pointer.
+Extend §"From issue to PR" with one short paragraph pointing at the PR template as the canonical per-AC grammar for inline evidence rows and the `⚠️ E2E gap:` row. Do not duplicate the grammar here – refer the reader to the template comments. Do not invent new rules; this file only adds a pointer.
 
 ## Verification (maps to ACs)
 
-1. **AC-21-1** (placeholder render): `pnpm lint:md` passes across the whole repo (template files included). Manually scan rendered template — placeholder block renders cleanly.
-2. **AC-21-2** (one evidence row per platform, no detached bullets): grep the template source and root mirror for `- Evidence:` — must return zero. Count `evidence —` rows in the per-AC block — must equal one per platform.
+1. **AC-21-1** (placeholder render): `pnpm lint:md` passes across the whole repo (template files included). Manually scan rendered template – placeholder block renders cleanly.
+2. **AC-21-2** (one evidence row per platform, no detached bullets): grep the template source and root mirror for `- Evidence:` – must return zero. Count `evidence –` rows in the per-AC block – must equal one per platform.
 3. **AC-21-3** (gap row directly above manual): a literal string match on the block must show `⚠️ E2E gap:` line immediately followed by `Manual test:` line with no other content between.
 4. **AC-21-4** (reviewer block-merge instruction): the template comments explicitly tell the reviewer to check both rows before merging; `docs/ac-traceability.md` links to the template as canonical.
-5. Template round-trip: `diff skills/bootstrap/templates/core/.github/pull_request_template.md .github/pull_request_template.md` — must be empty (byte-identical).
+5. Template round-trip: `diff skills/bootstrap/templates/core/.github/pull_request_template.md .github/pull_request_template.md` – must be empty (byte-identical).
 
 Run:
 

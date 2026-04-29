@@ -9,9 +9,9 @@ Key rules:
 - Markdown must pass `markdownlint-cli2` with `.markdownlint.jsonc` rules.
 - Skills live under `skills/`, one directory per skill, `SKILL.md` as the main contract.
 
-## Commit type — path-first rule
+## Commit type – path-first rule
 
-If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`:
+If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`:
 
 - `skills/**`
 - `skills/bootstrap/templates/**`
@@ -20,7 +20,7 @@ If any file in the diff is under one of these globs, the commit type is `feat:` 
 - `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`
 - `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl`
 
-Example — wording standardization across plugin manifests, skill bodies, and templates:
+Example – wording standardization across plugin manifests, skill bodies, and templates:
 
 - WRONG: `docs: #46 standardize Patina Project name`
 - RIGHT: `feat: #46 standardize Patina Project name across product surfaces`

@@ -1,6 +1,6 @@
 # Bootstrap
 
-Scaffold a new repository — or realign an existing one — to the Patina Project baseline. One invocation, consistent conventions, portable across every major AI coding tool.
+Scaffold a new repository – or realign an existing one – to the Patina Project baseline. One invocation, consistent conventions, portable across every major AI coding tool.
 
 Bootstrap is a Claude Code + Codex plugin distributed through the [`patinaproject/skills`](https://github.com/patinaproject/skills) marketplace. It ships a single skill that scaffolds a complete Patina Project baseline repository (commit + PR conventions, PNPM + Husky + markdownlint, agent docs, plugin manifests, release flow, GitHub repo settings) and keeps existing repos aligned with the latest baseline on rerun.
 
@@ -37,16 +37,16 @@ flowchart TD
 
 ## What bootstrap enforces
 
-### Core baseline — every repo
+### Core baseline – every repo
 
 - **Conventional Commits** with no scope and a required `#<issue>` tag; enforced locally by husky + commitlint and in CI by `lint-pr.yml`.
-- **PR title hygiene** — ASCII-only, conventional format, `#<issue>` subject, breaking-change marker consistency, `Closes #<issue>` in body.
+- **PR title hygiene** – ASCII-only, conventional format, `#<issue>` subject, breaking-change marker consistency, `Closes #<issue>` in body.
 - **Markdown linting** via `markdownlint-cli2`; husky `pre-commit` + `lint-staged` locally, `lint-md.yml` in CI.
 - **Workflow linting** via `actionlint` with `.github/actionlint.yaml`.
-- **GitHub Actions SHA pinning** — every `uses:` references a full commit SHA with a version comment; policy documented in `AGENTS.md`.
-- **PNPM toolchain** — `packageManager: pnpm@10.33.2`, `engines.node >=24`, `.nvmrc`, `.gitattributes`, `.editorconfig`.
-- **Agent + repo docs** — `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `SECURITY.md` (public only), `README.md`, `docs/file-structure.md`.
-- **Claude Code project settings** — `.claude/settings.json` with `enabledPlugins` declaring Patina Project marketplace plugins.
+- **GitHub Actions SHA pinning** – every `uses:` references a full commit SHA with a version comment; policy documented in `AGENTS.md`.
+- **PNPM toolchain** – `packageManager: pnpm@10.33.2`, `engines.node >=24`, `.nvmrc`, `.gitattributes`, `.editorconfig`.
+- **Agent + repo docs** – `AGENTS.md`, `CLAUDE.md`, `CONTRIBUTING.md`, `SECURITY.md` (public only), `README.md`, `docs/file-structure.md`.
+- **Claude Code project settings** – `.claude/settings.json` with `enabledPlugins` declaring Patina Project marketplace plugins.
 - **CODEOWNERS + issue/PR templates** under `.github/`.
 
 ### AI agent plugin add-ons
@@ -55,7 +55,7 @@ When the repo is itself a plugin, bootstrap additionally emits manifests/config 
 
 ### Release flow
 
-For plugins, bootstrap wires a complete [release-please](https://github.com/googleapis/release-please) flow — standing release PR, auto-generated `CHANGELOG.md` and GitHub Release notes, both plugin manifests kept in lockstep with `package.json` on every bump. When the repo is in the `patinaproject` org, the release workflow also dispatches a marketplace-bump event to `patinaproject/skills`.
+For plugins, bootstrap wires a complete [release-please](https://github.com/googleapis/release-please) flow – standing release PR, auto-generated `CHANGELOG.md` and GitHub Release notes, both plugin manifests kept in lockstep with `package.json` on every bump. When the repo is in the `patinaproject` org, the release workflow also dispatches a marketplace-bump event to `patinaproject/skills`.
 
 ### GitHub repository settings
 
@@ -63,8 +63,8 @@ Bootstrap walks the target repo's merge settings (via `gh api`, `curl`, or visua
 
 ## Modes
 
-- **New repo** — scaffold the full baseline, leave the first commit to the user.
-- **Realignment** — walk the checklist, classify gaps as `missing`/`stale`/`divergent`, recommend changes grouped into ordered batches, never overwrite without explicit user confirmation.
+- **New repo** – scaffold the full baseline, leave the first commit to the user.
+- **Realignment** – walk the checklist, classify gaps as `missing`/`stale`/`divergent`, recommend changes grouped into ordered batches, never overwrite without explicit user confirmation.
 
 ## Supported AI coding tools
 
@@ -84,7 +84,7 @@ Bootstrap walks the target repo's merge settings (via `gh api`, `curl`, or visua
 
 ## Installation
 
-Bootstrap ships as a Claude Code + Codex plugin. Other supported editors read the repository-level files bootstrap emits (`AGENTS.md`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`) directly — those tools require no additional plugin install. Pick the section for your tool.
+Bootstrap ships as a Claude Code + Codex plugin. Other supported editors read the repository-level files bootstrap emits (`AGENTS.md`, `.cursor/`, `.windsurfrules`, `.github/copilot-instructions.md`) directly – those tools require no additional plugin install. Pick the section for your tool.
 
 ### Claude Code
 
@@ -225,10 +225,10 @@ Then ask Continue to apply the bootstrap workflow described in `AGENTS.md`.
 After installing, run bootstrap from a cloned repository. The skill will prompt for:
 
 - `<owner>`, `<repo>`, `<repo-description>`
-- `<visibility>` — public or private
-- `<is-agent-plugin>` — yes emits plugin manifests + Cursor/Windsurf/Copilot surfaces
-- `<use-superteam>` — yes emits `docs/superpowers/` skeleton
-- Continue.dev — opt-in
+- `<visibility>` – public or private
+- `<is-agent-plugin>` – yes emits plugin manifests + Cursor/Windsurf/Copilot surfaces
+- `<use-superteam>` – yes emits `docs/superpowers/` skeleton
+- Continue.dev – opt-in
 
 Author name, author email, and `SECURITY.md` contact default from `git config user.name` / `git config user.email`.
 
@@ -262,8 +262,8 @@ See [`CONTRIBUTING.md`](./CONTRIBUTING.md) and [`AGENTS.md`](./AGENTS.md). The r
 
 ## Related
 
-- [`skills/bootstrap/SKILL.md`](./skills/bootstrap/SKILL.md) — skill contract, modes, placeholders, emitted tree.
-- [`skills/bootstrap/audit-checklist.md`](./skills/bootstrap/audit-checklist.md) — realignment checklist.
-- [`docs/file-structure.md`](./docs/file-structure.md) — layout reference.
-- [`patinaproject/superteam`](https://github.com/patinaproject/superteam) — sibling plugin whose layout bootstrap enforces.
-- [`patinaproject/skills`](https://github.com/patinaproject/skills) — marketplace distributing Patina Project plugins.
+- [`skills/bootstrap/SKILL.md`](./skills/bootstrap/SKILL.md) – skill contract, modes, placeholders, emitted tree.
+- [`skills/bootstrap/audit-checklist.md`](./skills/bootstrap/audit-checklist.md) – realignment checklist.
+- [`docs/file-structure.md`](./docs/file-structure.md) – layout reference.
+- [`patinaproject/superteam`](https://github.com/patinaproject/superteam) – sibling plugin whose layout bootstrap enforces.
+- [`patinaproject/skills`](https://github.com/patinaproject/skills) – marketplace distributing Patina Project plugins.
