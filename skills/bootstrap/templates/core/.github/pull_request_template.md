@@ -31,10 +31,10 @@ Short outcome summary.
 
 <!--
   Evidence rows: one per required platform. Fields are pipe-separated in fixed order:
-  runner | env | @handle | ISO (UTC timestamp). Omit evidence rows only for ACs
+  runner | env | verifier | ISO (UTC timestamp). Omit evidence rows only for ACs
   explicitly marked `[platform: none]`. Do not use detached `- Evidence:` bullets.
 -->
-- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>
+- [ ] <Platform> evidence — <runner> | <env> | <verifier> | <ISO>
 <!--
   E2E gap row: INCLUDE ONLY when automated coverage has a real gap that a reviewer
   must consciously accept. When present, the row must sit directly above the
