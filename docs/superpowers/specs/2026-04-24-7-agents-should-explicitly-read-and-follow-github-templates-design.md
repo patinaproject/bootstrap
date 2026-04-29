@@ -36,7 +36,7 @@ Identical structure, same wording, so every scaffolded repo inherits the rule on
 - **AC-7-1**: `AGENTS.md` has a `## Working with .github/ templates` section that explicitly tells agents to read `.github/pull_request_template.md` before creating a PR and the matching `.github/ISSUE_TEMPLATE/*.md` before creating an issue.
 - **AC-7-2**: The section recommends `gh ... --body-file` (or a body that mirrors the template structure verbatim) and warns against inventing alternative section names.
 - **AC-7-3**: The same section is present, with parallel wording, in `skills/bootstrap/templates/core/AGENTS.md.tmpl`.
-- **AC-7-4**: No phantom file references — the section only names files that exist in the core baseline (`.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/bug_report.md`, `.github/ISSUE_TEMPLATE/feature_request.md`).
+- **AC-7-4**: No phantom file references – the section only names files that exist in the core baseline (`.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/bug_report.md`, `.github/ISSUE_TEMPLATE/feature_request.md`).
 - **AC-7-5**: `pnpm lint:md` passes.
 
 ## Verification

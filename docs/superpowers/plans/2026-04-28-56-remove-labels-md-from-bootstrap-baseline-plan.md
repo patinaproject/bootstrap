@@ -24,7 +24,7 @@ These were resolved during planning so the Executor does not re-derive them:
 3. The `AGENTS.md` "Issue and PR labels" lead paragraph is rewritten verbatim as:
 
    ```markdown
-   Use `gh label list` as the source of truth for the live label inventory; rely on each label's `description` when picking one. Create new labels with `gh label create` (or the GitHub UI) against the live repo — do not track labels in a Markdown file.
+   Use `gh label list` as the source of truth for the live label inventory; rely on each label's `description` when picking one. Create new labels with `gh label create` (or the GitHub UI) against the live repo – do not track labels in a Markdown file.
    ```
 
    The `gh label list --json name,description --jq '.[] | select(.description == "")'` verification snippet and the `Verify every label has a non-empty description:` lead-in stay exactly as on `main`. (AC-56-4.)
@@ -51,7 +51,7 @@ These were resolved during planning so the Executor does not re-derive them:
 
 - Modify: `skills/bootstrap/audit-checklist.md` (delete the table row currently at line 41)
 
-**ACs satisfied:** AC-56-2, AC-56-6 (partial — combined with T-56-2 and T-56-3).
+**ACs satisfied:** AC-56-2, AC-56-6 (partial – combined with T-56-2 and T-56-3).
 
 - [ ] **Step 1: Delete the row in full.**
 
@@ -98,7 +98,7 @@ These were resolved during planning so the Executor does not re-derive them:
   Replace the existing paragraph that begins `[.github/LABELS.md](.github/LABELS.md) is the source of truth ...` with this exact text (single paragraph, no list):
 
   ```markdown
-  Use `gh label list` as the source of truth for the live label inventory; rely on each label's `description` when picking one. Create new labels with `gh label create` (or the GitHub UI) against the live repo — do not track labels in a Markdown file.
+  Use `gh label list` as the source of truth for the live label inventory; rely on each label's `description` when picking one. Create new labels with `gh label create` (or the GitHub UI) against the live repo – do not track labels in a Markdown file.
   ```
 
   Keep the next line `Verify every label has a non-empty description:` and the fenced `gh label list --json name,description --jq '.[] | select(.description == "")'` block exactly as on `main`. Keep the release-please paragraph that follows (the one beginning "The `autorelease: pending` and `autorelease: tagged` labels are reserved ...") verbatim.
@@ -193,22 +193,22 @@ These were resolved during planning so the Executor does not re-derive them:
   Run: `pnpm lint:md`
   Expected: exit code 0. If any rule fires on `AGENTS.md`, fix in place (most likely MD013 line length on the rewritten paragraph; if so, leave the paragraph as a single sentence-per-line wrap consistent with the surrounding file).
 
-- [ ] **Step 2: AC-56-1 — file absence.**
+- [ ] **Step 2: AC-56-1 – file absence.**
 
   Run: `test ! -e .github/LABELS.md && echo AC-56-1-OK`
   Expected: prints `AC-56-1-OK`.
 
-- [ ] **Step 3: AC-56-2 — audit checklist clean.**
+- [ ] **Step 3: AC-56-2 – audit checklist clean.**
 
   Run: `grep -n 'LABELS.md' skills/bootstrap/audit-checklist.md && exit 1 || echo AC-56-2-OK`
   Expected: prints `AC-56-2-OK`.
 
-- [ ] **Step 4: AC-56-3 — AGENTS.md clean.**
+- [ ] **Step 4: AC-56-3 – AGENTS.md clean.**
 
   Run: `grep -n 'LABELS.md' AGENTS.md && exit 1 || echo AC-56-3-OK`
   Expected: prints `AC-56-3-OK`.
 
-- [ ] **Step 5: AC-56-4 — `gh label list` authority and verification snippet preserved.**
+- [ ] **Step 5: AC-56-4 – `gh label list` authority and verification snippet preserved.**
 
   Run:
 
@@ -220,17 +220,17 @@ These were resolved during planning so the Executor does not re-derive them:
 
   Expected: prints both grep matches and then `AC-56-4-OK`.
 
-- [ ] **Step 6: AC-56-5 — issue templates clean.**
+- [ ] **Step 6: AC-56-5 – issue templates clean.**
 
   Run: `grep -n 'LABELS.md' .github/ISSUE_TEMPLATE/*.md && exit 1 || echo AC-56-5-OK`
   Expected: prints `AC-56-5-OK`.
 
-- [ ] **Step 7: AC-56-6 — bootstrap skill tree clean.**
+- [ ] **Step 7: AC-56-6 – bootstrap skill tree clean.**
 
   Run: `grep -rn 'LABELS.md' skills/bootstrap/ && exit 1 || echo AC-56-6-OK`
   Expected: prints `AC-56-6-OK`.
 
-- [ ] **Step 8: AC-56-7 — release-please reservation untouched.**
+- [ ] **Step 8: AC-56-7 – release-please reservation untouched.**
 
   Run:
 
@@ -240,7 +240,7 @@ These were resolved during planning so the Executor does not re-derive them:
 
   Expected: prints `AC-56-7-OK`.
 
-- [ ] **Step 9: AC-56-8 — historical Superpowers artifacts untouched.**
+- [ ] **Step 9: AC-56-8 – historical Superpowers artifacts untouched.**
 
   Run:
 
@@ -256,7 +256,7 @@ These were resolved during planning so the Executor does not re-derive them:
 
 Two commits land on this branch:
 
-1. `d460f8e` (already on the branch): `docs: #56 add design for removing LABELS.md baseline` — the design doc only. No baseline edits.
+1. `d460f8e` (already on the branch): `docs: #56 add design for removing LABELS.md baseline` – the design doc only. No baseline edits.
 2. **This implementation commit (Executor creates):** a single `feat:` commit covering Tasks T-56-1 through T-56-5 (T-56-6 is verification only and produces no diff).
 
    Commit command:
@@ -272,9 +272,9 @@ Two commits land on this branch:
    git commit -m "feat: #56 remove LABELS.md from bootstrap baseline"
    ```
 
-   **Why `feat:` and not `docs:`.** Per AGENTS.md "Commit type selection", changes that alter shipped behavior in skill files, audit checklists, plugin metadata, generated agent instructions, or other user-visible configuration are `feat:`. This change alters the bootstrap audit contract (target repos no longer need `.github/LABELS.md`) and the repo-root contract surfaces emitted by the bootstrap skill — both shipped product surfaces. A `docs:` commit here would be a non-bumping type for a behavior-changing edit, which the AGENTS.md rules explicitly forbid for changes that should produce a release.
+   **Why `feat:` and not `docs:`.** Per AGENTS.md "Commit type selection", changes that alter shipped behavior in skill files, audit checklists, plugin metadata, generated agent instructions, or other user-visible configuration are `feat:`. This change alters the bootstrap audit contract (target repos no longer need `.github/LABELS.md`) and the repo-root contract surfaces emitted by the bootstrap skill – both shipped product surfaces. A `docs:` commit here would be a non-bumping type for a behavior-changing edit, which the AGENTS.md rules explicitly forbid for changes that should produce a release.
 
-If T-56-6 surfaces a lint failure that requires editing `AGENTS.md`, fold the fix into the same `feat:` commit (or, if already committed, create a follow-up `feat: #56 ...` commit — never `--amend`).
+If T-56-6 surfaces a lint failure that requires editing `AGENTS.md`, fold the fix into the same `feat:` commit (or, if already committed, create a follow-up `feat: #56 ...` commit – never `--amend`).
 
 ## Self-review
 

@@ -12,8 +12,8 @@ The approved design (`docs/superpowers/specs/2026-04-24-14-align-agentsmd-and-pr
 
 Add a dedicated "Release-please (tool-managed)" subsection to `.github/LABELS.md` that documents both release-please default labels:
 
-- `autorelease: pending` — relocate the existing entry into this subsection.
-- `autorelease: tagged` — new entry describing its role (applied by release-please once a release is tagged).
+- `autorelease: pending` – relocate the existing entry into this subsection.
+- `autorelease: tagged` – new entry describing its role (applied by release-please once a release is tagged).
 
 Both entries must carry non-empty descriptions consistent with the rest of the catalog. No other label entries change. Maps to **AC-14-1**.
 

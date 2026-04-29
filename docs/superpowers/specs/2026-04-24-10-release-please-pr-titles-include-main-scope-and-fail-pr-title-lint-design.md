@@ -34,7 +34,7 @@ Fix the title at its source, and let lint-pr skip automation-authored release PR
 
 ## Rejected Alternatives
 
-- **Relax `disallowScopes` to allow `(main)`.** Opens the door to all scopes repo-wide — the strict rule exists for a reason.
+- **Relax `disallowScopes` to allow `(main)`.** Opens the door to all scopes repo-wide – the strict rule exists for a reason.
 - **Loosen `subjectPattern` to make the `#<issue>` reference optional.** Breaks the repo's traceability guarantee for human PRs.
 - **Exempt release PRs by author (`github.actions[bot]`).** Fragile; token identities vary (GITHUB_TOKEN vs PATs vs GitHub App installs), and author-based gating has been a known footgun for Release Please users.
 - **Exempt by title prefix (`startsWith(title, 'chore: release')`).** Trivially spoofable by a human PR title; label-gating is stronger because only Release Please can attach `autorelease: pending`.

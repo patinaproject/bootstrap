@@ -2,12 +2,12 @@
 
 ## Problem Statement
 
-When a user opens Claude Desktop's plugin customization menu and views the bootstrap plugin entry, the rendered description is the generic fallback string **"Patina Project plugin: bootstrap"** — not a description authored by this repository. This string is not stored anywhere in the repo; Claude Desktop constructs it automatically when the surface it reads has no usable description.
+When a user opens Claude Desktop's plugin customization menu and views the bootstrap plugin entry, the rendered description is the generic fallback string **"Patina Project plugin: bootstrap"** – not a description authored by this repository. This string is not stored anywhere in the repo; Claude Desktop constructs it automatically when the surface it reads has no usable description.
 
 The root cause has two compounding parts:
 
 1. `.claude-plugin/plugin.json` contains a `description` field, but Claude Desktop's customization menu is not reading it (or the value is being overridden by the absence of a marketplace entry).
-2. `patinaproject/skills` `.claude-plugin/marketplace.json` has `plugins: []` — bootstrap is not listed, so there is no marketplace-level description either.
+2. `patinaproject/skills` `.claude-plugin/marketplace.json` has `plugins: []` – bootstrap is not listed, so there is no marketplace-level description either.
 
 Users browsing the menu cannot determine the plugin's purpose or decide whether to enable it.
 
@@ -24,13 +24,13 @@ The fallback string "Patina Project plugin: bootstrap" is a pattern consistent w
 
 This is functional prose, so either Claude Desktop is not reading the local field at all (the marketplace is the authoritative source), or it is reading it but the marketplace absence causes the fallback to override it. Without access to Claude Desktop's source, the exact resolution order is unconfirmed.
 
-**Decision: fix both surfaces.** Updating only the local `description` may be insufficient if the marketplace is the primary source. Updating only the marketplace does not keep the two surfaces consistent. Fixing both — with identical copy — eliminates the ambiguity, is low-risk, and keeps the repo and marketplace aligned regardless of which surface wins.
+**Decision: fix both surfaces.** Updating only the local `description` may be insufficient if the marketplace is the primary source. Updating only the marketplace does not keep the two surfaces consistent. Fixing both – with identical copy – eliminates the ambiguity, is low-risk, and keeps the repo and marketplace aligned regardless of which surface wins.
 
 ## Agreed Description Copy
 
 The new description, fitting the ~120-character constraint to avoid truncation in the menu:
 
-> "Scaffold a new repository to the Patina Project baseline — commits, PRs, PNPM tooling, agent docs, and AI-tool plugin surfaces — or realign on rerun."
+> "Scaffold a new repository to the Patina Project baseline – commits, PRs, PNPM tooling, agent docs, and AI-tool plugin surfaces – or realign on rerun."
 
 Character count: 148. For the `description` field (single-line, may truncate), a shorter variant is used:
 
@@ -46,7 +46,7 @@ Character count: 125. Either variant is acceptable; the shorter form is preferre
 
 2. **Root mirror via realignment:** Run the local bootstrap skill in realignment mode to propagate the template change to `.claude-plugin/plugin.json`. Commit the template change and the mirrored root change together.
 
-3. **Template convention for generated repos:** The current template uses the placeholder `{{repo-description}}` for the `description` field in generated repos. No structural change is needed — the template already guides maintainers to supply their own copy. The existing convention is sufficient for AC-33-4.
+3. **Template convention for generated repos:** The current template uses the placeholder `{{repo-description}}` for the `description` field in generated repos. No structural change is needed – the template already guides maintainers to supply their own copy. The existing convention is sufficient for AC-33-4.
 
 ### Out of scope for this PR (separate PR in patinaproject/skills)
 
@@ -59,7 +59,7 @@ Character count: 125. Either variant is acceptable; the shorter form is preferre
 - Renaming the plugin or changing its slug (`bootstrap`).
 - Reorganizing the bootstrap skill directory or its template tree.
 - Adding `displayName`, `shortDescription`, `longDescription`, or `defaultPrompt` fields to `.claude-plugin/plugin.json` (those belong to the Codex manifest surface; Claude Desktop does not consume them from the Claude plugin manifest).
-- Changing `.codex-plugin/plugin.json` content — the Codex manifest already has strong copy and is out of scope.
+- Changing `.codex-plugin/plugin.json` content – the Codex manifest already has strong copy and is out of scope.
 - Verifying the fix inside Claude Desktop via automated test (manual verification post-deploy is sufficient).
 
 ## Acceptance Criteria
@@ -80,7 +80,7 @@ Given the bootstrap repo at HEAD (after this PR merges), when a reviewer reads `
 Verification:
 
 - [ ] `grep '"description"' .claude-plugin/plugin.json` returns the agreed literal copy.
-- [ ] `grep '"description"' skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` returns the `{{repo-description}}` placeholder (not the literal copy — the template uses a placeholder that realignment expands into the root file).
+- [ ] `grep '"description"' skills/bootstrap/templates/agent-plugin/.claude-plugin/plugin.json.tmpl` returns the `{{repo-description}}` placeholder (not the literal copy – the template uses a placeholder that realignment expands into the root file).
 - [ ] Both the root file and the template are in sync: the root value reflects what the template placeholder resolves to after realignment (no drift).
 
 ### AC-33-3

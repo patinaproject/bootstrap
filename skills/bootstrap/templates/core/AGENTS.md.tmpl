@@ -56,7 +56,7 @@ If you add executable tooling later, document the exact verification command in 
 
 ## Issue and PR labels
 
-Use `gh label list` to see the repository's canonical label set. Each label's `description` documents when to apply it. Rely on those descriptions when selecting labels for issues and PRs — do not invent new labels without updating the repository's label set first.
+Use `gh label list` to see the repository's canonical label set. Each label's `description` documents when to apply it. Rely on those descriptions when selecting labels for issues and PRs – do not invent new labels without updating the repository's label set first.
 
 Verify every label has a non-empty description:
 
@@ -68,9 +68,9 @@ The `autorelease: pending` and `autorelease: tagged` labels are reserved for Rel
 
 ## Working with `.github/` templates
 
-This repo ships canonical templates for issues and pull requests. Agents must use them — do not invent parallel structure.
+This repo ships canonical templates for issues and pull requests. Agents must use them – do not invent parallel structure.
 
-- Pull requests: `.github/pull_request_template.md`. Read it before running `gh pr create`. The PR body must use the template's section headings in the order the template defines, even when the body is passed inline via `--body`.
+- Pull requests: `.github/pull_request_template.md`. Read it before running `gh pr create`. The PR body must use the template's section headings (`Linked issue`, `What changed`, `Do before merging`, `Test coverage`, `Acceptance criteria`) in the order the template defines, even when the body is passed inline via `--body`.
 - Issues: `.github/ISSUE_TEMPLATE/bug_report.md` and `.github/ISSUE_TEMPLATE/feature_request.md`. Pick the one that matches the report and reproduce its sections in order.
 
 Recommended `gh` patterns:
@@ -78,7 +78,7 @@ Recommended `gh` patterns:
 - PRs: `gh pr create --body-file <path-to-rendered-body>` is the safest path. The rendered body must already follow the template. If you pass `--body` inline, copy every template section name and order verbatim before filling them in.
 - Issues: `gh issue create --template bug_report.md` or `--template feature_request.md` lets `gh` start from the canonical file. If you pass `--body` inline, mirror the template's headings the same way.
 
-Do not invent alternative section names when the template uses different ones — extend an existing section instead, or open a follow-up to update the template itself. The PR-body acceptance-criteria rules under [Commit & Pull Request Guidelines](#commit--pull-request-guidelines) are a refinement of the template's `Acceptance criteria` section, not a replacement for it.
+Do not invent alternative section names when the template uses different ones – extend an existing section instead, or open a follow-up to update the template itself. The PR-body acceptance-criteria rules under [Commit & Pull Request Guidelines](#commit--pull-request-guidelines) are a refinement of the template's `Acceptance criteria` section, not a replacement for it.
 
 ## GitHub Actions pinning
 
@@ -103,7 +103,7 @@ Scopes like `feat(repo): ...` are rejected. Keep the subject within 72 character
 
 ### Commit type selection
 
-Pick the commit type by **path**, not by file extension or self-judged "intent". If any file in the diff matches one of the product-surface globs below, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`.
+Pick the commit type by **path**, not by file extension or self-judged "intent". If any file in the diff matches one of the product-surface globs below, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`.
 
 **Product-surface globs:**
 
@@ -114,9 +114,9 @@ Pick the commit type by **path**, not by file extension or self-judged "intent".
 - `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`
 - `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl`
 
-**Path-first rule:** If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`. `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs. There is no "explanatory-only" exception, no PR-body call-out, no reviewer override.
+**Path-first rule:** If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`. `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs. There is no "explanatory-only" exception, no PR-body call-out, no reviewer override.
 
-The type table below is for reference once the path test has resolved to `feat:` / `fix:` (additive vs. corrective) or — when no product-surface glob is touched — to `docs:` / `chore:`.
+The type table below is for reference once the path test has resolved to `feat:` / `fix:` (additive vs. corrective) or – when no product-surface glob is touched – to `docs:` / `chore:`.
 
 | Change | Type |
 |--------|------|
@@ -135,7 +135,7 @@ Changes that should produce a release must not use non-bumping types such as `do
 | "I'm only aligning wording with the source of truth." | If the source of truth is itself a product surface (skill, template, agent instruction), wording IS behavior. Use `feat:`. |
 | "It's just a template change." | Templates under `skills/bootstrap/templates/**` ship to every bootstrapped repo on the next realignment. They are product. Use `feat:` / `fix:`. |
 | "I'm only adding a non-goal or an example to a skill." | Examples and non-goals on a `SKILL.md` change how the skill is interpreted by agents. Product. `feat:`. |
-| "I'm fixing a typo in a skill body." | Path-only rule: any edit inside `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, or `.github/copilot-instructions.md` is `fix:` when correcting wrong shipped content and `feat:` when adding or changing shipped content. Do not assess "whether it affects how the skill is read" — the path test already settled it. `chore:` is only available when the diff touches zero product-surface globs. |
+| "I'm fixing a typo in a skill body." | Path-only rule: any edit inside `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, or `.github/copilot-instructions.md` is `fix:` when correcting wrong shipped content and `feat:` when adding or changing shipped content. Do not assess "whether it affects how the skill is read" – the path test already settled it. `chore:` is only available when the diff touches zero product-surface globs. |
 | "It's a plugin manifest version bump." | Release-please owns version bumps under `chore: release X.Y.Z`. Hand-editing a manifest version outside that flow is a `fix:` (lockstep correction) or a release-PR commit, never `docs:`. Other manifest edits (description, homepage, keywords) are `feat:` because they change marketplace-visible product. |
 | "I'm rewording an agent instruction." | Agent instructions ARE the contract. `feat:`. |
 | "It's a markdown-lint cleanup with no semantic change." | Allowed as `chore:` only if zero product-surface globs are touched. If any product-surface glob is touched, `feat:` (or `fix:` if the lint fix corrected wrong shipped content). |
@@ -147,7 +147,7 @@ Changes that should produce a release must not use non-bumping types such as `do
 >
 > - You are about to commit `docs:` or `chore:` but `git diff --name-only` shows a file under `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, `.github/copilot-instructions.md`, `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`, `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, or `RELEASING.md.tmpl`.
 > - Your commit message says "align", "standardize", "clarify", "rename", "rewrite", or "rework" AND the diff touches a product-surface glob.
-> - You are using `docs:` or `chore:` for any change to `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, or `RELEASING.md.tmpl`. These files are agent-facing and contributor-facing contracts — every edit is `feat:` or `fix:`.
+> - You are using `docs:` or `chore:` for any change to `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, or `RELEASING.md.tmpl`. These files are agent-facing and contributor-facing contracts – every edit is `feat:` or `fix:`.
 
 #### Worked example (WRONG → RIGHT)
 
@@ -156,22 +156,22 @@ A historical commit on this repository touched a plugin manifest, a skill body, 
 - WRONG: `docs: #46 standardize Patina Project name`
 - RIGHT: `feat: #46 standardize Patina Project name across product surfaces`
 
-The verb "standardize" combined with a diff under `skills/**` and `.codex-plugin/**` is a path-first `feat:` — no judgement call required.
+The verb "standardize" combined with a diff under `skills/**` and `.codex-plugin/**` is a path-first `feat:` – no judgement call required.
 
 #### Round-trip discipline
 
-On this repo the canonical "Commit type selection" section is shipped through `skills/bootstrap/templates/core/AGENTS.md.tmpl` and round-tripped to root `AGENTS.md` via the `bootstrap` skill in realignment mode. Mistyped commits silently suppress releases — see [`RELEASING.md`](RELEASING.md) for the release-please semver mapping. The AC-54-7 parity grep (a one-liner that checks every per-tool surface for the verbatim glob list) is the verification artifact.
+On this repo the canonical "Commit type selection" section is shipped through `skills/bootstrap/templates/core/AGENTS.md.tmpl` and round-tripped to root `AGENTS.md` via the `bootstrap` skill in realignment mode. Mistyped commits silently suppress releases – see [`RELEASING.md`](RELEASING.md) for the release-please semver mapping. The AC-54-7 parity grep (a one-liner that checks every per-tool surface for the verbatim glob list) is the verification artifact.
 
-Pull requests should include a short summary, linked issue, validation notes, and any updated docs when structure or workflow changes.
+Pull requests should include linked issue (`None` when no issue applies), what changed, a `Do before merging` section for work-specific operator pre-merge steps, test coverage matrix, and acceptance-criteria outcomes.
 
 For squash-and-merge workflows, PR titles must exactly match the commit format. Use the final intended squash commit title as the PR title.
 
 GitHub issue titles are different: write them as plain-language summaries of the problem or request. Do not use conventional-commit prefixes like `docs:` or `feat:` in issue titles.
 
-When an issue defines acceptance criteria, include an `Acceptance Criteria` section in the PR description.
+When an issue defines acceptance criteria, include an `Acceptance criteria` section in the PR description.
 
 - Use one `### AC-<issue>-<n>` heading per relevant AC, with the heading containing only the AC ID.
 - Put a short outcome summary on the line below the heading.
 - Put verification steps directly under the AC they validate.
-- Use checkboxes only for testing or verification steps.
-- If an AC is deferred or out of scope for the repo, say so in the summary text and do not add fake verification checkboxes.
+- Use checkboxes only for operator actions that must happen before merge.
+- If an AC is deferred or out of scope for the repo, say so in the summary text and do not add fake checkboxes.

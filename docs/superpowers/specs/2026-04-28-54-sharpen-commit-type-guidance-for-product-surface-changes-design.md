@@ -13,21 +13,21 @@ templates.
 The rule is not landing in practice. A `git log` survey of this repository
 shows repeated `docs:` commits that touched product surfaces:
 
-- `082c5e9 docs: #46 standardize Patina Project name` — touched
+- `082c5e9 docs: #46 standardize Patina Project name` – touched
   `.codex-plugin/plugin.json`, `skills/bootstrap/SKILL.md`,
   `skills/bootstrap/agent-spawn-template.md`,
   `skills/bootstrap/pr-body-template.md`, and three template files under
   `skills/bootstrap/templates/**`. Plugin manifest + skill body + templates
   are all product surfaces; this should have been `feat:`.
 - `d6fe7d5 docs: #14 align agents and pr template with source-of-truth docs`
-  — touched `AGENTS.md` and `.github/pull_request_template.md` (the
+  – touched `AGENTS.md` and `.github/pull_request_template.md` (the
   workflow contract).
-- `0b6ebf0 docs: #11 incorporate issue filing style into templates` —
+- `0b6ebf0 docs: #11 incorporate issue filing style into templates` –
   touched `.github/ISSUE_TEMPLATE/**`, `.github/LABELS.md`.
-- `7f1a1a5 docs: #7 instruct agents to follow .github/ templates` —
+- `7f1a1a5 docs: #7 instruct agents to follow .github/ templates` –
   touched `AGENTS.md` and `skills/bootstrap/templates/core/AGENTS.md.tmpl`
   (a workflow contract that ships through every bootstrapped repo).
-- `9e32a1b docs: #3 align marketplace id and add per-tool install docs` —
+- `9e32a1b docs: #3 align marketplace id and add per-tool install docs` –
   touched `skills/bootstrap/SKILL.md`,
   `skills/bootstrap/audit-checklist.md`,
   `skills/bootstrap/templates/agent-plugin/README.md.tmpl`,
@@ -141,7 +141,7 @@ enforcement, and does not retroactively re-type past commits.
   `.github/copilot-instructions.md`, `.github/workflows/**`,
   `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`,
   `.github/LABELS.md`, `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`,
-  `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl` — so the
+  `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl` – so the
   agent can match its diff against a concrete list rather than a verbal
   category.
 
@@ -211,7 +211,7 @@ modes, with the planted counter:
 | # | Failure mode | Why current guidance fails | Counter required |
 |---|--------------|----------------------------|------------------|
 | 1 | "It's just Markdown" | The table says behavior expressed in Markdown counts, but the agent reads its own diff and sees text changes. | Anchor the rule to **path globs**, not "behavior". If the diff touches one of the listed globs, the type is `feat:` / `fix:` unless a named exception applies. Path is verifiable; "behavior" is judgment. |
-| 2 | "Explanatory-only" escape hatch | The qualifier "unless explanatory-only and does not alter installed behavior" is self-selected. | **Delete the qualifier entirely. There is no escape hatch.** Replace with a hard, path-only rule: `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs. If any file in the diff is under a product-surface glob, the type is `feat:` or `fix:` — full stop, no PR-body call-out, no reviewer sign-off, no "but this one is explanatory" override. Reviewers do not have authority to grant the exception because no exception exists. |
+| 2 | "Explanatory-only" escape hatch | The qualifier "unless explanatory-only and does not alter installed behavior" is self-selected. | **Delete the qualifier entirely. There is no escape hatch.** Replace with a hard, path-only rule: `docs:` and `chore:` apply if and only if the diff touches **zero** product-surface globs. If any file in the diff is under a product-surface glob, the type is `feat:` or `fix:` – full stop, no PR-body call-out, no reviewer sign-off, no "but this one is explanatory" override. Reviewers do not have authority to grant the exception because no exception exists. |
 | 3 | Surface fragmentation | `.cursor`, `.windsurfrules`, `copilot-instructions.md` give a one-line summary that omits the rationalizations and the path-glob list. | Each per-tool surface must include the product-surface glob list and a single WRONG → RIGHT example, or must inline-link to the canonical `AGENTS.md` section with the explicit instruction "read this before classifying any commit that touches a tracked path". |
 
 ## Considered approaches
@@ -229,7 +229,7 @@ WHAT-each-type-means table, but add:
   "skill-body typo", "config tweak", "lockstep version bump",
   "alignment with source of truth") and the resolution for each;
 - a Red Flags list ("you are about to commit `docs:` but the diff touches
-  `skills/**` — STOP");
+  `skills/**` – STOP");
 - two concrete WRONG → RIGHT pairs lifted from the historical commits
   identified in Context (e.g. `docs: #46 standardize Patina Project name`
   → `feat: #46 standardize Patina Project name across product surfaces`).
@@ -255,7 +255,7 @@ needs to be unmissable, not minimal.
 
 **Why preferred:** matches `superpowers:writing-skills` discipline
 (rationalization table + red flags + WRONG → RIGHT). Closes the three
-named failure modes directly. No CI / commitlint changes — pure
+named failure modes directly. No CI / commitlint changes – pure
 guidance.
 
 ### Alternative A: Tighten only the canonical AGENTS.md section, leave per-tool surfaces alone
@@ -298,7 +298,7 @@ design closes it by:
 | "I'm only aligning wording with the source of truth." | If the source of truth is itself a product surface (skill, template, agent instruction), wording IS behavior. Use `feat:`. |
 | "It's just a template change." | Templates under `skills/bootstrap/templates/**` ship to every bootstrapped repo on the next realignment. They are product. Use `feat:` / `fix:`. |
 | "I'm only adding a non-goal or an example to a skill." | Examples and non-goals on a `SKILL.md` change how the skill is interpreted by agents. Product. `feat:`. |
-| "I'm fixing a typo in a skill body." | Path-only rule: any edit inside `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, or `.github/copilot-instructions.md` is `fix:` when correcting wrong shipped content and `feat:` when adding or changing shipped content. Do not assess "whether it affects how the skill is read" — the path test already settled it. `chore:` is only available when the diff touches zero product-surface globs. |
+| "I'm fixing a typo in a skill body." | Path-only rule: any edit inside `skills/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, or `.github/copilot-instructions.md` is `fix:` when correcting wrong shipped content and `feat:` when adding or changing shipped content. Do not assess "whether it affects how the skill is read" – the path test already settled it. `chore:` is only available when the diff touches zero product-surface globs. |
 | "It's a plugin manifest version bump." | Release-please owns version bumps under `chore: release X.Y.Z`. Hand-editing a manifest version outside that flow is a `fix:` (lockstep correction) or a release-PR commit, never `docs:`. |
 | "I'm rewording an agent instruction." | Agent instructions ARE the contract. `feat:`. |
 | "It's a markdown-lint cleanup with no semantic change." | Allowed as `chore:` only if zero product-surface globs are touched. If any product-surface glob is touched, `feat:` (or `fix:` if the lint fix corrected wrong shipped content). |
@@ -323,7 +323,7 @@ The canonical section must end with a STOP block:
 > - You are using `docs:` or `chore:` for any change to `AGENTS.md`,
 >   `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`,
 >   `RELEASING.md`, or `RELEASING.md.tmpl`. These files are agent-facing
->   and contributor-facing contracts — every edit is `feat:` (new or
+>   and contributor-facing contracts – every edit is `feat:` (new or
 >   changed rule) or `fix:` (corrected wrong rule).
 
 ### Token-efficiency targets
@@ -359,7 +359,7 @@ counter:
 |--------|---------|
 | Agent commits with `docs:` and squashes into a PR titled `feat:`. | PR-title-lint already exists. Squash inherits PR title. Acceptable. |
 | Agent commits multiple changes, types the commit by the "biggest" change. | Commit-by-impact rule already in place. Add explicit guidance: if any file in the diff is on a product-surface glob, the commit type is at least `feat:`. |
-| Agent uses `docs:` and adds an explanatory-only call-out in PR body even though the change is behavioral. | Not available. The escape hatch is deleted; there is no "explanatory-only call-out" option. PR template MUST NOT include any reviewer-grant checkbox for this — see LOW-3 disposition. |
+| Agent uses `docs:` and adds an explanatory-only call-out in PR body even though the change is behavioral. | Not available. The escape hatch is deleted; there is no "explanatory-only call-out" option. PR template MUST NOT include any reviewer-grant checkbox for this – see LOW-3 disposition. |
 | Agent edits root `AGENTS.md` directly without round-tripping through the template. | Round-trip parity is verified by the AC-54-7 grep one-liner, whose output must be pasted in the PR body's `Validation` section. An empty grep output is the verification artifact; the Planner does not need to invent a separate check. |
 
 ## Round-trip discipline
@@ -375,7 +375,7 @@ For AC-54-2 and AC-54-7:
    so reviewers see both halves.
 6. Run the AC-54-7 parity grep one-liner from the repo root and paste
    its output (which must be empty) into the PR body's `Validation`
-   section. Non-empty output is a hard blocker — the listed surface(s)
+   section. Non-empty output is a hard blocker – the listed surface(s)
    missed the glob list and must be updated before merge.
 
 The implementation commits are themselves a worked example of the rule
@@ -588,7 +588,7 @@ adversarial_review_findings_round_2:
       Closed. AC-54-6 glob list extended to include .github/LABELS.md,
       AGENTS.md, AGENTS.md.tmpl, CONTRIBUTING.md, CONTRIBUTING.md.tmpl,
       RELEASING.md, RELEASING.md.tmpl. Red-flags bullet 3 rewritten to
-      drop the "adds or changes a rule" qualifier — every edit to those
+      drop the "adds or changes a rule" qualifier – every edit to those
       files is feat: or fix: by path. Role-ownership table extended to
       include LABELS.md.
   - source: adversarial-review

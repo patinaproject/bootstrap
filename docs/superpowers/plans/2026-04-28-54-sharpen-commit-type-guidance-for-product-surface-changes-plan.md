@@ -14,7 +14,7 @@
 
 ## Surface inventory
 
-Group A — **Templates** (under `skills/bootstrap/templates/**`, edited FIRST):
+Group A – **Templates** (under `skills/bootstrap/templates/**`, edited FIRST):
 
 | File | Edits required | ACs |
 |---|---|---|
@@ -26,7 +26,7 @@ Group A — **Templates** (under `skills/bootstrap/templates/**`, edited FIRST):
 | `skills/bootstrap/templates/agent-plugin/.github/copilot-instructions.md` | Same four-element block. ≤ 20 added lines. | AC-54-3 |
 | `skills/bootstrap/templates/agent-plugin/README.md.tmpl` | If it currently teaches commit types, mirror the lead block. If it does not, leave alone (per design's role-ownership table). | AC-54-3 (verification only) |
 
-Group B — **Root mirrors** (realigned via the local `bootstrap` skill in realignment mode AFTER Group A lands):
+Group B – **Root mirrors** (realigned via the local `bootstrap` skill in realignment mode AFTER Group A lands):
 
 - `AGENTS.md`
 - `CONTRIBUTING.md`
@@ -35,7 +35,7 @@ Group B — **Root mirrors** (realigned via the local `bootstrap` skill in reali
 - `.windsurfrules`
 - `.github/copilot-instructions.md`
 
-Group C — **Bootstrap skill internals** (this skill is a product surface; AC-54-8 meta-example):
+Group C – **Bootstrap skill internals** (this skill is a product surface; AC-54-8 meta-example):
 
 | File | Edits required | ACs |
 |---|---|---|
@@ -44,28 +44,28 @@ Group C — **Bootstrap skill internals** (this skill is a product surface; AC-5
 | `skills/bootstrap/agent-spawn-template.md` | If the spawn template references commit types, point it at the canonical AGENTS.md section. Otherwise leave alone. | AC-54-3 (verification only) |
 | `skills/bootstrap/pr-body-template.md` | Add a Validation-section reminder: paste the AC-54-7 grep parity output (or "empty output verified") when the PR touches commit-type guidance. | AC-54-7 |
 
-Group D — **Adjacent prompt surfaces** (verified in scope or explicitly out):
+Group D – **Adjacent prompt surfaces** (verified in scope or explicitly out):
 
-- `.claude/agents/` — none today (verified via `find skills -maxdepth 2`); no edits.
-- `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json` — manifests; not commit-type instruction surfaces. No edits unless realignment of unrelated fields surfaces drift, in which case skip per templates-first discipline.
-- `release-please-config.json`, `.release-please-manifest.json` — out of scope; no version-bump implication for this PR (the bootstrap plugin's own version will be bumped by release-please from the `feat:` squash title; no manual edit).
-- `scripts/sync-plugin-versions.mjs`, `scripts/check-plugin-versions.mjs` — out of scope; no commit-type content.
+- `.claude/agents/` – none today (verified via `find skills -maxdepth 2`); no edits.
+- `.claude-plugin/plugin.json`, `.codex-plugin/plugin.json` – manifests; not commit-type instruction surfaces. No edits unless realignment of unrelated fields surfaces drift, in which case skip per templates-first discipline.
+- `release-please-config.json`, `.release-please-manifest.json` – out of scope; no version-bump implication for this PR (the bootstrap plugin's own version will be bumped by release-please from the `feat:` squash title; no manual edit).
+- `scripts/sync-plugin-versions.mjs`, `scripts/check-plugin-versions.mjs` – out of scope; no commit-type content.
 
 ## Canonical AGENTS.md "Commit type selection" section structure
 
 The new section MUST appear in this order in both `skills/bootstrap/templates/core/AGENTS.md.tmpl` and root `AGENTS.md` (and the duplicated copy in `skills/bootstrap/SKILL.md`):
 
-1. **Lead block (FIRST, before the type table) — AC-54-6 ordering requirement:**
+1. **Lead block (FIRST, before the type table) – AC-54-6 ordering requirement:**
    - Verbatim product-surface glob list (rendered as a code block or bulleted code spans):
      `skills/**`, `skills/bootstrap/templates/**`, `.claude-plugin/**`, `.codex-plugin/**`, `.cursor/**`, `.windsurfrules`, `.github/copilot-instructions.md`, `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`, `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl`.
    - One-sentence path-first rule (verbatim, identical across all surfaces):
-     `If any file in the diff is under one of these globs, the commit type is feat: or fix: — never docs: or chore:.`
+     `If any file in the diff is under one of these globs, the commit type is feat: or fix: – never docs: or chore:.`
 
 2. **Type table** (existing four-row table, kept as-is for reference; the lead block makes it advisory rather than the primary decision tool).
 
 3. **Rationalization table** (9 named excuses + counters, copied verbatim from the design's "Rationalization table (planted in canonical section)" subsection). Headers: `| Rationalization | Reality |`.
 
-4. **Red Flags STOP block** (markdown blockquote starting `**STOP and reconsider if any of these are true:**` with three bullets, copied verbatim from the design's Red Flags subsection — and per HIGH-2 / MEDIUM-2 closure the bullet 3 wording does NOT contain "adds or changes a rule"; every edit to those files is `feat:` or `fix:` by path).
+4. **Red Flags STOP block** (markdown blockquote starting `**STOP and reconsider if any of these are true:**` with three bullets, copied verbatim from the design's Red Flags subsection – and per HIGH-2 / MEDIUM-2 closure the bullet 3 wording does NOT contain "adds or changes a rule"; every edit to those files is `feat:` or `fix:` by path).
 
 5. **WRONG → RIGHT pair** (≥1, drawn from a real historical commit). The plan picks `082c5e9` because it is the most pedagogical: it touched a plugin manifest AND skill body AND multiple templates, all three product-surface categories at once, and the rationalization in its subject ("standardize") is one of the named red-flag verbs.
    - WRONG: `docs: #46 standardize Patina Project name`
@@ -80,9 +80,9 @@ The "Edits to `skills/**/SKILL.md` and adjacent skill workflow contracts are pro
 The verbatim block emitted into `.cursor/rules/{{repo}}.mdc`, `.windsurfrules`, and `.github/copilot-instructions.md` (and their root mirrors), tightened to ≤ 20 lines each:
 
 ````markdown
-### Commit type — path-first rule
+### Commit type – path-first rule
 
-If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` — never `docs:` or `chore:`:
+If any file in the diff is under one of these globs, the commit type is `feat:` or `fix:` – never `docs:` or `chore:`:
 
 - `skills/**`
 - `skills/bootstrap/templates/**`
@@ -91,7 +91,7 @@ If any file in the diff is under one of these globs, the commit type is `feat:` 
 - `.github/workflows/**`, `.github/ISSUE_TEMPLATE/**`, `.github/pull_request_template.md`, `.github/LABELS.md`
 - `AGENTS.md`, `AGENTS.md.tmpl`, `CONTRIBUTING.md`, `CONTRIBUTING.md.tmpl`, `RELEASING.md`, `RELEASING.md.tmpl`
 
-Example — wording standardization across plugin manifests, skill bodies, and templates:
+Example – wording standardization across plugin manifests, skill bodies, and templates:
 
 - WRONG: `docs: #46 standardize Patina Project name`
 - RIGHT: `feat: #46 standardize Patina Project name across product surfaces`
@@ -99,7 +99,7 @@ Example — wording standardization across plugin manifests, skill bodies, and t
 Full rationalization table and red flags: see [`AGENTS.md` "Commit type selection"](/AGENTS.md#commit-type-selection).
 ````
 
-The `{{repo}}.mdc` template uses `[\`AGENTS.md\` "Commit type selection"](/AGENTS.md#commit-type-selection)` as the link form. The `.windsurfrules` and `.github/copilot-instructions.md`templates use the same anchor with their existing relative paths (`AGENTS.md` and `../AGENTS.md` respectively). The verbatim glob bullet list is identical across all three surfaces — the AC-54-7 grep parity check enforces this.
+The `{{repo}}.mdc` template uses `[\`AGENTS.md\` "Commit type selection"](/AGENTS.md#commit-type-selection)` as the link form. The `.windsurfrules` and `.github/copilot-instructions.md`templates use the same anchor with their existing relative paths (`AGENTS.md` and `../AGENTS.md` respectively). The verbatim glob bullet list is identical across all three surfaces – the AC-54-7 grep parity check enforces this.
 
 ## Round-trip parity grep (AC-54-7)
 
@@ -152,7 +152,7 @@ Diff (synthetic; treat as if real):
 
   diff --git a/skills/bootstrap/SKILL.md b/skills/bootstrap/SKILL.md
   @@ -7,1 +7,1 @@
-  - `bootstrap` scaffolds a repository — new or existing — to the Patina Project baseline.
+  - `bootstrap` scaffolds a repository – new or existing – to the Patina Project baseline.
   + `bootstrap` scaffolds a repository (new or existing) to the Patina Project baseline.
 
 The issue number to reference is #99 (synthetic).
@@ -172,13 +172,13 @@ Workstreams W1 → W5 run sequentially because the round-trip discipline require
 | W2: Run grep RED | T2.1 grep on templates only, expect MISSING for root files (RED before realignment) | RED | sequential |
 | W3: Realignment to root mirrors | T3.1 run bootstrap skill realignment, T3.2 accept root diffs, T3.3 commit | REFACTOR | sequential |
 | W4: GREEN verification | T4.1 grep parity (empty), T4.2 markdown lint, T4.3 cold-context subagent verification | GREEN | T4.1/T4.2 parallel; T4.3 last |
-| W5: PR | T5.1 PR body assembly, T5.2 push branch, T5.3 open PR | — | sequential |
+| W5: PR | T5.1 PR body assembly, T5.2 push branch, T5.3 open PR | – | sequential |
 
 ---
 
-## Workstream W1 — Templates + bootstrap-skill internals
+## Workstream W1 – Templates + bootstrap-skill internals
 
-### Task T1.1: RED — write the parity-check grep and confirm it currently fails
+### Task T1.1: RED – write the parity-check grep and confirm it currently fails
 
 **Files:**
 
@@ -215,15 +215,15 @@ Expected: NON-empty output naming several surfaces missing the glob list (`AGENT
 
 Save the grep output to a scratch file or paste into the eventual PR body's `Validation` section under "RED-phase baseline". Confirm the test fails before any GREEN edit.
 
-### Task T1.2: GREEN — rewrite canonical section in `AGENTS.md.tmpl`
+### Task T1.2: GREEN – rewrite canonical section in `AGENTS.md.tmpl`
 
 **Files:**
 
-- Modify: `skills/bootstrap/templates/core/AGENTS.md.tmpl` (replace lines 104-117 inclusive — the existing "Commit type selection" subsection).
+- Modify: `skills/bootstrap/templates/core/AGENTS.md.tmpl` (replace lines 104-117 inclusive – the existing "Commit type selection" subsection).
 
 - [ ] **Step 1: Replace the section body**
 
-Replace the existing block (the "Choose the commit type by product impact …" paragraph through the "Use `docs:` … explanatory-only …" paragraph) with the new section in this exact order: (1) lead block — glob list + path-first rule; (2) type table (kept verbatim from current); (3) rationalization table (9 rows, copied from the design); (4) red-flags STOP blockquote (three bullets, no "adds or changes a rule" qualifier on bullet 3); (5) WRONG → RIGHT pair using `082c5e9`; (6) round-trip discipline reference paragraph linking to `RELEASING.md`.
+Replace the existing block (the "Choose the commit type by product impact …" paragraph through the "Use `docs:` … explanatory-only …" paragraph) with the new section in this exact order: (1) lead block – glob list + path-first rule; (2) type table (kept verbatim from current); (3) rationalization table (9 rows, copied from the design); (4) red-flags STOP blockquote (three bullets, no "adds or changes a rule" qualifier on bullet 3); (5) WRONG → RIGHT pair using `082c5e9`; (6) round-trip discipline reference paragraph linking to `RELEASING.md`.
 
 The full text follows the canonical structure spelled out under "Canonical AGENTS.md 'Commit type selection' section structure" above. Use the verbatim glob list and path-first rule sentence from this plan; do NOT paraphrase.
 
@@ -241,7 +241,7 @@ grep -n "explanatory-only\|clearly explanatory" skills/bootstrap/templates/core/
 
 Expected: empty output. Any hit means the loophole is still present and the file must be re-edited.
 
-### Task T1.3: GREEN — mirror lead block in `CONTRIBUTING.md.tmpl`
+### Task T1.3: GREEN – mirror lead block in `CONTRIBUTING.md.tmpl`
 
 **Files:**
 
@@ -259,7 +259,7 @@ grep -n "explanatory-only\|clearly explanatory" skills/bootstrap/templates/core/
 
 Expected: empty.
 
-### Task T1.4: GREEN — mirror canonical section in `skills/bootstrap/SKILL.md`
+### Task T1.4: GREEN – mirror canonical section in `skills/bootstrap/SKILL.md`
 
 **Files:**
 
@@ -277,7 +277,7 @@ grep -n "explanatory-only\|clearly explanatory" skills/bootstrap/SKILL.md
 
 Expected: empty.
 
-### Task T1.5: GREEN — per-tool surface templates (AC-54-3, four-element block)
+### Task T1.5: GREEN – per-tool surface templates (AC-54-3, four-element block)
 
 **Files:**
 
@@ -311,7 +311,7 @@ done
 
 Expected: each file outputs `3` (or higher if globs appear elsewhere). Mismatched counts indicate drift.
 
-### Task T1.6: GREEN — bootstrap skill audit-checklist + pr-body-template
+### Task T1.6: GREEN – bootstrap skill audit-checklist + pr-body-template
 
 **Files:**
 
@@ -334,11 +334,11 @@ Add a Validation-section reminder line:
 - Commit-type guidance changes: paste output of the AC-54-7 parity grep (or `empty output verified`) here.
 ```
 
-### Task T1.7: GREEN — `RELEASING.md` cross-link
+### Task T1.7: GREEN – `RELEASING.md` cross-link
 
 **Files:**
 
-- Modify: `skills/bootstrap/templates/core/RELEASING.md` (near line 124, "Determined from releasable Conventional Commit types — no human choice").
+- Modify: `skills/bootstrap/templates/core/RELEASING.md` (near line 124, "Determined from releasable Conventional Commit types – no human choice").
 
 - [ ] **Step 1: Add a one-sentence cross-link**
 
@@ -377,7 +377,7 @@ Expected: commit succeeds; `pnpm lint:md` (run by lint-staged) passes on staged 
 
 ---
 
-## Workstream W2 — RED grep against templates-only state
+## Workstream W2 – RED grep against templates-only state
 
 ### Task T2.1: Run AC-54-7 parity grep; confirm root files still missing
 
@@ -385,7 +385,7 @@ Expected: commit succeeds; `pnpm lint:md` (run by lint-staged) passes on staged 
 
 Same one-liner as T1.1.
 
-Expected: non-empty output naming the six root files (`AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, `.cursor/rules/bootstrap.mdc`, `.windsurfrules`) — the realignment loop has not yet run. Templates should NO LONGER appear in the missing list.
+Expected: non-empty output naming the six root files (`AGENTS.md`, `CONTRIBUTING.md`, `.github/copilot-instructions.md`, `.cursor/rules/bootstrap.mdc`, `.windsurfrules`) – the realignment loop has not yet run. Templates should NO LONGER appear in the missing list.
 
 - [ ] **Step 2: Confirm template-side passes**
 
@@ -393,7 +393,7 @@ The grep output must NOT include any path under `skills/bootstrap/templates/**`.
 
 ---
 
-## Workstream W3 — Realignment to root mirrors
+## Workstream W3 – Realignment to root mirrors
 
 ### Task T3.1: Run the local `bootstrap` skill in realignment mode
 
@@ -432,7 +432,7 @@ Subject ≤ 72 chars (verified: 56). Both `feat:` per AC-54-8.
 
 ---
 
-## Workstream W4 — GREEN verification
+## Workstream W4 – GREEN verification
 
 ### Task T4.1: AC-54-7 parity grep is now empty
 
@@ -442,7 +442,7 @@ Same one-liner. Expected: **empty output**.
 
 - [ ] **Step 2: Capture the verification artifact**
 
-Save the (empty) output to paste in PR body. If non-empty, the listed surface(s) are still missing the glob list — return to W1/W3 to fix; this is a hard blocker.
+Save the (empty) output to paste in PR body. If non-empty, the listed surface(s) are still missing the glob list – return to W1/W3 to fix; this is a hard blocker.
 
 ### Task T4.2: Markdown lint
 
@@ -470,7 +470,7 @@ Pass = subagent picks `feat:` or `fix:`. Fail = `docs:` or `chore:`. On fail, re
 
 ---
 
-## Workstream W5 — PR
+## Workstream W5 – PR
 
 ### Task T5.1: Assemble PR body
 
@@ -504,7 +504,7 @@ gh pr create --title "feat: #54 sharpen commit-type guidance for product-surface
 
 Title length: 71 chars (verified ≤ 72). PR-title lint will accept.
 
-If "for product-surface changes" needs to be truncated to fit a stricter local limit, use `feat: #54 sharpen commit-type guidance for product surfaces` (60 chars) — but do NOT truncate without need.
+If "for product-surface changes" needs to be truncated to fit a stricter local limit, use `feat: #54 sharpen commit-type guidance for product surfaces` (60 chars) – but do NOT truncate without need.
 
 ---
 
@@ -515,8 +515,8 @@ If "for product-surface changes" needs to be truncated to fit a stricter local l
   - `d34eb5f docs: #54 add design doc for sharpening commit-type guidance` (already on branch; pure design-doc, `docs:` correct per the spec carve-out).
   - `3cbaeeb docs: #54 address adversarial review on commit-type design` (already on branch; same carve-out).
   - The plan-doc commit landed by this Planner: `docs: #54 add implementation plan for commit-type guidance` (this file under `docs/superpowers/plans/**`; same brainstormer/planner artifact carve-out as AC-54-8).
-  - W1 commit: `feat: #54 sharpen commit-type guidance in templates` — touches `skills/bootstrap/templates/**` and `skills/bootstrap/SKILL.md`. Both are product surfaces. `feat:` is correct.
-  - W3 commit: `feat: #54 realign root commit-type guidance from templates` — touches root product surfaces. `feat:` is correct.
+  - W1 commit: `feat: #54 sharpen commit-type guidance in templates` – touches `skills/bootstrap/templates/**` and `skills/bootstrap/SKILL.md`. Both are product surfaces. `feat:` is correct.
+  - W3 commit: `feat: #54 realign root commit-type guidance from templates` – touches root product surfaces. `feat:` is correct.
 - **PR body**: explicitly call out this commit-type breakdown as the worked example for AC-54-8.
 
 ---
@@ -531,7 +531,7 @@ Per `.github/pull_request_template.md` headings (verbatim, in template order):
 | `Linked issue` | `Closes #54`. |
 | `Acceptance criteria` | Eight `### AC-54-N` headings (AC-54-1 through AC-54-8), each with a one-line outcome summary and verification under it. |
 | `Validation` | (a) AC-54-7 parity grep output (empty), (b) `pnpm lint:md` exit 0, (c) commit-msg hook accepted each `feat: #54 …` and `docs: #54 …` subject, (d) cold-context subagent response (under AC-54-1), (e) markdownlint clean for changed files. |
-| `Docs updated` | Yes — `AGENTS.md`, `CONTRIBUTING.md`, `RELEASING.md`, `.cursor/rules/bootstrap.mdc`, `.windsurfrules`, `.github/copilot-instructions.md`, `skills/bootstrap/SKILL.md`, plus templates under `skills/bootstrap/templates/**` and supporting `audit-checklist.md` / `pr-body-template.md`. |
+| `Docs updated` | Yes – `AGENTS.md`, `CONTRIBUTING.md`, `RELEASING.md`, `.cursor/rules/bootstrap.mdc`, `.windsurfrules`, `.github/copilot-instructions.md`, `skills/bootstrap/SKILL.md`, plus templates under `skills/bootstrap/templates/**` and supporting `audit-checklist.md` / `pr-body-template.md`. |
 
 Per-AC verification under `Acceptance criteria`:
 

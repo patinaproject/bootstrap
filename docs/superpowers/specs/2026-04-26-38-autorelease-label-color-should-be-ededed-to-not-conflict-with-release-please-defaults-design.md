@@ -30,7 +30,7 @@ no observable benefit.
 
 - Changing release-please's own configuration or defaults.
 - Editing historical Superpowers plan/spec files under `docs/superpowers/`
-  that reference `c5def5` — point-in-time artifacts.
+  that reference `c5def5` – point-in-time artifacts.
 - Changing the `description` field of either autorelease label.
 - Adding `autorelease: tagged` to the audit checklist (it's only listed in
   the documentation paragraph today, not the checklist row).

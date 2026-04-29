@@ -19,13 +19,13 @@ Make `/github-flows:new-issue` work out of the box on any freshly bootstrapped r
 Create `skills/bootstrap/templates/core/.github/LABELS.md.tmpl` with:
 
 - An H1 (`# Labels`) and a short prose intro identifying the file as the source of truth for label application, with a pointer to `gh label list --json name,description` as the authoritative runtime inventory.
-- A `## Labels` heading (exact text — the parser keys on this).
+- A `## Labels` heading (exact text – the parser keys on this).
 - A two-column markdown table with header `| Name | Description |` and the divider row `| --- | --- |`.
 - One row per label, alphabetically sorted by `Name` (lowercase ASCII sort).
 - Canonical row set, minimum: `bug`, `documentation`, `duplicate`, `enhancement`, `good first issue`, `help wanted`, `invalid`, `question`, `wontfix`.
 - A trailing `## Adding or changing labels` section pointing back at `AGENTS.md` label-hygiene rules.
 
-**Column choice — two columns, not three.** The `/github-flows:new-issue` parser only reads column 1 (`Name`). A `Description` column is enough for humans to pick the right label and matches what `gh label list --json name,description` already returns, so the file stays trivially diff-able against the live inventory. A third "When to apply" column would duplicate the description in practice (the existing bullet-list shape of the bootstrap repo proves this — its bullets are single-sentence "apply when" descriptions) and adds a column the parser ignores. Keeping it at two columns is the YAGNI choice.
+**Column choice – two columns, not three.** The `/github-flows:new-issue` parser only reads column 1 (`Name`). A `Description` column is enough for humans to pick the right label and matches what `gh label list --json name,description` already returns, so the file stays trivially diff-able against the live inventory. A third "When to apply" column would duplicate the description in practice (the existing bullet-list shape of the bootstrap repo proves this – its bullets are single-sentence "apply when" descriptions) and adds a column the parser ignores. Keeping it at two columns is the YAGNI choice.
 
 ### D2. Agent-plugin mode handling
 
@@ -35,7 +35,7 @@ Mirror the existing per-mode supplement pattern by creating a parallel template 
 
 - `skills/bootstrap/templates/agent-plugin/.github/LABELS.md.supplement.tmpl`
 
-The supplement contains a `### Release-please (tool-managed)` subsection — heading plus a short note that the labels are tool-applied and must not be hand-edited, plus two `- \`autorelease: pending\`: …` and `- \`autorelease: tagged\`: …` bullets.
+The supplement contains a `### Release-please (tool-managed)` subsection – heading plus a short note that the labels are tool-applied and must not be hand-edited, plus two `- \`autorelease: pending\`: …` and `- \`autorelease: tagged\`: …` bullets.
 
 Bootstrap's emitter, when running in agent-plugin mode, appends the supplement's body **after** the core template's `## Labels` table and **before** the `## Adding or changing labels` section. This keeps the parser's table-shape assertion intact (the supplement does not introduce a second `## Labels` heading or a second `| Name |` table) while documenting the reserved labels for humans.
 
@@ -43,7 +43,7 @@ This mirrors how `skills/bootstrap/templates/patinaproject-supplement/RELEASING.
 
 ### D3. Audit checklist update
 
-Add a row under "Area 2 — GitHub metadata" of `skills/bootstrap/audit-checklist.md`:
+Add a row under "Area 2 – GitHub metadata" of `skills/bootstrap/audit-checklist.md`:
 
 | File | Required | Check |
 |---|---|---|
@@ -58,7 +58,7 @@ The existing "Reserved GitHub labels" sub-table (which already covers `autorelea
 Per `AGENTS.md` "Source of truth for repo baseline": the template change and the mirrored root change must ship together in the same PR. The Executor will:
 
 1. Add the template (D1) and the supplement (D2).
-2. Run the local `bootstrap` skill against this repo in realignment mode and accept the proposed diff for `.github/LABELS.md` — converting it from the current bullet-list shape to the table shape.
+2. Run the local `bootstrap` skill against this repo in realignment mode and accept the proposed diff for `.github/LABELS.md` – converting it from the current bullet-list shape to the table shape.
 3. Verify the parser shape on the regenerated root file (the audit check from D3 is the canonical assertion).
 
 The regenerated root file must include the agent-plugin Release-please subsection because the bootstrap repo is itself an agent plugin (it ships `.claude-plugin/`, `.codex-plugin/`, `.cursor/`, `.windsurfrules`, `release-please-config.json`).
@@ -121,10 +121,10 @@ The audit checklist enforces presence and parser-shape compliance.
 
 - Given the bootstrap audit checklist,
 - When an auditor walks `skills/bootstrap/audit-checklist.md` against any bootstrapped repo,
-- Then `.github/LABELS.md` presence and parser-shape compliance is one of the checked items under "Area 2 — GitHub metadata".
+- Then `.github/LABELS.md` presence and parser-shape compliance is one of the checked items under "Area 2 – GitHub metadata".
 
 ## Validation strategy
 
 The Planner / Executor will rely on the audit checklist's parser-shape assertion (AC-39-5) as the canonical test for AC-39-1, AC-39-3, and AC-39-4. AC-39-2 is validated by manually invoking `/github-flows:new-issue` Step 1 against the bootstrap repo's regenerated root file (the bootstrap repo is itself a freshly-realigned target).
 
-Markdownlint must pass on the new template files and the regenerated root file under the repo's `.markdownlint.jsonc` rules — the husky `pre-commit` hook covers this on staged files.
+Markdownlint must pass on the new template files and the regenerated root file under the repo's `.markdownlint.jsonc` rules – the husky `pre-commit` hook covers this on staged files.

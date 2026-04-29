@@ -14,12 +14,12 @@ Approved design: [`docs/superpowers/specs/2026-04-27-49-allow-manual-dispatch-fo
 
 ## File Structure
 
-- Modify: `skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml` — base emitted release workflow for plugin repos outside `patinaproject`.
-- Modify: `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml` — Patina Project release workflow with marketplace notification.
-- Modify: `.github/workflows/release.yml` — root mirror of the Patina Project supplement workflow.
-- Modify: `skills/bootstrap/templates/core/RELEASING.md` — shared release docs emitted to repos.
-- Modify: `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` — Patina Project release docs with marketplace-distribution wording.
-- Modify: `RELEASING.md` — root mirror of the Patina Project release docs.
+- Modify: `skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml` – base emitted release workflow for plugin repos outside `patinaproject`.
+- Modify: `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml` – Patina Project release workflow with marketplace notification.
+- Modify: `.github/workflows/release.yml` – root mirror of the Patina Project supplement workflow.
+- Modify: `skills/bootstrap/templates/core/RELEASING.md` – shared release docs emitted to repos.
+- Modify: `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md` – Patina Project release docs with marketplace-distribution wording.
+- Modify: `RELEASING.md` – root mirror of the Patina Project release docs.
 
 ## Task T49-1: Add the Manual Trigger To Release Workflow Templates
 

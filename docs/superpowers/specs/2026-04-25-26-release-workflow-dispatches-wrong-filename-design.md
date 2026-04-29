@@ -24,15 +24,15 @@ Per `AGENTS.md`, `skills/bootstrap/templates/**` is the source of truth for this
 
 Pure rename. No behavior change, no permission change, no token change.
 
-1. **Template edit (source of truth)** — In `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`, change the `workflow:` input on the `benc-uk/workflow-dispatch` step from `bump-plugin-tags.yml` to `plugin-release-bump.yml`. No other lines change.
-2. **Root mirror** — Apply the identical change to `.github/workflows/release.yml` so the root tracks the template.
-3. **Doc alignment** — Update the operator-facing references to the dispatched workflow filename so they match the template. In scope:
+1. **Template edit (source of truth)** – In `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml`, change the `workflow:` input on the `benc-uk/workflow-dispatch` step from `bump-plugin-tags.yml` to `plugin-release-bump.yml`. No other lines change.
+2. **Root mirror** – Apply the identical change to `.github/workflows/release.yml` so the root tracks the template.
+3. **Doc alignment** – Update the operator-facing references to the dispatched workflow filename so they match the template. In scope:
    - `skills/bootstrap/templates/patinaproject-supplement/RELEASING.md`
    - `skills/bootstrap/templates/core/RELEASING.md` (shared paragraph describing Patina Project auto-dispatch)
    - `RELEASING.md` (mirrored root)
    - `skills/bootstrap/SKILL.md` (describes the supplement's notify job)
    - `skills/bootstrap/audit-checklist.md` (if it names the filename as part of a check)
-4. **Historical docs** — Leave `docs/superpowers/specs/**` and `docs/superpowers/plans/**` alone. They describe decisions made against the then-current filename and are not operator guidance.
+4. **Historical docs** – Leave `docs/superpowers/specs/**` and `docs/superpowers/plans/**` alone. They describe decisions made against the then-current filename and are not operator guidance.
 
 ## Acceptance criteria
 
@@ -76,7 +76,7 @@ None. The correct filename is established by the successful manual dispatch duri
 
 ## Scope expansion
 
-The v1.1.0 release run ([24921997515](https://github.com/patinaproject/bootstrap/actions/runs/24921997515)) cut the tag and published the GitHub Release successfully, but the `notify-patinaproject-skills` job failed with `Parameter token or opts.auth is required`. Root cause: the org-level dispatch secret is not configured, so the templated reference resolves to an empty string, and the dispatcher rejects the empty token. The renamed workflow (AC-26-1) is irrelevant to the failure — the job never reaches the dispatch call.
+The v1.1.0 release run ([24921997515](https://github.com/patinaproject/bootstrap/actions/runs/24921997515)) cut the tag and published the GitHub Release successfully, but the `notify-patinaproject-skills` job failed with `Parameter token or opts.auth is required`. Root cause: the org-level dispatch secret is not configured, so the templated reference resolves to an empty string, and the dispatcher rejects the empty token. The renamed workflow (AC-26-1) is irrelevant to the failure – the job never reaches the dispatch call.
 
 Today every release will keep ending in a red CI badge until the secret is configured. That is operator-visible noise on a successful release and conflates two distinct conditions (release broken vs. marketplace bump deferred). The graceful-degradation requirement: when the dispatch token is unavailable, the notify job should treat the marketplace bump as deferred, not as a release failure, and tell the operator how to recover manually.
 
