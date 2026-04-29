@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.5.0](https://github.com/patinaproject/bootstrap/compare/v1.4.0...v1.5.0) (2026-04-29)
+
+
+### Features
+
+* [#64](https://github.com/patinaproject/bootstrap/issues/64) enforce required PR template checkboxes ([#67](https://github.com/patinaproject/bootstrap/issues/67)) ([7a960a1](https://github.com/patinaproject/bootstrap/commit/7a960a1a963e1e4afc1c0f74188ab907e0bcbb9c))
+* [#65](https://github.com/patinaproject/bootstrap/issues/65) redesign pull request template ([#66](https://github.com/patinaproject/bootstrap/issues/66)) ([99e27e3](https://github.com/patinaproject/bootstrap/commit/99e27e34b36ca38048105ba97bf790166bf51c63))
+
+
+### Bug Fixes
+
+* [#61](https://github.com/patinaproject/bootstrap/issues/61) remove handle placeholders from PR templates ([#62](https://github.com/patinaproject/bootstrap/issues/62)) ([8492fd1](https://github.com/patinaproject/bootstrap/commit/8492fd1bc54956fdcc3b0d05aec35998aff44704))
+
 ## [1.4.0](https://github.com/patinaproject/bootstrap/compare/v1.3.0...v1.4.0) (2026-04-28)
 
 
