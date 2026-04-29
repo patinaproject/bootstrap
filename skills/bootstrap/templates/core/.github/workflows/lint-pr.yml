@@ -84,6 +84,20 @@ jobs:
           echo "::error::PR body must contain a GitHub closing keyword (e.g. 'Closes #123') outside code blocks, HTML comments, strikethrough, and blockquotes."
           exit 1
 
+  template-checkboxes:
+    name: Required template checkboxes
+    runs-on: ubuntu-latest
+    if: "${{ !contains(github.event.pull_request.labels.*.name, 'autorelease: pending') }}"
+    steps:
+      - name: Check out repository
+        # actions/checkout@v4.3.1
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+
+      - name: Validate required template checkboxes
+        env:
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: node scripts/check-pr-template-checkboxes.mjs
+
   mark-breaking-change:
     name: Mark breaking change
     runs-on: ubuntu-latest
