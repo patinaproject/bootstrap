@@ -1,6 +1,6 @@
 # Plan: Align marketplace id and add per-tool install docs for every supported editor [#3](https://github.com/patinaproject/bootstrap/issues/3)
 
-## Workstream A — Marketplace id rename
+## Workstream A – Marketplace id rename
 
 Replace every plugin-id literal `@patinaproject` with `@patinaproject-skills`. Preserve email addresses (`ted@patinaproject.com`) and bare GitHub paths (`patinaproject/skills`) untouched.
 
@@ -25,7 +25,7 @@ Replace every plugin-id literal `@patinaproject` with `@patinaproject-skills`. P
 
 **Verification**: `rg '@patinaproject(?!-skills|\.com)'` returns zero matches.
 
-## Workstream B — Per-tool install docs
+## Workstream B – Per-tool install docs
 
 Rewrite `## Installation` in `README.md` and mirror the structure in `skills/bootstrap/templates/agent-plugin/README.md.tmpl`. Update the "Supported AI coding tools" table to link rows to the new subsections via in-document anchors.
 
@@ -45,7 +45,7 @@ Rewrite `## Installation` in `README.md` and mirror the structure in `skills/boo
 | 10 | Opencode | AGENTS.md | Opencode reads `AGENTS.md`; clone and open |
 | 11 | Continue.dev | Opt-in | exact `.continue/config.json` snippet enabling the plugin |
 
-**Table edits**: split the combined "Aider, Zed, Cline, Codex CLI, Opencode" row into one row per tool (Codex CLI already has its own row — don't duplicate; just anchor each row). Anchor every tool name with `[Name](#anchor-slug)`.
+**Table edits**: split the combined "Aider, Zed, Cline, Codex CLI, Opencode" row into one row per tool (Codex CLI already has its own row – don't duplicate; just anchor each row). Anchor every tool name with `[Name](#anchor-slug)`.
 
 **Tasks**:
 

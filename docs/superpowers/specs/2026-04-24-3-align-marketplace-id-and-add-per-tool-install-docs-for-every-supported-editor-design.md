@@ -20,7 +20,7 @@ The same templates also under-document the long tail of supported editors. The R
 - The `patinaproject/skills` marketplace itself (tracked separately).
 - Renaming the marketplace repo.
 - Publishing plugins to npm or other non-marketplace distribution.
-- Release workflow misfiring on every push to `main` and `RELEASING.md` correctness — carved out into [#4](https://github.com/patinaproject/bootstrap/issues/4).
+- Release workflow misfiring on every push to `main` and `RELEASING.md` correctness – carved out into [#4](https://github.com/patinaproject/bootstrap/issues/4).
 
 ## Decisions
 
@@ -36,7 +36,7 @@ Replace every `superteam@patinaproject` and `bootstrap@patinaproject` literal wi
 - `skills/bootstrap/templates/agent-plugin/README.md.tmpl` install snippet
 - Both prior `docs/superpowers/{specs,plans}/2026-04-24-1-…` artifacts that quote the old id
 
-Preserve `ted@patinaproject.com` (email) in `SECURITY.md` and `package.json` — these are not marketplace ids.
+Preserve `ted@patinaproject.com` (email) in `SECURITY.md` and `package.json` – these are not marketplace ids.
 
 ### Per-tool docs
 
@@ -46,7 +46,7 @@ Categorize each tool by what bootstrap actually does for it:
 
 - **Plugin marketplace** (Claude Code, Codex CLI, Codex App): exact `marketplace add` + `install` commands.
 - **Emitted instructions file, no extra config** (GitHub Copilot, Cursor, Windsurf): name the file bootstrap emits, point to where the user adds personal overrides.
-- **AGENTS.md alone, no extra config** (Aider, Zed, Cline, Opencode): explicit "clone the repo and open it — `AGENTS.md` is read natively" — no phantom commands.
+- **AGENTS.md alone, no extra config** (Aider, Zed, Cline, Opencode): explicit "clone the repo and open it – `AGENTS.md` is read natively" – no phantom commands.
 - **Opt-in** (Continue.dev): exact `.continue/config.json` snippet to enable the plugin.
 
 Mirror the same structure in `skills/bootstrap/templates/agent-plugin/README.md.tmpl` using `{{repo}}` / `{{owner}}` placeholders so every scaffolded plugin ships per-tool install instructions for free.

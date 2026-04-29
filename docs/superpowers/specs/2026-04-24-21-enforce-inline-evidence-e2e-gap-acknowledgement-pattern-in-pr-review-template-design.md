@@ -21,29 +21,29 @@ Without these prompts, bootstrap-scaffolded repos let reviewers check `Manual te
 
 Short outcome summary.
 
-- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>
+- [ ] <Platform> evidence – <runner> | <env> | @<handle> | <ISO>
 - [ ] ⚠️ E2E gap: <what automated coverage does not verify>
 - [ ] Manual test: <concrete numbered steps; observed outcome>
 ```
 
 Rules encoded in template comments:
 
-- One `<Platform> evidence — ...` row per required platform. Omit the evidence rows entirely for ACs explicitly marked `[platform: none]`.
+- One `<Platform> evidence – ...` row per required platform. Omit the evidence rows entirely for ACs explicitly marked `[platform: none]`.
 - Evidence fields are pipe-separated in fixed order: `runner | env | @handle | ISO` (UTC). No detached `- Evidence:` bullets anywhere in the block.
-- A `⚠️ E2E gap:` row is **included only when automated coverage has a real gap** that a reviewer must consciously accept. If coverage is comprehensive, omit the row entirely — do not use placeholder phrases like "no known gap". Every manual test is still required to sit below any applicable gap row, and the row (when present) must be checked before merge.
+- A `⚠️ E2E gap:` row is **included only when automated coverage has a real gap** that a reviewer must consciously accept. If coverage is comprehensive, omit the row entirely – do not use placeholder phrases like "no known gap". Every manual test is still required to sit below any applicable gap row, and the row (when present) must be checked before merge.
 - The `Manual test:` row uses the literal prefix `Manual test:`, concrete numbered steps, and stays unchecked until a human reviewer performs the steps and flips the box in GitHub UI.
 - Stand-in phrases `none required`, `n/a`, `not applicable`, `automated coverage is sufficient` are rejected (merge policy / future validator enforcement).
 
 ## Files changed
 
-- `skills/bootstrap/templates/core/.github/pull_request_template.md` — template source of truth.
-- `.github/pull_request_template.md` — repo-root mirror (enforced by the template-round-trip rule in `AGENTS.md`).
-- `docs/ac-traceability.md` — extend §"From issue to PR" with a short reference to the slim evidence + gap rows, pointing back to the template as the canonical grammar.
+- `skills/bootstrap/templates/core/.github/pull_request_template.md` – template source of truth.
+- `.github/pull_request_template.md` – repo-root mirror (enforced by the template-round-trip rule in `AGENTS.md`).
+- `docs/ac-traceability.md` – extend §"From issue to PR" with a short reference to the slim evidence + gap rows, pointing back to the template as the canonical grammar.
 
 ## Acceptance criteria
 
 - **AC-21-1**: Given a PR body rendered from the updated template, when the author has not replaced the `<Platform>`, `<runner>`, `<env>`, `<handle>`, or `<ISO>` placeholders, then the template still renders cleanly (passes `markdownlint-cli2`) and documents the expected slim grammar via inline comments.
-- **AC-21-2**: Given a PR body rendered from the updated template, when the author fills real evidence, then every required platform has exactly one inline `- [ ] <Platform> evidence — <runner> | <env> | @<handle> | <ISO>` row and no detached `- Evidence:` bullets appear.
+- **AC-21-2**: Given a PR body rendered from the updated template, when the author fills real evidence, then every required platform has exactly one inline `- [ ] <Platform> evidence – <runner> | <env> | @<handle> | <ISO>` row and no detached `- Evidence:` bullets appear.
 - **AC-21-3**: Given a PR body rendered from the updated template, when the author writes the per-AC block and the AC has a real E2E gap, then a `- [ ] ⚠️ E2E gap: ...` row sits directly above the `- [ ] Manual test: ...` row. When coverage is comprehensive, the gap row is omitted entirely.
 - **AC-21-4**: Given a reviewer merging a PR rendered from the updated template, when they have not checked both the gap row and the Manual test row, then the template's own instructions (and the linked `docs/ac-traceability.md`) instruct them to block merge. Enforcement wiring (validator, required-checks) is deferred.
 

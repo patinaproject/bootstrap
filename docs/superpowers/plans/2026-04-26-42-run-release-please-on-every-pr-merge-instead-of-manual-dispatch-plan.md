@@ -20,7 +20,7 @@ Per `AGENTS.md`, edit templates first, then mirror to root. Both sides of the lo
 
 ## Workstreams
 
-### W1 — Workflow YAML changes (T1, T2, T3 → release.yml × 3)
+### W1 – Workflow YAML changes (T1, T2, T3 → release.yml × 3)
 
 For all three release.yml files apply the same shape:
 
@@ -36,7 +36,7 @@ For all three release.yml files apply the same shape:
 - Update the leading comment (currently describes `workflow_dispatch` + `pull_request: closed` semantics) to describe push-only semantics: every push to `main` runs release-please; release-please refreshes the standing release PR on regular merges and cuts the tag when it sees the merged release PR.
 - Leave `permissions:` blocks, the `release-please-action` step, and (in the supplement + root) the `notify-patinaproject-skills` job untouched.
 
-### W2 — RELEASING.md changes (T4, T5, T6 → RELEASING.md × 3)
+### W2 – RELEASING.md changes (T4, T5, T6 → RELEASING.md × 3)
 
 For all three RELEASING.md files:
 
@@ -45,7 +45,7 @@ For all three RELEASING.md files:
   - On regular feature/fix merges, release-please refreshes the standing `chore: release X.Y.Z` PR.
   - On the release-PR merge, the same push event causes release-please to cut the tag, publish the GitHub Release, and (where applicable) dispatch the marketplace bump.
 - Remove all manual-dispatch instructions: the "Trigger the workflow via Actions → Release → Run workflow" step disappears; the two-step ritual collapses into "merge regular PRs as usual; merge the release PR when ready."
-- Keep the prerequisite sections (workflow permissions, Allow Actions to create PRs, org-policy cap, PAT/App fallback, tag ruleset caution, SHA pinning) untouched — they are unrelated to the trigger surface.
+- Keep the prerequisite sections (workflow permissions, Allow Actions to create PRs, org-policy cap, PAT/App fallback, tag ruleset caution, SHA pinning) untouched – they are unrelated to the trigger surface.
 - Keep the supplement-only and core-only paragraphs preserved as today (only the "How it works" prose changes; the marketplace-bump section in the supplement variant stays).
 
 ## Verification

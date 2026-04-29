@@ -4,9 +4,9 @@
 
 Merging release-please's standing release PR is supposed to produce a `vX.Y.Z` tag, a published GitHub Release, and a marketplace dispatch on `patinaproject/skills`. On 2026-04-24, PR [#9](https://github.com/patinaproject/bootstrap/pull/9) ("chore: release 1.0.0") merged into `main` but none of that happened.
 
-Root cause: `.github/workflows/release.yml` listens only on `workflow_dispatch`. release-please needs a *second* workflow run after the release PR merges — that run is what sees the release commit on `main` and creates the tag + release. Without a `push` trigger, the second run never fires automatically, and `RELEASING.md` step 4 reinforces the wrong mental model by saying "Clicking Merge on that PR is the release action."
+Root cause: `.github/workflows/release.yml` listens only on `workflow_dispatch`. release-please needs a *second* workflow run after the release PR merges – that run is what sees the release commit on `main` and creates the tag + release. Without a `push` trigger, the second run never fires automatically, and `RELEASING.md` step 4 reinforces the wrong mental model by saying "Clicking Merge on that PR is the release action."
 
-PR #4 / [#6](https://github.com/patinaproject/bootstrap/pull/6) introduced the dispatch-only trigger to avoid an earlier failure — GitHub Actions lacked permission to create PRs. That failure is now addressed by the `RELEASING.md` Prerequisites section (the org-level "Allow Actions to create pull requests" toggle and `PATINA_SKILLS_DISPATCH_TOKEN`). The dispatch-only constraint no longer serves its original purpose.
+PR #4 / [#6](https://github.com/patinaproject/bootstrap/pull/6) introduced the dispatch-only trigger to avoid an earlier failure – GitHub Actions lacked permission to create PRs. That failure is now addressed by the `RELEASING.md` Prerequisites section (the org-level "Allow Actions to create pull requests" toggle and `PATINA_SKILLS_DISPATCH_TOKEN`). The dispatch-only constraint no longer serves its original purpose.
 
 ## Goals
 
@@ -23,7 +23,7 @@ PR #4 / [#6](https://github.com/patinaproject/bootstrap/pull/6) introduced the d
 
 ## Fix direction
 
-**Recommended: option (a) — add `push: branches: [main]` alongside `workflow_dispatch`.**
+**Recommended: option (a) – add `push: branches: [main]` alongside `workflow_dispatch`.**
 
 ```yaml
 on:
@@ -34,17 +34,17 @@ on:
 
 Rationale:
 
-- release-please is idempotent. On non-release commits it is a no-op (no release PR update needed, or just a PR update). Only release commits produce `release_created == 'true'`, and the `notify-patinaproject-skills` job is already gated on that output. So a `push` trigger does not turn every merge to `main` into a release — it turns only release-producing commits into releases, which is the documented intent.
+- release-please is idempotent. On non-release commits it is a no-op (no release PR update needed, or just a PR update). Only release commits produce `release_created == 'true'`, and the `notify-patinaproject-skills` job is already gated on that output. So a `push` trigger does not turn every merge to `main` into a release – it turns only release-producing commits into releases, which is the documented intent.
 - The original reason to go dispatch-only (#4 / #6) was a permissions failure when Actions could not create PRs. That failure is resolved structurally by the `RELEASING.md` Prerequisites (org-level workflow permissions + org secret). The dispatch-only constraint outlived its cause.
-- Operator ergonomics: the merge button is the natural "ship it" signal. Requiring a post-merge dispatch adds an undocumented step that is easy to miss (as #9 demonstrates) and hard to monitor for — there is no natural alert when the second dispatch is forgotten.
+- Operator ergonomics: the merge button is the natural "ship it" signal. Requiring a post-merge dispatch adds an undocumented step that is easy to miss (as #9 demonstrates) and hard to monitor for – there is no natural alert when the second dispatch is forgotten.
 - `RELEASING.md` step 4 already promises this behavior. Aligning code with docs is cheaper than editing docs to describe a two-step ritual.
 - Keeping `workflow_dispatch` alongside `push` preserves the manual escape hatch (e.g. to retry after a transient failure, or to seed the first release PR without waiting for the next push to `main`).
 
-Option (b) — keep dispatch-only and document the two-step ritual — is rejected because it hard-codes the footgun. Even with a comment-bot reminder, a reminder that can be dismissed is a weaker guarantee than making the correct behavior the default. The "merge = release" mental model is well-understood and matches release-please's own docs.
+Option (b) – keep dispatch-only and document the two-step ritual – is rejected because it hard-codes the footgun. Even with a comment-bot reminder, a reminder that can be dismissed is a weaker guarantee than making the correct behavior the default. The "merge = release" mental model is well-understood and matches release-please's own docs.
 
 ## Stuck-state recovery for v1.0.0
 
-Recovery is **in scope for this PR as a documented, manual operator runbook** — not as automation. The steps only need to run once, and writing tooling to re-run a one-shot history rewrite is not worth the surface area. The runbook ships in the PR description (under `Validation`) and the operator performs it after the workflow fix merges.
+Recovery is **in scope for this PR as a documented, manual operator runbook** – not as automation. The steps only need to run once, and writing tooling to re-run a one-shot history rewrite is not worth the surface area. The runbook ships in the PR description (under `Validation`) and the operator performs it after the workflow fix merges.
 
 Recovery steps (to be executed by a maintainer with push / release permissions, after the fix merges):
 
@@ -97,7 +97,7 @@ on:
   workflow_dispatch:
 ```
 
-No bot, no CI check, no custom tooling. A comment that survives file edits is enough to deter a future contributor from "cleaning up" the push trigger. If the gap recurs, a proper CI check can be added then — speculative tooling is out of scope for this fix.
+No bot, no CI check, no custom tooling. A comment that survives file edits is enough to deter a future contributor from "cleaning up" the push trigger. If the gap recurs, a proper CI check can be added then – speculative tooling is out of scope for this fix.
 
 ## Acceptance criteria
 

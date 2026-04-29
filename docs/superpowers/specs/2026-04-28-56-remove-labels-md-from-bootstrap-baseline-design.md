@@ -15,7 +15,7 @@ incoherent today:
    source of truth in the same paragraph that points at the gh command.
 3. **AGENTS.md falsely claims a round-trip.** `AGENTS.md:27` lists
    `.github/LABELS.md` under "Covered files (any change here must round-trip
-   through a template edit)" — but no template exists for it. Any agent who
+   through a template edit)" – but no template exists for it. Any agent who
    takes that line at face value cannot complete the loop.
 
 Concrete drift in this very repo: `.github/ISSUE_TEMPLATE/bug_report.md:8` and
@@ -26,7 +26,7 @@ reference. The root files are already out of sync with the baseline they claim
 to descend from.
 
 A maintained `LABELS.md` would also duplicate metadata GitHub already serves
-authoritatively — name, color, description — and the duplication is exactly
+authoritatively – name, color, description – and the duplication is exactly
 where drift lives. The fix is to delete the document, the audit row, and the
 prose that names it, and to keep `gh label list` as the single live source.
 
@@ -81,7 +81,7 @@ historical artifacts under `docs/superpowers/specs/` or
 
 - The `autorelease: pending` and `autorelease: tagged` reservation in
   `AGENTS.md` ("Issue and PR labels" section, last paragraph) stays exactly as
-  written — that is a release-please contract, not a `LABELS.md` artifact.
+  written – that is a release-please contract, not a `LABELS.md` artifact.
 - The `gh label list` verification snippet stays.
 - Historical specs and plans under `docs/superpowers/specs/` and
   `docs/superpowers/plans/` that mention `LABELS.md` are immutable artifacts of
@@ -230,7 +230,7 @@ When reviewing any PR that descends from this design, flag and reject:
   hit after the change merges.
 - A "see also" or compatibility-shim link that names `LABELS.md`.
 - An audit-checklist row that conditionally requires `LABELS.md` (e.g. only
-  for agent plugins, only when X) — same drift surface, smaller blast radius
+  for agent plugins, only when X) – same drift surface, smaller blast radius
   is still drift.
 - Removal of the existing `gh label list` verification snippet from
   `AGENTS.md` in the same change. Removing the live check while removing the
@@ -253,8 +253,8 @@ Dimensions checked:
   behavioural rule.
 - **Rationalisation resistance.** The "Workflow-contract pressure tests"
   section enumerates four named rationalisations and ties each to a specific
-  AC that forecloses it. The most plausible regression — "demote to a 'see
-  also' link" — is killed by AC-56-3's zero-match grep.
+  AC that forecloses it. The most plausible regression – "demote to a 'see
+  also' link" – is killed by AC-56-3's zero-match grep.
 - **Red flags.** Five-item explicit list at the bottom of the pressure-tests
   section. Each is observable by `grep` or by inspection of a future PR diff.
 - **Token-efficiency targets.** This is a one-shot design doc, not a
@@ -266,9 +266,9 @@ Dimensions checked:
   `using-github` and release-please scope-fences explicit so adjacent role
   owners aren't drawn in.
 - **Stage-gate bypass paths.** The most likely bypass is "add a stub LABELS.md
-  to make AC-56-1 less alarming" — explicitly forbidden in the Proposal's
-  "File deletion" subsection. The second-most-likely bypass — "keep the
-  AGENTS.md round-trip line and add a template later" — is forbidden by
+  to make AC-56-1 less alarming" – explicitly forbidden in the Proposal's
+  "File deletion" subsection. The second-most-likely bypass – "keep the
+  AGENTS.md round-trip line and add a template later" – is forbidden by
   AC-56-3 (zero LABELS.md matches in AGENTS.md).
 
 clean_pass_rationale: The design has one observable end state per surface,

@@ -2,12 +2,12 @@
 
 Approved design: [2026-04-26-38-…-design.md](../specs/2026-04-26-38-autorelease-label-color-should-be-ededed-to-not-conflict-with-release-please-defaults-design.md).
 
-## Workstream A — skill source edits
+## Workstream A – skill source edits
 
 Single workstream; both edits change the same color literal in adjacent
 sentences and ship together.
 
-### Task A1 — Update `skills/bootstrap/SKILL.md`
+### Task A1 – Update `skills/bootstrap/SKILL.md`
 
 In [skills/bootstrap/SKILL.md:252](../../../skills/bootstrap/SKILL.md), under
 `### Reserved labels`, change:
@@ -27,7 +27,7 @@ The "(the release-please default)" parenthetical makes the rationale legible
 in the audit prose so future readers don't have to chase the issue. Satisfies
 **AC-38-1**.
 
-### Task A2 — Update `skills/bootstrap/audit-checklist.md`
+### Task A2 – Update `skills/bootstrap/audit-checklist.md`
 
 In [skills/bootstrap/audit-checklist.md:53](../../../skills/bootstrap/audit-checklist.md),
 under `### Reserved GitHub labels`, change the `autorelease: pending` row's
@@ -35,9 +35,9 @@ under `### Reserved GitHub labels`, change the `autorelease: pending` row's
 
 Satisfies **AC-38-2**.
 
-### Task A3 — Repaint the live label
+### Task A3 – Repaint the live label
 
-After the two doc edits land in the PR (or as a one-shot before merge — order
+After the two doc edits land in the PR (or as a one-shot before merge – order
 doesn't matter for the PR diff), run on `patinaproject/bootstrap`:
 
 ```bash

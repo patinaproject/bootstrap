@@ -83,7 +83,7 @@ Expected: matches in `AGENTS.md.tmpl`, `CONTRIBUTING.md.tmpl`,
 Update `## Semver decision` in both release templates so it documents:
 
 ```markdown
-Determined from releasable Conventional Commit types — no human choice:
+Determined from releasable Conventional Commit types – no human choice:
 
 - `fix:` -> patch
 - `feat:` -> minor

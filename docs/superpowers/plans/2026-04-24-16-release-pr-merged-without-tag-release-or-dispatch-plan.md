@@ -4,7 +4,7 @@
 
 **Goal:** Restore the "merge the release-please PR = ship a release" flow by adding a `push: branches: [main]` trigger to `release.yml` (root + both templates), realign `RELEASING.md` (root + core template) to describe that flow, and emit the v1.0.0 stuck-state recovery runbook for the PR body.
 
-**Architecture:** Pure YAML + Markdown changes. Three workflow files gain a `push` trigger alongside the existing `workflow_dispatch`, each prefixed with an explanatory comment that documents why both triggers exist. Two `RELEASING.md` files have step 1 rewritten so the merge-triggered path is dominant and `workflow_dispatch` is described only as an escape hatch. The v1.0.0 recovery steps are not code — they are emitted as runbook text for the Finisher to paste into the PR body under `Validation`.
+**Architecture:** Pure YAML + Markdown changes. Three workflow files gain a `push` trigger alongside the existing `workflow_dispatch`, each prefixed with an explanatory comment that documents why both triggers exist. Two `RELEASING.md` files have step 1 rewritten so the merge-triggered path is dominant and `workflow_dispatch` is described only as an escape hatch. The v1.0.0 recovery steps are not code – they are emitted as runbook text for the Finisher to paste into the PR body under `Validation`.
 
 **Tech Stack:** GitHub Actions YAML, Markdown, `actionlint` (run in CI on workflow changes), `markdownlint-cli2` (run via Husky / `pnpm lint:md`).
 
@@ -18,13 +18,13 @@ Each acceptance criterion has a manual verification command documented in the de
 
 Files modified by this plan, each with a single responsibility:
 
-- `.github/workflows/release.yml` — root release workflow. Adds `push` trigger + comment. **AC-16-1.**
-- `skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml` — template mirroring root triggers. **AC-16-2.**
-- `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml` — template mirroring root triggers. **AC-16-3.**
-- `RELEASING.md` — root releasing doc. Rewrite step 1. **AC-16-4.**
-- `skills/bootstrap/templates/core/RELEASING.md` — templated releasing doc. Mirror step 1 rewrite. **AC-16-5.**
+- `.github/workflows/release.yml` – root release workflow. Adds `push` trigger + comment. **AC-16-1.**
+- `skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml` – template mirroring root triggers. **AC-16-2.**
+- `skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml` – template mirroring root triggers. **AC-16-3.**
+- `RELEASING.md` – root releasing doc. Rewrite step 1. **AC-16-4.**
+- `skills/bootstrap/templates/core/RELEASING.md` – templated releasing doc. Mirror step 1 rewrite. **AC-16-5.**
 
-No repo files are modified for **AC-16-6** — the runbook is emitted as text for `Finisher` to place in the PR body.
+No repo files are modified for **AC-16-6** – the runbook is emitted as text for `Finisher` to place in the PR body.
 
 ---
 
@@ -54,7 +54,7 @@ skills/bootstrap/templates/agent-plugin/.github/workflows/release.yml
 skills/bootstrap/templates/patinaproject-supplement/.github/workflows/release.yml
 ```
 
-If any additional release-related workflow appears, halt and route back to `Brainstormer` — the design scoped only these three.
+If any additional release-related workflow appears, halt and route back to `Brainstormer` – the design scoped only these three.
 
 - [ ] **Step 2: Confirm no other file documents the dispatch-only flow**
 
@@ -66,7 +66,7 @@ grep -Rln 'does not run on pushes\|Actions → Release → Run workflow' .
 
 Expected: matches only in `RELEASING.md` and `skills/bootstrap/templates/core/RELEASING.md` (and possibly this plan + design doc). No other docs teach the dispatch-only ritual.
 
-- [ ] **Step 3: No commit** — this is a scope check only.
+- [ ] **Step 3: No commit** – this is a scope check only.
 
 ### Task 2: Add `push` trigger to root `.github/workflows/release.yml` (AC-16-1)
 
@@ -243,7 +243,7 @@ git commit -m "fix: #16 mirror release push trigger into supplement template"
 
 ## Workstream 2: `RELEASING.md` alignment
 
-Goal: step 1 of both `RELEASING.md` docs describes the push-triggered flow as the primary path; `workflow_dispatch` survives only as an explicit escape hatch (manual re-run / first release / recovery). Step 4 ("Clicking Merge on that PR is the release action") is already accurate once the workflow change lands — leave it untouched.
+Goal: step 1 of both `RELEASING.md` docs describes the push-triggered flow as the primary path; `workflow_dispatch` survives only as an explicit escape hatch (manual re-run / first release / recovery). Step 4 ("Clicking Merge on that PR is the release action") is already accurate once the workflow change lands – leave it untouched.
 
 ### Task 5: Rewrite root `RELEASING.md` step 1 (AC-16-4)
 
@@ -266,7 +266,7 @@ Expected (current, failing): step 1 reads "A maintainer manually triggers the `R
 Replace the current line 7 (the numbered list item `1.`) so it frames the merge trigger as the primary path and names `workflow_dispatch` only as an escape hatch. Keep the numbering and surrounding list structure intact. Use:
 
 ```markdown
-1. On every push to `main`, the `Release` workflow runs `release-please`. The same workflow can also be triggered manually from **Actions → Release → Run workflow** as an escape hatch — use it to seed the very first release PR before any push to `main`, or to re-run after a transient failure.
+1. On every push to `main`, the `Release` workflow runs `release-please`. The same workflow can also be triggered manually from **Actions → Release → Run workflow** as an escape hatch – use it to seed the very first release PR before any push to `main`, or to re-run after a transient failure.
 ```
 
 Do not modify steps 2, 3, or 4. Step 4 ("Clicking Merge on that PR is the release action") becomes accurate the moment the Workstream 1 change ships.
@@ -302,7 +302,7 @@ git commit -m "docs: #16 describe push-triggered release flow"
 
 **Files:**
 
-- Modify: `skills/bootstrap/templates/core/RELEASING.md` (same line range — step 1 of `How it works`)
+- Modify: `skills/bootstrap/templates/core/RELEASING.md` (same line range – step 1 of `How it works`)
 
 - [ ] **Step 1: Run the AC-16-5 verification command and expect FAIL with meaningful deltas in "How it works"**
 
@@ -319,7 +319,7 @@ Expected (before edit): the diff includes the step 1 rewrite from Task 5 as a di
 Use the exact same replacement text as Task 5 step 2:
 
 ```markdown
-1. On every push to `main`, the `Release` workflow runs `release-please`. The same workflow can also be triggered manually from **Actions → Release → Run workflow** as an escape hatch — use it to seed the very first release PR before any push to `main`, or to re-run after a transient failure.
+1. On every push to `main`, the `Release` workflow runs `release-please`. The same workflow can also be triggered manually from **Actions → Release → Run workflow** as an escape hatch – use it to seed the very first release PR before any push to `main`, or to re-run after a transient failure.
 ```
 
 - [ ] **Step 3: Re-run AC-16-5 verification and expect PASS (no deltas in `How it works`)**
@@ -393,9 +393,9 @@ The `Finisher` must:
 
 - Use `gh pr create --body-file <path>` with a rendered body that follows `.github/pull_request_template.md` section order.
 - Place the runbook block above inside the `Validation` section.
-- Include the AC-16-1 … AC-16-6 `### AC-16-n` headings in the `Acceptance criteria` section, with verification steps under each AC as checkboxes where appropriate. AC-16-6's verification steps are the post-merge `gh release view` and `gh run list` commands — these are maintainer-executed, not CI.
+- Include the AC-16-1 … AC-16-6 `### AC-16-n` headings in the `Acceptance criteria` section, with verification steps under each AC as checkboxes where appropriate. AC-16-6's verification steps are the post-merge `gh release view` and `gh run list` commands – these are maintainer-executed, not CI.
 
-- [ ] **Step 4: No commit** — nothing in this workstream touches the repo.
+- [ ] **Step 4: No commit** – nothing in this workstream touches the repo.
 
 ---
 
@@ -407,7 +407,7 @@ Goal: before reporting done, Executor reproduces every AC manual-test command fr
 
 **Files:** none modified.
 
-- [ ] **Step 1: AC-16-1 — root workflow triggers**
+- [ ] **Step 1: AC-16-1 – root workflow triggers**
 
 Run:
 
@@ -417,7 +417,7 @@ grep -B2 -A5 '^on:' .github/workflows/release.yml
 
 Expected: two-line comment above `on:`; `push: branches: [main]` and `workflow_dispatch:` both present.
 
-- [ ] **Step 2: AC-16-2 — agent-plugin template matches root**
+- [ ] **Step 2: AC-16-2 – agent-plugin template matches root**
 
 Run:
 
@@ -429,7 +429,7 @@ diff \
 
 Expected: empty output.
 
-- [ ] **Step 3: AC-16-3 — supplement template matches root**
+- [ ] **Step 3: AC-16-3 – supplement template matches root**
 
 Run:
 
@@ -441,7 +441,7 @@ diff \
 
 Expected: empty output.
 
-- [ ] **Step 4: AC-16-4 — root `RELEASING.md` step 1 / step 4**
+- [ ] **Step 4: AC-16-4 – root `RELEASING.md` step 1 / step 4**
 
 Run:
 
@@ -451,7 +451,7 @@ sed -n '5,15p' RELEASING.md
 
 Expected: step 1 frames the push-triggered flow; step 4 still reads "Clicking Merge on that PR is the release action."
 
-- [ ] **Step 5: AC-16-5 — template `RELEASING.md` mirrors root**
+- [ ] **Step 5: AC-16-5 – template `RELEASING.md` mirrors root**
 
 Run:
 
@@ -461,7 +461,7 @@ diff RELEASING.md skills/bootstrap/templates/core/RELEASING.md
 
 Expected: the only differences are the repo-specific paragraphs (the org-callout in Prerequisites), none in the `How it works` section.
 
-- [ ] **Step 6: AC-16-6 — runbook hand-off confirmed**
+- [ ] **Step 6: AC-16-6 – runbook hand-off confirmed**
 
 Confirm the runbook text from Task 7 Step 2 is captured verbatim in the Finisher's handoff notes / PR body draft. No repo file change is expected here.
 
@@ -475,13 +475,13 @@ pnpm lint:md
 
 Expected: no new findings.
 
-- [ ] **Step 8: No commit** — this is verification only. If any step fails, fix in its originating workstream and re-run this task.
+- [ ] **Step 8: No commit** – this is verification only. If any step fails, fix in its originating workstream and re-run this task.
 
 ---
 
 ## Self-review notes
 
 - **Spec coverage:** every AC-16-n has at least one task. AC-16-1 → Task 2; AC-16-2 → Task 3; AC-16-3 → Task 4; AC-16-4 → Task 5; AC-16-5 → Task 6; AC-16-6 → Task 7. Task 8 re-runs all six.
-- **Placeholders:** none — every step shows exact commands, exact replacement text, and exact expected output.
+- **Placeholders:** none – every step shows exact commands, exact replacement text, and exact expected output.
 - **Consistency:** the comment text above `on:` is identical across Tasks 2, 3, and 4. The step 1 rewrite is identical across Tasks 5 and 6. The runbook text in Task 7 matches the design doc verbatim.
 - **Out of scope (confirmed from design):** no changes to `release-please-config.json`, no new CI guardrails, no reminder bots, no changes to the marketplace protocol.

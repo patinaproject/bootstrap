@@ -15,11 +15,11 @@
      --jq .default_workflow_permissions
    ```
 
-   Expected output: `write`. If it prints `read`, the toggle did not stick — escalate to an org admin or fall back to the PAT/App token path documented in `RELEASING.md`.
+   Expected output: `write`. If it prints `read`, the toggle did not stick – escalate to an org admin or fall back to the PAT/App token path documented in `RELEASING.md`.
 
 2. **Merge this PR.** Standard squash merge lands the template + root workflow changes on `main`.
 
-3. **Manually create the `v1.0.0` tag and GitHub Release.** The merge commit of PR #9 is `270d51a`. Main has since advanced past `270d51a` (e.g. `fb1f7c1`); tagging at the release-PR merge commit is the release-please convention and correctly pins `v1.0.0` to the state that set `package.json` version = 1.0.0. Extract the `## [1.0.0]` section of `CHANGELOG.md` into a release-notes file first — you can extract the notes with:
+3. **Manually create the `v1.0.0` tag and GitHub Release.** The merge commit of PR #9 is `270d51a`. Main has since advanced past `270d51a` (e.g. `fb1f7c1`); tagging at the release-PR merge commit is the release-please convention and correctly pins `v1.0.0` to the state that set `package.json` version = 1.0.0. Extract the `## [1.0.0]` section of `CHANGELOG.md` into a release-notes file first – you can extract the notes with:
 
    ```bash
    awk '/^## \[1\.0\.0\]/{p=1} p; /^## \[0/{p=0}' CHANGELOG.md > /tmp/v1.0.0-notes.md

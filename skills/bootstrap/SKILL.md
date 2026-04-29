@@ -5,7 +5,7 @@ description: Use when scaffolding a new repository (public or private) to the Pa
 
 # bootstrap
 
-`bootstrap` scaffolds a repository — new or existing — to the Patina Project baseline. The baseline mirrors [`patinaproject/superteam`](https://github.com/patinaproject/superteam): a dual-plugin repository root, a self-contained `skills/` directory, conventional-commits-with-issue-ref enforcement, a PR template, `AGENTS.md` + `CLAUDE.md`, a human-readable `README.md`, a `docs/file-structure.md` contributor reference, and PNPM + Husky + markdownlint tooling.
+`bootstrap` scaffolds a repository – new or existing – to the Patina Project baseline. The baseline mirrors [`patinaproject/superteam`](https://github.com/patinaproject/superteam): a dual-plugin repository root, a self-contained `skills/` directory, conventional-commits-with-issue-ref enforcement, a PR template, `AGENTS.md` + `CLAUDE.md`, a human-readable `README.md`, a `docs/file-structure.md` contributor reference, and PNPM + Husky + markdownlint tooling.
 
 ## Modes
 
@@ -39,7 +39,7 @@ Behavior:
 - For each gap, produce a concrete recommendation on how to realign with the current baseline.
 - Detect whether the repo is an AI agent plugin (by presence of any agent-plugin manifest). When detected, additionally recommend any currently-supported AI platform surface that is missing.
 - For each recommendation, show a diff preview and ask the user to accept, skip, or defer. **Never overwrite existing files without explicit confirmation.** There are no flags or escape hatches; realignment is always interactive.
-- Group recommendations into ordered batches that can be applied independently. Each batch below must cover its listed files; no file from the "Source of truth for repo baseline" list in `AGENTS.md` may be skipped. `patinaproject/bootstrap` is a normal realignment target — the skill must not self-exclude when run against it.
+- Group recommendations into ordered batches that can be applied independently. Each batch below must cover its listed files; no file from the "Source of truth for repo baseline" list in `AGENTS.md` may be skipped. `patinaproject/bootstrap` is a normal realignment target – the skill must not self-exclude when run against it.
   1. Plugin manifests: `.claude-plugin/`, `.codex-plugin/`, `release-please-config.json`, `.release-please-manifest.json`.
   2. Commit / PR conventions: `commitlint.config.js`, `.husky/*`, `.github/pull_request_template.md`, `.github/ISSUE_TEMPLATE/*`.
   3. PNPM tooling: `package.json`, `.markdownlint.jsonc`, `scripts/check-plugin-versions.mjs`, `scripts/sync-plugin-versions.mjs`.
@@ -56,11 +56,11 @@ The skill collects the following inputs. Author name, author email, and the secu
 |---|---|---|
 | `<owner>` | from `git remote get-url origin` | GitHub org or user |
 | `<repo>` | from `git remote get-url origin` | repository name |
-| `<repo-description>` | — | one-line description |
+| `<repo-description>` | – | one-line description |
 | `<visibility>` | public | public \| private |
 | `<is-agent-plugin>` | no | yes emits plugin/config surfaces for every supported AI coding tool |
 | `<use-superteam>` | no | yes emits `docs/superpowers/` skeleton |
-| `<primary-skill-name>` | — | optional; scaffolds `skills/<name>/SKILL.md` starter |
+| `<primary-skill-name>` | – | optional; scaffolds `skills/<name>/SKILL.md` starter |
 | `<codeowner>` | `@<owner>` | written into `.github/CODEOWNERS` |
 | `<security-contact>` | from `git config user.email` | public repos only; written into `SECURITY.md` |
 | `<author-name>` | from `git config user.name` | written into every `author` block |
@@ -123,7 +123,7 @@ skills/.gitkeep
 
 The agent-plugin `README.md.tmpl` is richer than the core one: it includes install steps for Claude Code, Codex CLI, and Codex App, plus usage examples. The core `README.md.tmpl` is emitted only for non-plugin repos.
 
-Aider, Zed, Cline, and Opencode read `AGENTS.md` natively and are covered by the core baseline — no dedicated surface needed. Codex CLI also reads `AGENTS.md` natively but additionally consumes `.codex-plugin/plugin.json` in agent-plugin mode. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
+Aider, Zed, Cline, and Opencode read `AGENTS.md` natively and are covered by the core baseline – no dedicated surface needed. Codex CLI also reads `AGENTS.md` natively but additionally consumes `.codex-plugin/plugin.json` in agent-plugin mode. Continue.dev is available as an opt-in secondary editor (`.continue/config.json`).
 
 ### Patina Project organization supplement
 
@@ -178,28 +178,28 @@ Every bootstrap-managed repo should carry these merge settings:
 | `squash_merge_commit_message` | `COMMIT_MESSAGES` | Preserves commit-level context (useful for review and git blame) in the squash body. |
 | `delete_branch_on_merge` | true | Keeps the branch list tidy after each squash. |
 | `allow_update_branch` | true | Surfaces an "Update branch" button on stale PRs so reviewers can sync without leaving the UI. |
-| Release immutability | enabled | Prevents published release assets and tags from being modified after the fact — critical for marketplace consumers pinning to a tag. UI-only: not exposed via the standard REST `repos` endpoint. |
+| Release immutability | enabled | Prevents published release assets and tags from being modified after the fact – critical for marketplace consumers pinning to a tag. UI-only: not exposed via the standard REST `repos` endpoint. |
 
 ### Checking current settings
 
 The skill picks the check path based on what the user has installed and whether the repo is public. Never apply changes without explicit user confirmation.
 
-**Path 1 — `gh` CLI (preferred, covers public + private uniformly):**
+**Path 1 – `gh` CLI (preferred, covers public + private uniformly):**
 
 ```bash
 gh api "repos/<owner>/<repo>" --jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_update_branch}'
 ```
 
-**Path 2 — `curl` + public REST API (no auth, public repos only; requires `jq` for the field projection below — fall back to inspecting raw JSON if `jq` is absent):**
+**Path 2 – `curl` + public REST API (no auth, public repos only; requires `jq` for the field projection below – fall back to inspecting raw JSON if `jq` is absent):**
 
 ```bash
 curl -s "https://api.github.com/repos/<owner>/<repo>" \
   | jq '{allow_squash_merge, allow_merge_commit, allow_rebase_merge, squash_merge_commit_title, squash_merge_commit_message, delete_branch_on_merge, allow_update_branch}'
 ```
 
-Rate limit is 60 req/hr per IP unauthenticated — fine for a one-shot realignment check. If the response is a 404 on what should be a visible repo, the repo is private and this path cannot be used.
+Rate limit is 60 req/hr per IP unauthenticated – fine for a one-shot realignment check. If the response is a 404 on what should be a visible repo, the repo is private and this path cannot be used.
 
-**Path 3 — no CLI available, or private repo without auth:** skip the check and proceed straight to the UI walkthrough below; list expected values next to the checkboxes the user should see.
+**Path 3 – no CLI available, or private repo without auth:** skip the check and proceed straight to the UI walkthrough below; list expected values next to the checkboxes the user should see.
 
 Skill picks the first path that will succeed: `gh` if installed → `curl` if the repo is public → UI-only if neither.
 
@@ -213,10 +213,10 @@ Writes always require auth. Rather than scripting tokens, the skill directs the 
    - **Allow rebase merging** → **unchecked**.
    - **Always suggest updating pull request branches** → **checked** (`allow_update_branch=true`).
    - **Automatically delete head branches** → **checked** (`delete_branch_on_merge=true`).
-2. Scroll to **Releases** (or open **[General → Releases](https://github.com/<owner>/<repo>/settings)** and scroll). Toggle **Enable release immutability** → **on**. This prevents published release assets and tags from being modified after the fact; it is verified by eye only — the setting is not exposed by the standard `repos` REST endpoint.
+2. Scroll to **Releases** (or open **[General → Releases](https://github.com/<owner>/<repo>/settings)** and scroll). Toggle **Enable release immutability** → **on**. This prevents published release assets and tags from being modified after the fact; it is verified by eye only – the setting is not exposed by the standard `repos` REST endpoint.
 3. Click **Save** under each changed control that has one; the checkboxes save inline.
 
-Faster for `gh`-equipped users — the equivalent single PATCH:
+Faster for `gh`-equipped users – the equivalent single PATCH:
 
 ```bash
 gh api -X PATCH "repos/<owner>/<repo>" \
@@ -242,7 +242,7 @@ Repository settings drift detected. Open:
   3. Default squash commit message: currently "Default to pull request title",
      should be "Pull request title and commit details".
   4. Automatically delete head branches: currently OFF, should be ON.
-  (Auto-merge is intentionally left unopinionated — neither recommended nor
+  (Auto-merge is intentionally left unopinionated – neither recommended nor
    flagged.)
 
 Proceed to apply via `gh api` (if available), or confirm after applying via UI?
@@ -270,11 +270,11 @@ Run `pnpm exec markdownlint-cli2 --fix "**/*.md" "#node_modules"` to auto-fix co
 
 ## Reference implementation
 
-This repository — [`patinaproject/bootstrap`](https://github.com/patinaproject/bootstrap) — is the canonical reference for every file this skill emits. The `templates/` directory under `skills/bootstrap/` mirrors these files with placeholders.
+This repository – [`patinaproject/bootstrap`](https://github.com/patinaproject/bootstrap) – is the canonical reference for every file this skill emits. The `templates/` directory under `skills/bootstrap/` mirrors these files with placeholders.
 
 ## Related documents
 
-- [`audit-checklist.md`](./audit-checklist.md) — canonical realignment checklist.
-- [`templates/`](./templates/) — template files emitted into target repos.
-- [`../../AGENTS.md`](../../AGENTS.md) — repo workflow contract.
-- [`../../docs/file-structure.md`](../../docs/file-structure.md) — layout reference.
+- [`audit-checklist.md`](./audit-checklist.md) – canonical realignment checklist.
+- [`templates/`](./templates/) – template files emitted into target repos.
+- [`../../AGENTS.md`](../../AGENTS.md) – repo workflow contract.
+- [`../../docs/file-structure.md`](../../docs/file-structure.md) – layout reference.
