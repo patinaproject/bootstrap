@@ -36,7 +36,7 @@
   Include one row per in-scope AC. Keep the `Unit` column, then add one column
   per supported platform for this project. Remove unsupported platform columns
   before opening the PR. Use:
-  ✅ covered/passing
+  ✅ tested
   ❌ required but missing/failing
   ➖ not applicable for this AC
 -->
