@@ -28,6 +28,8 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
 - R8: `Manual test:` rows are only for steps the operator needs to perform;
   command output, lint results, and other author-run verification must not be
   relabeled as manual testing.
+- R9: Manual-test rows and test-gap rows are operator-review checkboxes only;
+  agents must write them unchecked and must not write them as plain bullets.
 
 ## Acceptance criteria
 
@@ -52,6 +54,9 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
 - AC-79-6: Given an author fills an acceptance-criteria report, when they add a
   `Manual test:` row, then the template tells them to use that row only for
   steps the operator needs to perform.
+- AC-79-7: Given an author fills an acceptance-criteria report, when they add a
+  manual-test or test-gap row, then the template requires an unchecked
+  operator-review checkbox and forbids plain bullets or agent-checked boxes.
 
 ## Surfaces
 
@@ -71,7 +76,9 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
   column, forbids unit-test rows under AC sections, forbids detached `Test:`
   bullets, rejects word statuses such as `tested` in matrix cells, and forbids
-  relabeling author-run command verification as manual testing.
+  relabeling author-run command verification as manual testing. It also
+  requires manual-test and test-gap rows to be unchecked operator-review
+  checkboxes instead of plain bullets or agent-checked boxes.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template instead of
   duplicating all rules.
@@ -95,6 +102,8 @@ Checked dimensions:
 - Matrix status rationalization is closed by the explicit no-word-status rule.
 - Manual-test rationalization is closed by the explicit operator-step-only
   rule.
+- Test-gap and manual-test checkbox rationalization is closed by the explicit
+  unchecked operator-review checkbox rule.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

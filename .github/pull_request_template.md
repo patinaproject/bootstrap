@@ -69,19 +69,22 @@ Short outcome summary.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  Manual test rows are only for steps the operator needs to perform. Use the
-  literal prefix `Manual test:` and concrete numbered steps. Do not relabel
+  Manual test rows are only for steps the operator needs to perform. When
+  present, they must be unchecked operator-review checkboxes using the literal
+  prefix `Manual test:` and concrete numbered steps. Agents must never check
+  these boxes and must never write manual tests as plain bullets. Do not relabel
   command output, lint results, or other author-run verification as manual
-  tests. Do not use a checkbox unless the row is an operator action that must
-  be performed before merge.
+  tests.
 -->
-- Manual test: <concrete numbered steps; observed outcome>
+- [ ] Manual test: <concrete numbered steps; observed outcome>
 <!--
-  Add a visible Test gap row only when automated coverage has a real gap that a
-  reviewer must consciously accept. When automated coverage is comprehensive,
+  Add a visible Test gap row only when automated coverage has a real gap that
+  the operator must consciously review. When present, it must be an unchecked
+  operator-review checkbox. Agents must never check this box and must never
+  write test gaps as plain bullets. When automated coverage is comprehensive,
   omit the row entirely – do not use placeholder phrases like `no known gap`,
   `none required`, `n/a`, `not applicable`, or `automated coverage is sufficient`.
-  Example: - ⚠️ Test gap: <what automated coverage does not verify>
+  Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
 -->
 
 ### AC-<issue>-<n>
