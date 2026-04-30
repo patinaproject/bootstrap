@@ -4,9 +4,9 @@
 
 Make the bootstrap PR body contract prevent accidental agent trigger mentions in
 verifier fields while keeping acceptance-criteria reports compact. The template
-should name neutral verifier values, avoid bot-handle examples, and omit
-unit-test reporting from per-AC reports because it adds noise without improving
-review decisions.
+should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
+summary column in the `Test coverage` matrix, and omit per-AC unit-test detail
+rows because they add noise without improving review decisions.
 
 ## Requirements
 
@@ -15,7 +15,7 @@ review decisions.
   intentional.
 - R2: Test verifier guidance uses neutral values such as a person, role, or run
   identifier instead of bot handles.
-- R3: The `Test coverage` matrix omits the `Unit` column and only includes
+- R3: The `Test coverage` matrix keeps the `Unit` column and only adds
   supported platform or project validation columns.
 - R4: Per-AC test rows are optional and only report meaningful project or
   platform validation.
@@ -41,8 +41,8 @@ review decisions.
   mentions.
 - AC-79-4: Given an author fills the acceptance-criteria reports in the
   bootstrap PR template, when they add test coverage or per-AC verification,
-  then the template omits unit-test reporting and only asks for meaningful
-  platform, project, manual, or gap evidence.
+  then the template keeps the `Unit` coverage summary column while omitting
+  unit-test detail rows from the per-AC sections.
 - AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then the template tells them to use the status symbols instead of
   word statuses such as `tested`.
@@ -56,14 +56,15 @@ review decisions.
 
 ## Workflow-Contract Safeguards
 
-- RED baseline: the previous PR template required a `Unit` matrix column and
-  per-AC unit/platform rows, which encouraged noisy AC reports even when unit
-  tests did not add reviewer-useful evidence.
-- GREEN target: the template keeps platform/project validation, manual tests,
-  and real test gaps visible while removing unit-test reporting from AC reports.
-- Rationalization resistance: the template explicitly says not to add a `Unit`
-  column, not to include unit-test rows, not to use detached `Test:` bullets,
-  and not to write word statuses such as `tested` in matrix cells.
+- RED baseline: the previous PR template required per-AC unit/platform rows,
+  which encouraged noisy AC reports even when unit-test details did not add
+  reviewer-useful evidence.
+- GREEN target: the template keeps the `Unit` summary column, platform/project
+  validation, manual tests, and real test gaps visible while removing unit-test
+  detail rows from AC reports.
+- Rationalization resistance: the template explicitly keeps the `Unit` matrix
+  column, forbids unit-test rows under AC sections, forbids detached `Test:`
+  bullets, and rejects word statuses such as `tested` in matrix cells.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template instead of
   duplicating all rules.
@@ -82,7 +83,8 @@ Reviewer context: same-thread fallback.
 Checked dimensions:
 
 - RED/GREEN baseline obligations are documented above.
-- Rationalization resistance is present through explicit no-unit-row wording.
+- Rationalization resistance is present through explicit Unit-summary vs.
+  unit-detail-row wording.
 - Matrix status rationalization is closed by the explicit no-word-status rule.
 - Red flags are addressed by preserving platform/project evidence and visible
   gap reporting.
