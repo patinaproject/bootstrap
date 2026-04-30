@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.7.0](https://github.com/patinaproject/bootstrap/compare/v1.6.0...v1.7.0) (2026-04-30)
+
+
+### Features
+
+* [#73](https://github.com/patinaproject/bootstrap/issues/73) omit empty pre-merge sections ([#76](https://github.com/patinaproject/bootstrap/issues/76)) ([8d8e43c](https://github.com/patinaproject/bootstrap/commit/8d8e43cef904656d2a3f17557380854f327c301e))
+
+
+### Bug Fixes
+
+* [#72](https://github.com/patinaproject/bootstrap/issues/72) require lint checks in rulesets ([#74](https://github.com/patinaproject/bootstrap/issues/74)) ([19461b4](https://github.com/patinaproject/bootstrap/commit/19461b428d1cd69680b5306f7c197a43c29330f7))
+* [#77](https://github.com/patinaproject/bootstrap/issues/77) remove status check setup guidance ([#78](https://github.com/patinaproject/bootstrap/issues/78)) ([40e376f](https://github.com/patinaproject/bootstrap/commit/40e376f6cf0057143b542ca479a8a1ff749bb56d))
+
 ## [1.6.0](https://github.com/patinaproject/bootstrap/compare/v1.5.0...v1.6.0) (2026-04-30)
 
 
