@@ -5,8 +5,8 @@
 Make the bootstrap PR body contract prevent accidental agent trigger mentions in
 verifier fields while keeping acceptance-criteria reports compact. The template
 should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
-  summary column in the `Test coverage` matrix, and omit per-AC unit-test
-  detail rows because they add noise without improving review decisions.
+summary column in the `Test coverage` matrix, and keep detailed unit command
+output out of per-AC summaries so reviewers see the decisions they need.
 
 ## Requirements
 
@@ -14,22 +14,18 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
   `@codex`, or similar agent trigger mentions unless the trigger is
   intentional.
 - R2: Test verifier guidance uses neutral values such as a person, role, or run
-  identifier instead of bot handles.
+  identifier.
 - R3: The `Test coverage` matrix keeps the `Unit` column and only adds
   supported platform columns.
-- R4: Per-AC test rows are optional and only report meaningful platform
-  validation.
-- R5: Per-AC reports explicitly forbid unit-test rows and detached `Test:`
-  bullets.
+- R4: Per-AC test rows report meaningful platform validation.
+- R5: Per-AC reports summarize the AC outcome and keep detailed unit command
+  output in the coverage matrix.
 - R6: The emitted bootstrap core template, root template, and traceability docs
   describe the same PR-body grammar.
-- R7: `Test coverage` matrix status cells use only the template's status
-  symbols and explicitly reject word statuses such as `tested`.
-- R8: `Manual test:` rows are only for steps the operator needs to perform;
-  command output, lint results, and other author-run verification must not be
-  relabeled as manual testing.
-- R9: Manual-test rows and test-gap rows are operator-review checkboxes only;
-  agents must write them unchecked and must not write them as plain bullets.
+- R7: `Test coverage` matrix status cells use the template's status symbols.
+- R8: `Manual test:` rows capture steps the operator needs to perform.
+- R9: Manual-test rows and test-gap rows are unchecked operator-review
+  checkboxes.
 
 ## Acceptance criteria
 
@@ -46,17 +42,16 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
   mentions.
 - AC-79-4: Given an author fills the acceptance-criteria reports in the
   bootstrap PR template, when they add test coverage or per-AC verification,
-  then the template keeps the `Unit` coverage summary column while omitting
-  unit-test detail rows from the per-AC sections.
+  then the template keeps the `Unit` coverage summary column and keeps detailed
+  unit command output out of the per-AC summaries.
 - AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
-  AC status, then the template tells them to use the status symbols instead of
-  word statuses such as `tested`.
+  AC status, then the template tells them to use the status symbols.
 - AC-79-6: Given an author fills an acceptance-criteria report, when they add a
   `Manual test:` row, then the template tells them to use that row only for
   steps the operator needs to perform.
 - AC-79-7: Given an author fills an acceptance-criteria report, when they add a
-  manual-test or test-gap row, then the template requires an unchecked
-  operator-review checkbox and forbids plain bullets or agent-checked boxes.
+  manual-test or test-gap row, then the template shows it as an unchecked
+  operator-review checkbox.
 
 ## Surfaces
 
@@ -72,16 +67,13 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
   reviewer-useful evidence.
 - GREEN target: the template keeps the `Unit` summary column, platform
   validation, operator-needed manual tests, and real test gaps visible while
-  removing unit-test detail rows from AC reports.
+  keeping detailed unit command output out of AC prose.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
-  column, forbids unit-test rows under AC sections, forbids detached `Test:`
-  bullets, rejects word statuses such as `tested` in matrix cells, and forbids
-  relabeling author-run command verification as manual testing. It also
-  requires manual-test and test-gap rows to be unchecked operator-review
-  checkboxes instead of plain bullets or agent-checked boxes.
+  column, names symbolic matrix statuses, names platform test row fields, and
+  shows manual-test and test-gap rows as unchecked operator-review checkboxes.
 - Token efficiency: detailed grammar stays in the PR template comments, while
-  `docs/ac-traceability.md` points to the canonical template instead of
-  duplicating all rules.
+  `docs/ac-traceability.md` points to the canonical template for the full rule
+  set.
 - Role ownership: authors decide which platform evidence is meaningful;
   reviewers inspect AC outcomes and gaps; operators see checkboxes only for
   actual pre-merge actions.
@@ -99,11 +91,11 @@ Checked dimensions:
 - RED/GREEN baseline obligations are documented above.
 - Rationalization resistance is present through explicit Unit-summary vs.
   unit-detail-row wording.
-- Matrix status rationalization is closed by the explicit no-word-status rule.
-- Manual-test rationalization is closed by the explicit operator-step-only
-  rule.
-- Test-gap and manual-test checkbox rationalization is closed by the explicit
-  unchecked operator-review checkbox rule.
+- Matrix status rationalization is closed by showing the symbolic status set.
+- Manual-test rationalization is closed by naming operator-needed steps as the
+  included manual-test content.
+- Test-gap and manual-test checkbox rationalization is closed by showing the
+  unchecked operator-review checkbox form.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

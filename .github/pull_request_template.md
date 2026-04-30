@@ -39,9 +39,8 @@
 
 <!--
   Include one row per in-scope AC. Keep the `Unit` column, then add one column
-  per supported platform for this project. Remove unsupported platform columns
-  before opening the PR. Status cells must use only these symbols, not words
-  like `tested`:
+  per supported platform for this project. Fill status cells with these
+  symbols:
   ✅ tested
   ❌ required but missing/failing
   ➖ not applicable for this AC
@@ -59,31 +58,22 @@
 Short outcome summary.
 
 <!--
-  Test rows are optional and only belong here when they report meaningful
-  platform validation for this AC. Fields are pipe-separated in fixed order:
-  runner | env | verifier | ISO (UTC timestamp). Do not include unit-test rows
-  or detached `- Test:` bullets. Use a neutral verifier value, such as a
-  person, role, or run identifier. Do not include `@claude`, `@codex`, or
-  similar agent trigger mentions unless you intentionally want to trigger that
-  agent in a supported GitHub surface.
+  Include platform test rows for meaningful platform validation of this AC.
+  Fields are pipe-separated in fixed order: runner | env | verifier | ISO
+  (UTC timestamp). Use a neutral verifier value, such as a person, role, or run
+  identifier.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  Manual test rows are only for steps the operator needs to perform. When
-  present, they must be unchecked operator-review checkboxes using the literal
-  prefix `Manual test:` and concrete numbered steps. Agents must never check
-  these boxes and must never write manual tests as plain bullets. Do not relabel
-  command output, lint results, or other author-run verification as manual
-  tests.
+  Include manual test rows for steps the operator needs to perform. Write each
+  one as an unchecked operator-review checkbox using the literal prefix
+  `Manual test:` and concrete numbered steps.
 -->
 - [ ] Manual test: <concrete numbered steps; observed outcome>
 <!--
-  Add a visible Test gap row only when automated coverage has a real gap that
-  the operator must consciously review. When present, it must be an unchecked
-  operator-review checkbox. Agents must never check this box and must never
-  write test gaps as plain bullets. When automated coverage is comprehensive,
-  omit the row entirely – do not use placeholder phrases like `no known gap`,
-  `none required`, `n/a`, `not applicable`, or `automated coverage is sufficient`.
+  Include a visible Test gap row when automated coverage has a real gap that
+  the operator must consciously review. Write each gap as an unchecked
+  operator-review checkbox.
   Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
 -->
 
