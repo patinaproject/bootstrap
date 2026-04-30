@@ -41,7 +41,7 @@
   Include one row per in-scope AC. Add one column per supported platform or
   project validation target. Remove unsupported columns before opening the PR.
   Do not add a `Unit` column; unit-test reporting is unnecessary noise in AC
-  reports. Use:
+  reports. Status cells must use only these symbols, not words like `tested`:
   ✅ tested
   ❌ required but missing/failing
   ➖ not applicable for this AC

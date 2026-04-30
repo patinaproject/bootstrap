@@ -23,6 +23,8 @@ review decisions.
   bullets.
 - R6: The emitted bootstrap core template, root template, and traceability docs
   describe the same PR-body grammar.
+- R7: `Test coverage` matrix status cells use only the template's status
+  symbols and explicitly reject word statuses such as `tested`.
 
 ## Acceptance criteria
 
@@ -41,6 +43,9 @@ review decisions.
   bootstrap PR template, when they add test coverage or per-AC verification,
   then the template omits unit-test reporting and only asks for meaningful
   platform, project, manual, or gap evidence.
+- AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
+  AC status, then the template tells them to use the status symbols instead of
+  word statuses such as `tested`.
 
 ## Surfaces
 
@@ -57,8 +62,8 @@ review decisions.
 - GREEN target: the template keeps platform/project validation, manual tests,
   and real test gaps visible while removing unit-test reporting from AC reports.
 - Rationalization resistance: the template explicitly says not to add a `Unit`
-  column, not to include unit-test rows, and not to use detached `Test:`
-  bullets.
+  column, not to include unit-test rows, not to use detached `Test:` bullets,
+  and not to write word statuses such as `tested` in matrix cells.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template instead of
   duplicating all rules.
@@ -78,6 +83,7 @@ Checked dimensions:
 
 - RED/GREEN baseline obligations are documented above.
 - Rationalization resistance is present through explicit no-unit-row wording.
+- Matrix status rationalization is closed by the explicit no-word-status rule.
 - Red flags are addressed by preserving platform/project evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the
