@@ -44,8 +44,9 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R18: Matrix `➖` means not relevant, not omitted; shown evidence, gaps, or
   operator checks make the matching matrix cell non-`➖` only when they clearly
   map to that matrix column.
-- R19: Unresolved critical or major review findings that affect validation are
-  reported as test-gap checkboxes unless they belong in `Do before merging`.
+- R19: Unresolved critical or major review findings that affect validation may
+  produce test-gap checkboxes, but those gaps describe the missing observable
+  behavior or validation rather than restating the finding.
 - R20: Matrix rows are limited to ACs with validation evidence, a required test
   gap, or an operator check.
 - R21: Evidence rows use a colon after the evidence label and name the concrete
@@ -82,6 +83,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
   validate.
 - R37: CI that must rerun after a fix is reported as a test gap unless an
   operator must manually trigger or inspect a specific job.
+- R38: Test-gap checkboxes are about observable behavior, missing coverage, or
+  validation that cannot yet be trusted.
 
 ## Acceptance criteria
 
@@ -132,8 +135,9 @@ output out of per-AC summaries so reviewers see the decisions they need.
   includes evidence, a gap, or an operator check that clearly maps to a matrix
   column, then the matching matrix cell is not `➖`.
 - AC-79-16: Given a critical or major review finding affects validation, when
-  the author updates the AC report, then the finding appears as a test-gap
-  checkbox unless it belongs in `Do before merging`.
+  the author updates the AC report, then the test-gap checkbox describes the
+  missing observable behavior or validation unless it belongs in
+  `Do before merging`.
 - AC-79-17: Given an AC has no validation evidence, required test gap, or
   operator check, when the author fills the `Test coverage` matrix, then the AC
   may be omitted from the matrix and summarized only in the AC section.
@@ -187,6 +191,10 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - AC-79-34: Given CI must rerun after a fix, when the author records that
   validation state under an AC, then the rerun is reported as a test gap unless
   the operator must manually trigger or inspect a specific job.
+- AC-79-35: Given an author writes a test-gap checkbox, when the gap comes from
+  a code review finding, then the checkbox describes observable behavior,
+  missing coverage, or validation that cannot yet be trusted rather than
+  restating the code review finding.
 
 ## Surfaces
 
@@ -249,7 +257,7 @@ Checked dimensions:
 - Matrix inconsistency is closed by requiring clearly mapped evidence, gaps, or
   operator checks to make the matching cell non-`➖`.
 - Review-finding loss is closed by requiring validation-affecting critical or
-  major findings to appear as test gaps or pre-merge tasks.
+  major findings to surface as observable validation gaps or pre-merge tasks.
 - Matrix bloat is closed by allowing bookkeeping-only ACs to stay out of the
   matrix.
 - Evidence vagueness is closed by requiring a concrete command, workflow job,
@@ -270,6 +278,9 @@ Checked dimensions:
   evidence is the meaningful validation for that AC.
 - Gap wording ambiguity is closed by making test gaps descriptive rather than
   command-shaped.
+- Code-review gap laundering is closed by requiring test gaps to describe
+  observable behavior, missing coverage, or validation that cannot yet be
+  trusted rather than restating findings.
 - Operator-check vagueness is closed by requiring an expected decision or
   result.
 - Evidence traceability is improved by allowing evidence links in the optional

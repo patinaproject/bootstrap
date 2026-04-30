@@ -90,18 +90,21 @@ including unresolved blockers or pending validation when present.
   evidence row only when unit evidence is the meaningful validation for this AC;
   otherwise keep unit details in the matrix or CI summary.
   If an unresolved critical or major review finding affects validation for this
-  AC, include it as a test-gap checkbox unless it belongs in Do before merging.
+  AC, describe the missing observable behavior or validation as a test-gap
+  checkbox unless it belongs in Do before merging.
 -->
 - <Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]
 <!--
   Include every known Test gap that the operator must consciously review. Use
   `Test gap:` to describe missing coverage or an unresolved validation concern,
-  not to duplicate an operator action. Treat CI that must rerun after a fix as
-  a test gap unless the operator must manually trigger or inspect a specific
-  job. Delete unused placeholder checkbox rows.
-  Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
+  not to restate a code-review finding or duplicate an operator action. Test
+  gaps must be about observable behavior, missing coverage, or validation that
+  cannot yet be trusted. Treat CI that must rerun after a fix as a test gap
+  unless the operator must manually trigger or inspect a specific job. Delete
+  unused placeholder checkbox rows.
+  Example: - [ ] ⚠️ Test gap: <observable behavior or validation not verified>
 -->
-- [ ] ⚠️ Test gap: <missing coverage or unresolved validation concern>
+- [ ] ⚠️ Test gap: <observable behavior, missing coverage, or unresolved validation concern>
 <!--
   Include every known operator action below any test-gap checkboxes for this
   AC. Use the literal prefix `Operator check:` for product testing, diff
