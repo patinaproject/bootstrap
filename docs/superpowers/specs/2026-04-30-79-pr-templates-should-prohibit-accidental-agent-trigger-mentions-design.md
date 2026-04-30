@@ -68,6 +68,17 @@ output out of per-AC summaries so reviewers see the decisions they need.
   slot.
 - R31: Matrix status symbols describe the required-validation state for each
   AC/column pair, including blocking gaps.
+- R32: `Do before merging` excludes failing or pending PR check status because
+  GitHub already reports checks.
+- R33: Pending required validation is reported as `❌` plus a test-gap checkbox
+  until the validation passes.
+- R34: Partial examples shown outside a PR body are labeled as excerpts, while
+  actual PR bodies keep every relevant AC heading.
+- R35: Per-AC summaries state the current reviewer-relevant result, including
+  blockers or pending validation when present.
+- R36: Operator checks avoid product retest checkboxes for
+  maintainability-only findings unless there is behavior risk the operator can
+  validate.
 
 ## Acceptance criteria
 
@@ -155,6 +166,20 @@ output out of per-AC summaries so reviewers see the decisions they need.
   `✅` only for passed required validation with no blocking gap, `❌` for
   missing, failing, or blocked required validation, and `➖` only when the
   column is not relevant to the AC.
+- AC-79-29: Given a PR has failing or pending GitHub checks, when the author
+  fills `Do before merging`, then check status is not duplicated there.
+- AC-79-30: Given required validation for an AC/column is pending, when the
+  author fills the matrix, then that cell uses `❌` and the AC includes a
+  test-gap checkbox until validation passes.
+- AC-79-31: Given an author shows a partial PR-body example outside GitHub,
+  when relevant AC headings are omitted for brevity, then the example is
+  labeled as an excerpt.
+- AC-79-32: Given an author writes an AC summary, when blockers or pending
+  validation are present, then the summary states that current
+  reviewer-relevant status.
+- AC-79-33: Given a review finding is maintainability-only, when the author
+  records follow-up under an AC, then the PR body does not add product retest
+  operator checkboxes unless there is behavior risk the operator can validate.
 
 ## Surfaces
 
@@ -199,7 +224,11 @@ Checked dimensions:
   unit-detail-row wording.
 - Matrix status rationalization is closed by tying each symbol to the
   required-validation state for the AC/column pair.
+- Pending-validation overclaiming is closed by requiring `❌` plus a test-gap
+  checkbox until required validation passes.
 - Matrix status copying is closed by requiring symbol-only cells.
+- PR-check duplication is closed by keeping GitHub check status out of
+  `Do before merging`.
 - Operator-check rationalization is closed by naming operator-needed actions as
   the included operator-check content.
 - Operator result invention is closed by asking for expected decisions or
@@ -224,6 +253,8 @@ Checked dimensions:
   specific risk, artifact, or unresolved decision.
 - Gap/check duplication is closed by separating unresolved validation concerns
   from operator actions that can close or validate them.
+- Maintainability-only retest creep is closed by requiring behavior risk before
+  product retest operator checkboxes are added.
 - Whole-body trigger safety is closed by moving trigger guidance to the PR-wide
   template comment.
 - AC omission loss is closed by requiring every relevant AC to keep an AC
@@ -244,6 +275,9 @@ Checked dimensions:
   descriptive test-gap text.
 - AC section drift is closed by naming the summary, evidence, test-gap, and
   operator-check order.
+- Example truncation drift is closed by labeling partial examples as excerpts.
+- Summary vagueness is closed by asking for the current reviewer-relevant
+  result, including blockers or pending validation.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

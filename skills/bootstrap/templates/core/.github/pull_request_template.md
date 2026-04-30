@@ -34,7 +34,8 @@
   - [ ] Rotate the production secret after deploy.
 
   Keep checklist items concrete, actionable, and imperative. Do not duplicate
-  AC-specific test gaps or operator checks here. Do not add this section for
+  AC-specific test gaps, operator checks, or failing/pending PR checks here;
+  PR check status is already reported by GitHub. Do not add this section for
   placeholders such as `None`, `N/A`, or `No work-specific pre-merge operator
   steps.` To include an intentionally optional checkbox, put a
   `pr-checkbox: optional` HTML comment immediately above that checkbox.
@@ -55,7 +56,8 @@
 
   Use `➖` only when that verification type is not relevant to the AC. If an AC
   includes evidence, a test gap, or an operator check that clearly maps to a
-  matrix column, that cell must not be `➖`.
+  matrix column, that cell must not be `➖`. If required validation is still
+  pending, use `❌` and add a test-gap checkbox until that validation passes.
 -->
 | AC | Title | Unit | <Platform> |
 | --- | --- | --- | --- |
@@ -65,13 +67,16 @@
 
 <!--
   One heading per relevant AC. AC IDs follow the convention in
-  docs/ac-traceability.md. Under each AC, use this order when present:
+  docs/ac-traceability.md. Actual PR bodies must not omit relevant AC headings.
+  When showing a partial example outside a PR body, label it as an excerpt.
+  Under each AC, use this order when present:
   summary, evidence rows, test-gap checkboxes, operator-check checkboxes.
 -->
 
 ### AC-<issue>-<n>
 
-Short outcome summary.
+Short outcome summary that states the current reviewer-relevant result,
+including unresolved blockers or pending validation when present.
 
 <!--
   For each supported platform that is relevant to this AC, include one evidence
@@ -101,10 +106,12 @@ Short outcome summary.
   result for each operator check. Do not add generic diff-review
   checks unless the operator must inspect a specific risk, artifact, or
   unresolved decision. Do not duplicate a test gap as an operator check unless
-  the operator action can close or validate the gap. When updating an existing
-  PR body, preserve every existing manual-review or manual-test instruction
-  under its AC in this checkbox form. Phrase checkbox text in imperative style.
-  Delete unused placeholder checkbox rows.
+  the operator action can close or validate the gap. Do not add product retest
+  checkboxes for maintainability-only findings unless there is a behavior risk
+  the operator can validate. When updating an existing PR body, preserve every
+  existing manual-review or manual-test instruction under its AC in this
+  checkbox form. Phrase checkbox text in imperative style. Delete unused
+  placeholder checkbox rows.
 -->
 - [ ] Operator check: <imperative operator action and expected decision or result>
 
