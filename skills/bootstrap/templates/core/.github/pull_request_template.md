@@ -69,9 +69,11 @@ Short outcome summary.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  Manual test row uses the literal prefix `Manual test:` and concrete numbered
-  steps. Do not use a checkbox unless the row is an operator action that must be
-  performed before merge.
+  Manual test rows are only for steps the operator needs to perform. Use the
+  literal prefix `Manual test:` and concrete numbered steps. Do not relabel
+  command output, lint results, or other author-run verification as manual
+  tests. Do not use a checkbox unless the row is an operator action that must
+  be performed before merge.
 -->
 - Manual test: <concrete numbered steps; observed outcome>
 <!--

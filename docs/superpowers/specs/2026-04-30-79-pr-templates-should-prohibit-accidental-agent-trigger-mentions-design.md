@@ -17,14 +17,17 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
   identifier instead of bot handles.
 - R3: The `Test coverage` matrix keeps the `Unit` column and only adds
   supported platform columns.
-- R4: Per-AC test rows are optional and only report meaningful project or
-  platform validation.
+- R4: Per-AC test rows are optional and only report meaningful platform
+  validation.
 - R5: Per-AC reports explicitly forbid unit-test rows and detached `Test:`
   bullets.
 - R6: The emitted bootstrap core template, root template, and traceability docs
   describe the same PR-body grammar.
 - R7: `Test coverage` matrix status cells use only the template's status
   symbols and explicitly reject word statuses such as `tested`.
+- R8: `Manual test:` rows are only for steps the operator needs to perform;
+  command output, lint results, and other author-run verification must not be
+  relabeled as manual testing.
 
 ## Acceptance criteria
 
@@ -46,6 +49,9 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
 - AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then the template tells them to use the status symbols instead of
   word statuses such as `tested`.
+- AC-79-6: Given an author fills an acceptance-criteria report, when they add a
+  `Manual test:` row, then the template tells them to use that row only for
+  steps the operator needs to perform.
 
 ## Surfaces
 
@@ -60,11 +66,12 @@ should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
   which encouraged noisy AC reports even when unit-test details did not add
   reviewer-useful evidence.
 - GREEN target: the template keeps the `Unit` summary column, platform
-  validation, manual tests, and real test gaps visible while removing unit-test
-  detail rows from AC reports.
+  validation, operator-needed manual tests, and real test gaps visible while
+  removing unit-test detail rows from AC reports.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
   column, forbids unit-test rows under AC sections, forbids detached `Test:`
-  bullets, and rejects word statuses such as `tested` in matrix cells.
+  bullets, rejects word statuses such as `tested` in matrix cells, and forbids
+  relabeling author-run command verification as manual testing.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template instead of
   duplicating all rules.
@@ -86,6 +93,8 @@ Checked dimensions:
 - Rationalization resistance is present through explicit Unit-summary vs.
   unit-detail-row wording.
 - Matrix status rationalization is closed by the explicit no-word-status rule.
+- Manual-test rationalization is closed by the explicit operator-step-only
+  rule.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the
