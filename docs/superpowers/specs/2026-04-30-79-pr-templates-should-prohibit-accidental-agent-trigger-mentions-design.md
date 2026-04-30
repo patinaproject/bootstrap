@@ -85,6 +85,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
   operator must manually trigger or inspect a specific job.
 - R38: Test-gap checkboxes are about observable behavior, missing coverage, or
   validation that cannot yet be trusted.
+- R39: Manual product or workflow validation stays as an operator check when a
+  human must exercise observable behavior after a gap is fixed.
 
 ## Acceptance criteria
 
@@ -195,6 +197,9 @@ output out of per-AC summaries so reviewers see the decisions they need.
   a code review finding, then the checkbox describes observable behavior,
   missing coverage, or validation that cannot yet be trusted rather than
   restating the code review finding.
+- AC-79-36: Given a validation gap requires a human to exercise product or
+  workflow behavior after the fix, when the author records follow-up under the
+  AC, then that manual validation remains an operator-check checkbox.
 
 ## Surfaces
 
@@ -299,6 +304,9 @@ Checked dimensions:
   result, including blockers or pending validation.
 - CI-rerun checkbox creep is closed by treating reruns after fixes as test gaps
   unless the operator must manually trigger or inspect a specific job.
+- Manual-validation loss is closed by keeping human product or workflow checks
+  as operator checks when the operator must exercise observable behavior after a
+  gap is fixed.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

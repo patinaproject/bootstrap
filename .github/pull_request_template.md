@@ -115,11 +115,13 @@ including unresolved blockers or pending validation when present.
   unresolved decision. Do not duplicate a test gap as an operator check unless
   the operator action can close or validate the gap. Do not add product retest
   checkboxes for maintainability-only findings unless there is a behavior risk
-  the operator can validate. Do not add CI-rerun operator checks unless the
-  operator must manually trigger or inspect a specific job. When updating an
-  existing PR body, preserve every existing manual-review or manual-test
-  instruction under its AC in this checkbox form. Phrase checkbox text in
-  imperative style. Delete unused placeholder checkbox rows.
+  the operator can validate. Keep manual product or workflow validation as an
+  operator check when a human must exercise observable behavior after a gap is
+  fixed. Do not add CI-rerun operator checks unless the operator must manually
+  trigger or inspect a specific job. When updating an existing PR body,
+  preserve every existing manual-review or manual-test instruction under its AC
+  in this checkbox form. Phrase checkbox text in imperative style. Delete
+  unused placeholder checkbox rows.
 -->
 - [ ] Operator check: <imperative operator action and expected decision or result>
 
