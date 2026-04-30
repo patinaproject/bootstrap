@@ -66,6 +66,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R29: Operator-check rows include an expected decision or result.
 - R30: Evidence rows may include an optional link in the verifier/timestamp
   slot.
+- R31: Matrix status symbols describe the required-validation state for each
+  AC/column pair, including blocking gaps.
 
 ## Acceptance criteria
 
@@ -148,6 +150,11 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - AC-79-27: Given an author adds an evidence row, when useful evidence has a
   link, then the optional evidence slot can contain that link instead of a
   verifier or timestamp.
+- AC-79-28: Given an author fills a matrix status cell, when validation for
+  that AC and column is complete, blocked, or irrelevant, then the cell uses
+  `✅` only for passed required validation with no blocking gap, `❌` for
+  missing, failing, or blocked required validation, and `➖` only when the
+  column is not relevant to the AC.
 
 ## Surfaces
 
@@ -190,7 +197,8 @@ Checked dimensions:
 - RED/GREEN baseline obligations are documented above.
 - Rationalization resistance is present through explicit Unit-summary vs.
   unit-detail-row wording.
-- Matrix status rationalization is closed by showing the symbolic status set.
+- Matrix status rationalization is closed by tying each symbol to the
+  required-validation state for the AC/column pair.
 - Matrix status copying is closed by requiring symbol-only cells.
 - Operator-check rationalization is closed by naming operator-needed actions as
   the included operator-check content.

@@ -47,10 +47,11 @@
   operator check. Keep the `Unit` column, then add one column per supported
   platform affected by this PR. Deferred or bookkeeping-only ACs may be
   summarized in the AC section without a matrix row, but every relevant AC
-  still needs an AC heading. Use only these symbols in status cells:
-  ✅ = tested
-  ❌ = required but missing/failing
-  ➖ = not applicable for this AC
+  still needs an AC heading. Each cell summarizes the required-validation state
+  for that AC and column. Use only these symbols in status cells:
+  ✅ = required validation passed, with no blocking gap for this column
+  ❌ = required validation missing, failing, or blocked by an unresolved gap
+  ➖ = not relevant to this AC
 
   Use `➖` only when that verification type is not relevant to the AC. If an AC
   includes evidence, a test gap, or an operator check that clearly maps to a
