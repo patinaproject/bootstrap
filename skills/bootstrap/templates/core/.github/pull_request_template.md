@@ -39,11 +39,15 @@
 
 <!--
   Include one row per in-scope AC. Keep the `Unit` column, then add one column
-  per supported platform for this project. Use only these symbols in status
+  per supported platform affected by this PR. Use only these symbols in status
   cells:
   ✅ = tested
   ❌ = required but missing/failing
   ➖ = not applicable for this AC
+
+  Use `➖` only when that verification type is not relevant to the AC. If an
+  AC includes evidence, a test gap, a manual review item, or a manual test item
+  for a platform or verification type, its matrix cell must not be `➖`.
 -->
 | AC | Title | Unit | <Platform> |
 | --- | --- | --- | --- |
@@ -54,7 +58,8 @@
 <!--
   One heading per relevant AC. AC IDs follow the convention in
   docs/ac-traceability.md. Under each AC, use this order when present:
-  summary, platform evidence rows, test-gap checkboxes, manual-test checkboxes.
+  summary, platform evidence rows, test-gap checkboxes, manual-review
+  checkboxes, manual-test checkboxes.
 -->
 
 ### AC-<issue>-<n>
@@ -68,6 +73,8 @@ Short outcome summary.
   Use a neutral verifier value, such as a person, role, or run identifier. Do
   not put an `@` immediately before agent names such as Claude or Codex unless
   you intentionally want to trigger that agent in a supported GitHub surface.
+  If an unresolved critical or major review finding affects validation for this
+  AC, include it as a test-gap checkbox unless it belongs in Do before merging.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
@@ -78,12 +85,22 @@ Short outcome summary.
 -->
 - [ ] ⚠️ Test gap: Review <missing coverage or unverified behavior>
 <!--
-  Include every known manual test step the operator needs to perform below any
-  test-gap checkboxes for this AC. Write each one as an unchecked
-  operator-review checkbox using the literal prefix `Manual test:` and concrete
-  numbered steps. When updating an existing PR body, preserve every existing
-  manual-review instruction under its AC in this checkbox form. Phrase checkbox
-  text in imperative style.
+  Include every known operator audit or inspection step below any test-gap
+  checkboxes and above any manual-test checkboxes for this AC. Use the literal
+  prefix `Manual review:` for diff inspection, coverage-report review, review
+  finding review, deployment evidence review, or other operator review work
+  that does not exercise the product directly. Phrase checkbox text in
+  imperative style.
+-->
+- [ ] Manual review: <imperative review or audit step and expected decision>
+<!--
+  Include every known manual product test step the operator needs to perform
+  below any test-gap and manual-review checkboxes for this AC. Write each one
+  as an unchecked operator-review checkbox using the literal prefix
+  `Manual test:` and concrete numbered steps. When updating an existing PR body,
+  preserve every existing manual-review instruction under its AC as either
+  `Manual review:` or `Manual test:` based on whether it inspects evidence or
+  exercises product behavior. Phrase checkbox text in imperative style.
 -->
 - [ ] Manual test: <imperative operator steps and expected result>
 
