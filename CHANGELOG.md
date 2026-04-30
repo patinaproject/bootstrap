@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.0](https://github.com/patinaproject/bootstrap/compare/v1.5.0...v1.6.0) (2026-04-30)
+
+
+### Features
+
+* [#68](https://github.com/patinaproject/bootstrap/issues/68) consolidate CI workflow checks ([#69](https://github.com/patinaproject/bootstrap/issues/69)) ([fdf8df5](https://github.com/patinaproject/bootstrap/commit/fdf8df5e61b591375b9da5a480bbed10e9e2fc81))
+
+
+### Bug Fixes
+
+* [#68](https://github.com/patinaproject/bootstrap/issues/68) rename CI workflows and lint checks ([#71](https://github.com/patinaproject/bootstrap/issues/71)) ([d511c73](https://github.com/patinaproject/bootstrap/commit/d511c73bc3c91f1970a89af37b8f0fd487737c58))
+
 ## [1.5.0](https://github.com/patinaproject/bootstrap/compare/v1.4.0...v1.5.0) (2026-04-29)
 
 
