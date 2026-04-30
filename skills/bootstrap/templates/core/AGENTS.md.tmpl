@@ -97,17 +97,7 @@ Also enable **Settings → Actions → General → Require actions to be pinned 
 
 Prefer named steps inside an existing job for short-lived checks that share the
 same trigger, permissions, runner, and reporting needs. Do not split such
-checks into separate jobs just to give each command its own status. Preserve
-documented required status check names, or update the branch-protection and
-ruleset guidance in the same change.
-
-## Required PR checks
-
-Require the `Lint` status check before merge. This check runs pull request
-metadata linting, including required template checkboxes, conventional PR title
-validation, closing-keyword validation, and breaking-change marker consistency.
-Configure it in branch protection or a repository ruleset alongside the other
-required PR checks.
+checks into separate jobs just to give each command its own status.
 
 ## Commit & Pull Request Guidelines
 
