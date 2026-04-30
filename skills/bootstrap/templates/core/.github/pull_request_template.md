@@ -61,7 +61,10 @@ Short outcome summary.
   Test rows: one per covered Unit/platform target. Fields are pipe-separated
   in fixed order: runner | env | verifier | ISO (UTC timestamp). Omit test
   rows only for ACs explicitly marked `[platform: none]`. Do not use detached
-  `- Test:` bullets.
+  `- Test:` bullets. Use a neutral verifier value, such as a person, role, or
+  run identifier. Do not include `@claude`, `@codex`, or similar agent trigger
+  mentions unless you intentionally want to trigger that agent in a supported
+  GitHub surface.
 -->
 - <Unit-or-platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
