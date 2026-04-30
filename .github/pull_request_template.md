@@ -46,8 +46,8 @@
   Include one row per AC with validation evidence, a required test gap, or an
   operator check. Keep the `Unit` column, then add one column per supported
   platform affected by this PR. Deferred or bookkeeping-only ACs may be
-  summarized in the AC section without a matrix row. Use only these symbols in
-  status cells:
+  summarized in the AC section without a matrix row, but every relevant AC
+  still needs an AC heading. Use only these symbols in status cells:
   ✅ = tested
   ❌ = required but missing/failing
   ➖ = not applicable for this AC
@@ -76,26 +76,28 @@ Short outcome summary.
   For each supported platform that is relevant to this AC, include one evidence
   row or report the missing validation as a test-gap checkbox. Keep evidence
   rows compact and use a colon after the evidence label:
-  `<Platform> test: <command, workflow job, tool, or harness>, <environment>[, <verifier or ISO>]`.
+  `<Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]`.
   Name the concrete command, workflow job, tool, or harness when known. Use a
-  neutral verifier value, such as a person, role, or run identifier.
+  neutral verifier value, such as a person, role, or run identifier. Add a unit
+  evidence row only when unit evidence is the meaningful validation for this AC;
+  otherwise keep unit details in the matrix or CI summary.
   If an unresolved critical or major review finding affects validation for this
   AC, include it as a test-gap checkbox unless it belongs in Do before merging.
 -->
-- <Platform> test: <command, workflow job, tool, or harness>, <environment>[, <verifier or ISO>]
+- <Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]
 <!--
-  Include every known Test gap that the operator must consciously review. Write
-  each gap as an unchecked checkbox for the operator. Phrase checkbox text in
-  imperative style. Use `Test gap:` when coverage is missing or an unresolved
-  validation concern remains.
-  Example: - [ ] ⚠️ Test gap: Review <what automated coverage does not verify>
+  Include every known Test gap that the operator must consciously review. Use
+  `Test gap:` to describe missing coverage or an unresolved validation concern,
+  not to duplicate an operator action. Delete unused placeholder checkbox rows.
+  Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
 -->
-- [ ] ⚠️ Test gap: Review <missing coverage or unverified behavior>
+- [ ] ⚠️ Test gap: <missing coverage or unresolved validation concern>
 <!--
   Include every known operator action below any test-gap checkboxes for this
   AC. Use the literal prefix `Operator check:` for product testing, diff
   inspection, coverage-report review, review-finding review, deployment
-  evidence review, or other operator work. Do not add generic diff-review
+  evidence review, or other operator work. Include an expected decision or
+  result for each operator check. Do not add generic diff-review
   checks unless the operator must inspect a specific risk, artifact, or
   unresolved decision. Do not duplicate a test gap as an operator check unless
   the operator action can close or validate the gap. When updating an existing

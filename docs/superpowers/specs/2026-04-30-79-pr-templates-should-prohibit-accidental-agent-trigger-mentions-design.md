@@ -31,8 +31,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R11: When updating an existing PR body, every existing manual-review or
   manual-test instruction stays under its AC as an unchecked operator-check
   checkbox.
-- R12: Checkbox items use imperative style so the operator can act on them
-  directly.
+- R12: Operator-check checkbox items use imperative style so the operator can
+  act on them directly.
 - R13: Matrix status cells contain only the status symbols, with explanatory
   text kept outside the cells.
 - R14: Missing relevant platform validation is reported as a test-gap checkbox.
@@ -57,6 +57,15 @@ output out of per-AC summaries so reviewers see the decisions they need.
   action can close or validate that gap.
 - R25: The agent-trigger rule applies to the whole PR body, not only evidence
   rows.
+- R26: Every relevant AC keeps an AC heading even when it is omitted from the
+  matrix.
+- R27: Unit evidence rows are used only when unit evidence is the meaningful
+  validation for that AC.
+- R28: Test-gap checkboxes describe missing coverage or unresolved validation
+  concerns rather than issuing operator commands.
+- R29: Operator-check rows include an expected decision or result.
+- R30: Evidence rows may include an optional link in the verifier/timestamp
+  slot.
 
 ## Acceptance criteria
 
@@ -87,7 +96,7 @@ output out of per-AC summaries so reviewers see the decisions they need.
   contains manual-review or manual-test instructions, then the template
   preserves each instruction under its AC as an unchecked operator-check
   checkbox.
-- AC-79-9: Given an author adds an operator checkbox, when the checkbox
+- AC-79-9: Given an author adds an operator-check checkbox, when the checkbox
   is written, then its text uses imperative style.
 - AC-79-10: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then each status cell contains only a status symbol.
@@ -126,6 +135,19 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - AC-79-22: Given an author writes any part of the PR body, when they mention
   agent names, then the template applies the trigger-warning guidance across
   the full PR body.
+- AC-79-23: Given a relevant AC is omitted from the matrix because it has no
+  validation signal, when the PR body is finalized, then the AC still has a
+  heading in the Acceptance criteria section.
+- AC-79-24: Given an author adds a unit evidence row under an AC, when the row
+  is written, then unit evidence is the meaningful validation for that AC.
+- AC-79-25: Given an author adds a test-gap checkbox, when the checkbox is
+  written, then it describes missing coverage or an unresolved validation
+  concern rather than issuing an operator command.
+- AC-79-26: Given an author adds an operator-check checkbox, when the checkbox
+  is written, then it includes an expected decision or result.
+- AC-79-27: Given an author adds an evidence row, when useful evidence has a
+  link, then the optional evidence slot can contain that link instead of a
+  verifier or timestamp.
 
 ## Surfaces
 
@@ -196,11 +218,22 @@ Checked dimensions:
   from operator actions that can close or validate them.
 - Whole-body trigger safety is closed by moving trigger guidance to the PR-wide
   template comment.
+- AC omission loss is closed by requiring every relevant AC to keep an AC
+  heading even when it is omitted from the matrix.
+- Unit-detail creep is closed by allowing unit evidence rows only when unit
+  evidence is the meaningful validation for that AC.
+- Gap wording ambiguity is closed by making test gaps descriptive rather than
+  command-shaped.
+- Operator-check vagueness is closed by requiring an expected decision or
+  result.
+- Evidence traceability is improved by allowing evidence links in the optional
+  evidence slot.
 - Platform loss is closed by requiring evidence or a test-gap checkbox for each
   relevant supported platform.
 - PR-update loss is closed by requiring existing manual-review and manual-test
   instructions to stay attached to their ACs as operator checks.
-- Checkbox ambiguity is closed by requiring imperative operator-facing text.
+- Checkbox ambiguity is closed by requiring imperative operator-check text and
+  descriptive test-gap text.
 - AC section drift is closed by naming the summary, evidence, test-gap, and
   operator-check order.
 - Red flags are addressed by preserving platform evidence and visible
