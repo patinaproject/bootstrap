@@ -23,8 +23,11 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R6: The emitted bootstrap core template, root template, and traceability docs
   describe the same PR-body grammar.
 - R7: `Test coverage` matrix status cells use the template's status symbols.
-- R8: `Manual test:` rows capture steps the operator needs to perform.
-- R9: Manual-test rows and test-gap rows are unchecked operator-review
+- R8: `Manual test:` rows capture every known step the operator needs to
+  perform.
+- R9: Test-gap rows capture every known coverage gap the operator needs to
+  review.
+- R10: Manual-test rows and test-gap rows are unchecked operator-review
   checkboxes.
 
 ## Acceptance criteria
@@ -47,11 +50,11 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then the template tells them to use the status symbols.
 - AC-79-6: Given an author fills an acceptance-criteria report, when they add a
-  `Manual test:` row, then the template tells them to use that row only for
-  steps the operator needs to perform.
+  `Manual test:` row, then the template tells them to include every known step
+  the operator needs to perform.
 - AC-79-7: Given an author fills an acceptance-criteria report, when they add a
-  manual-test or test-gap row, then the template shows it as an unchecked
-  operator-review checkbox.
+  manual-test or test-gap row, then the template shows every known item as an
+  unchecked operator-review checkbox.
 
 ## Surfaces
 
@@ -66,8 +69,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
   which encouraged noisy AC reports even when unit-test details did not add
   reviewer-useful evidence.
 - GREEN target: the template keeps the `Unit` summary column, platform
-  validation, operator-needed manual tests, and real test gaps visible while
-  keeping detailed unit command output out of AC prose.
+  validation, every known operator-needed manual test, and every known test gap
+  visible while keeping detailed unit command output out of AC prose.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
   column, names symbolic matrix statuses, names platform test row fields, and
   shows manual-test and test-gap rows as unchecked operator-review checkboxes.
@@ -96,6 +99,8 @@ Checked dimensions:
   included manual-test content.
 - Test-gap and manual-test checkbox rationalization is closed by showing the
   unchecked operator-review checkbox form.
+- Lossy summarization is closed by requiring every known operator-needed manual
+  step and every known test gap to be carried forward.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

@@ -65,14 +65,14 @@ Short outcome summary.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  Include manual test rows for steps the operator needs to perform. Write each
-  one as an unchecked operator-review checkbox using the literal prefix
+  Include every known manual test step the operator needs to perform. Write
+  each one as an unchecked operator-review checkbox using the literal prefix
   `Manual test:` and concrete numbered steps.
 -->
 - [ ] Manual test: <concrete numbered steps; observed outcome>
 <!--
-  Include a visible Test gap row when automated coverage has a real gap that
-  the operator must consciously review. Write each gap as an unchecked
+  Include every known Test gap that the operator must consciously review. Write
+  each gap as an unchecked
   operator-review checkbox.
   Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
 -->
