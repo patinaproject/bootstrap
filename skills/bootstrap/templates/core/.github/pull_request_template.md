@@ -9,6 +9,10 @@
   - `chore: \#34 bootstrap commit hooks`
   This title rule applies to pull requests only. GitHub issue titles should stay
   plain-language and should not use conventional-commit prefixes.
+
+  Do not put an `@` immediately before agent names such as Claude or Codex
+  anywhere in the PR body unless you intentionally want to trigger that agent in
+  a supported GitHub surface.
 -->
 
 ## Linked issue
@@ -29,18 +33,21 @@
 
   - [ ] Rotate the production secret after deploy.
 
-  Keep checklist items concrete, actionable, and imperative. Do not add this
-  section for placeholders such as `None`, `N/A`, or `No work-specific
-  pre-merge operator steps.` To include an intentionally optional checkbox, put
-  a `pr-checkbox: optional` HTML comment immediately above that checkbox.
+  Keep checklist items concrete, actionable, and imperative. Do not duplicate
+  AC-specific test gaps or operator checks here. Do not add this section for
+  placeholders such as `None`, `N/A`, or `No work-specific pre-merge operator
+  steps.` To include an intentionally optional checkbox, put a
+  `pr-checkbox: optional` HTML comment immediately above that checkbox.
 -->
 
 ## Test coverage
 
 <!--
-  Include one row per in-scope AC. Keep the `Unit` column, then add one column
-  per supported platform affected by this PR. Use only these symbols in status
-  cells:
+  Include one row per AC with validation evidence, a required test gap, or an
+  operator check. Keep the `Unit` column, then add one column per supported
+  platform affected by this PR. Deferred or bookkeeping-only ACs may be
+  summarized in the AC section without a matrix row. Use only these symbols in
+  status cells:
   ✅ = tested
   ❌ = required but missing/failing
   ➖ = not applicable for this AC
@@ -68,18 +75,19 @@ Short outcome summary.
 <!--
   For each supported platform that is relevant to this AC, include one evidence
   row or report the missing validation as a test-gap checkbox. Keep evidence
-  rows compact: `<Platform> test – <runner>, <environment>[, <verifier or ISO>]`.
-  Use a neutral verifier value, such as a person, role, or run identifier. Do
-  not put an `@` immediately before agent names such as Claude or Codex unless
-  you intentionally want to trigger that agent in a supported GitHub surface.
+  rows compact and use a colon after the evidence label:
+  `<Platform> test: <command, workflow job, tool, or harness>, <environment>[, <verifier or ISO>]`.
+  Name the concrete command, workflow job, tool, or harness when known. Use a
+  neutral verifier value, such as a person, role, or run identifier.
   If an unresolved critical or major review finding affects validation for this
   AC, include it as a test-gap checkbox unless it belongs in Do before merging.
 -->
-- <Platform> test – <runner>, <environment>[, <verifier or ISO>]
+- <Platform> test: <command, workflow job, tool, or harness>, <environment>[, <verifier or ISO>]
 <!--
   Include every known Test gap that the operator must consciously review. Write
   each gap as an unchecked checkbox for the operator. Phrase checkbox text in
-  imperative style.
+  imperative style. Use `Test gap:` when coverage is missing or an unresolved
+  validation concern remains.
   Example: - [ ] ⚠️ Test gap: Review <what automated coverage does not verify>
 -->
 - [ ] ⚠️ Test gap: Review <missing coverage or unverified behavior>
@@ -87,9 +95,13 @@ Short outcome summary.
   Include every known operator action below any test-gap checkboxes for this
   AC. Use the literal prefix `Operator check:` for product testing, diff
   inspection, coverage-report review, review-finding review, deployment
-  evidence review, or other operator work. When updating an existing PR body,
-  preserve every existing manual-review or manual-test instruction under its AC
-  in this checkbox form. Phrase checkbox text in imperative style.
+  evidence review, or other operator work. Do not add generic diff-review
+  checks unless the operator must inspect a specific risk, artifact, or
+  unresolved decision. Do not duplicate a test gap as an operator check unless
+  the operator action can close or validate the gap. When updating an existing
+  PR body, preserve every existing manual-review or manual-test instruction
+  under its AC in this checkbox form. Phrase checkbox text in imperative style.
+  Delete unused placeholder checkbox rows.
 -->
 - [ ] Operator check: <imperative operator action and expected decision or result>
 

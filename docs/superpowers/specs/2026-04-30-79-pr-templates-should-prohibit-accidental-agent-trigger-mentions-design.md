@@ -46,6 +46,17 @@ output out of per-AC summaries so reviewers see the decisions they need.
   map to that matrix column.
 - R19: Unresolved critical or major review findings that affect validation are
   reported as test-gap checkboxes unless they belong in `Do before merging`.
+- R20: Matrix rows are limited to ACs with validation evidence, a required test
+  gap, or an operator check.
+- R21: Evidence rows use a colon after the evidence label and name the concrete
+  command, workflow job, tool, or harness when known.
+- R22: Placeholder checkbox rows are deleted when unused.
+- R23: Generic diff-review checks are not added unless tied to a specific risk,
+  artifact, or unresolved decision.
+- R24: A test gap is not duplicated as an operator check unless the operator
+  action can close or validate that gap.
+- R25: The agent-trigger rule applies to the whole PR body, not only evidence
+  rows.
 
 ## Acceptance criteria
 
@@ -98,6 +109,23 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - AC-79-16: Given a critical or major review finding affects validation, when
   the author updates the AC report, then the finding appears as a test-gap
   checkbox unless it belongs in `Do before merging`.
+- AC-79-17: Given an AC has no validation evidence, required test gap, or
+  operator check, when the author fills the `Test coverage` matrix, then the AC
+  may be omitted from the matrix and summarized only in the AC section.
+- AC-79-18: Given an author adds an evidence row, when the row is written, then
+  it uses a colon after the evidence label and names the concrete command,
+  workflow job, tool, or harness when known.
+- AC-79-19: Given a placeholder checkbox row is unused, when the PR body is
+  finalized, then the placeholder row is deleted.
+- AC-79-20: Given an author adds an operator-check row, when the check is a
+  diff review, then it names the specific risk, artifact, or unresolved
+  decision the operator must inspect.
+- AC-79-21: Given an author reports a test gap, when an operator check appears
+  under the same AC, then it does not duplicate the gap unless the operator
+  action can close or validate that gap.
+- AC-79-22: Given an author writes any part of the PR body, when they mention
+  agent names, then the template applies the trigger-warning guidance across
+  the full PR body.
 
 ## Surfaces
 
@@ -116,8 +144,9 @@ output out of per-AC summaries so reviewers see the decisions they need.
   while keeping detailed unit command output out of AC prose.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
   column, names symbol-only matrix statuses, requires platform evidence or an
-  explicit gap for relevant supported platforms, names platform test row fields,
-  shows operator-check and test-gap rows as unchecked operator checkboxes, and
+  explicit gap for relevant supported platforms, requires colon-style evidence
+  rows with concrete commands/jobs/tools/harnesses when known, shows
+  operator-check and test-gap rows as unchecked operator checkboxes, and
   prevents `➖` from hiding clearly mapped evidence or gaps.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template for the full rule
@@ -155,6 +184,18 @@ Checked dimensions:
   operator checks to make the matching cell non-`➖`.
 - Review-finding loss is closed by requiring validation-affecting critical or
   major findings to appear as test gaps or pre-merge tasks.
+- Matrix bloat is closed by allowing bookkeeping-only ACs to stay out of the
+  matrix.
+- Evidence vagueness is closed by requiring a concrete command, workflow job,
+  tool, or harness when known.
+- Placeholder leakage is closed by requiring unused checkbox placeholders to be
+  deleted.
+- Generic review noise is closed by requiring diff-review checks to name a
+  specific risk, artifact, or unresolved decision.
+- Gap/check duplication is closed by separating unresolved validation concerns
+  from operator actions that can close or validate them.
+- Whole-body trigger safety is closed by moving trigger guidance to the PR-wide
+  template comment.
 - Platform loss is closed by requiring evidence or a test-gap checkbox for each
   relevant supported platform.
 - PR-update loss is closed by requiring existing manual-review and manual-test
