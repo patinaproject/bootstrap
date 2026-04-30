@@ -33,6 +33,13 @@ output out of per-AC summaries so reviewers see the decisions they need.
   instruction stays under its AC as an unchecked manual-test checkbox.
 - R12: Checkbox items use imperative style so the operator can act on them
   directly.
+- R13: Matrix status cells contain only the status symbols, with explanatory
+  text kept outside the cells.
+- R14: Missing relevant platform validation is reported as a test-gap checkbox.
+- R15: Manual-test checkboxes describe operator steps and expected results
+  without implying the agent has observed the outcome.
+- R16: Per-AC content order is stable: summary, platform evidence rows,
+  manual-test checkboxes, then test-gap checkboxes.
 
 ## Acceptance criteria
 
@@ -64,6 +71,16 @@ output out of per-AC summaries so reviewers see the decisions they need.
   instruction under its AC as an unchecked manual-test checkbox.
 - AC-79-9: Given an author adds an operator-review checkbox, when the checkbox
   is written, then its text uses imperative style.
+- AC-79-10: Given an author fills the `Test coverage` matrix, when they mark an
+  AC status, then each status cell contains only a status symbol.
+- AC-79-11: Given an AC has a relevant supported platform without validation,
+  when the author fills that AC report, then the missing validation appears as
+  a test-gap checkbox.
+- AC-79-12: Given an author adds a manual-test checkbox, when they describe the
+  operator work, then the checkbox names steps and expected results instead of
+  implying an already observed outcome.
+- AC-79-13: Given an author fills an AC report, when they include evidence,
+  manual tests, and gaps, then the content follows the template order.
 
 ## Surfaces
 
@@ -82,8 +99,10 @@ output out of per-AC summaries so reviewers see the decisions they need.
   visible while preserving existing per-AC manual-review instructions and
   keeping detailed unit command output out of AC prose.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
-  column, names symbolic matrix statuses, names platform test row fields, and
-  shows manual-test and test-gap rows as unchecked operator-review checkboxes.
+  column, names symbol-only matrix statuses, requires platform evidence or an
+  explicit gap for relevant supported platforms, names platform test row fields,
+  and shows manual-test and test-gap rows as unchecked operator-review
+  checkboxes.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template for the full rule
   set.
@@ -105,15 +124,23 @@ Checked dimensions:
 - Rationalization resistance is present through explicit Unit-summary vs.
   unit-detail-row wording.
 - Matrix status rationalization is closed by showing the symbolic status set.
+- Matrix status copying is closed by requiring symbol-only cells.
 - Manual-test rationalization is closed by naming operator-needed steps as the
   included manual-test content.
+- Manual-test result invention is closed by asking for expected results instead
+  of observed outcomes.
 - Test-gap and manual-test checkbox rationalization is closed by showing the
   unchecked operator-review checkbox form.
+- Test-gap omission is closed by showing a visible test-gap checkbox placeholder.
 - Lossy summarization is closed by requiring every known operator-needed manual
   step and every known test gap to be carried forward.
+- Platform loss is closed by requiring evidence or a test-gap checkbox for each
+  relevant supported platform.
 - PR-update loss is closed by requiring existing manual-review instructions to
   stay attached to their ACs.
 - Checkbox ambiguity is closed by requiring imperative operator-facing text.
+- AC section drift is closed by naming the summary, platform evidence,
+  manual-test, and test-gap order.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

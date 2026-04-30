@@ -29,21 +29,21 @@
 
   - [ ] Rotate the production secret after deploy.
 
-  Keep checklist items concrete and actionable. Do not add this section for
-  placeholders such as `None`, `N/A`, or `No work-specific pre-merge operator
-  steps.` To include an intentionally optional checkbox, put a
-  `pr-checkbox: optional` HTML comment immediately above that checkbox.
+  Keep checklist items concrete, actionable, and imperative. Do not add this
+  section for placeholders such as `None`, `N/A`, or `No work-specific
+  pre-merge operator steps.` To include an intentionally optional checkbox, put
+  a `pr-checkbox: optional` HTML comment immediately above that checkbox.
 -->
 
 ## Test coverage
 
 <!--
   Include one row per in-scope AC. Keep the `Unit` column, then add one column
-  per supported platform for this project. Fill status cells with these
-  symbols:
-  ✅ tested
-  ❌ required but missing/failing
-  ➖ not applicable for this AC
+  per supported platform for this project. Use only these symbols in status
+  cells:
+  ✅ = tested
+  ❌ = required but missing/failing
+  ➖ = not applicable for this AC
 -->
 | AC | Title | Unit | <Platform> |
 | --- | --- | --- | --- |
@@ -51,17 +51,23 @@
 
 ## Acceptance criteria
 
-<!-- One heading per relevant AC. AC IDs follow the convention in docs/ac-traceability.md. -->
+<!--
+  One heading per relevant AC. AC IDs follow the convention in
+  docs/ac-traceability.md. Under each AC, use this order when present:
+  summary, platform evidence rows, manual-test checkboxes, test-gap checkboxes.
+-->
 
 ### AC-<issue>-<n>
 
 Short outcome summary.
 
 <!--
-  Include platform test rows for meaningful platform validation of this AC.
-  Fields are pipe-separated in fixed order: runner | env | verifier | ISO
-  (UTC timestamp). Use a neutral verifier value, such as a person, role, or run
-  identifier.
+  For each supported platform that is relevant to this AC, include one evidence
+  row or report the missing validation as a test-gap checkbox. Fields are
+  pipe-separated in fixed order: runner | env | verifier | ISO (UTC timestamp).
+  Use a neutral verifier value, such as a person, role, or run identifier. Do
+  not put an `@` immediately before agent names such as Claude or Codex unless
+  you intentionally want to trigger that agent in a supported GitHub surface.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
@@ -71,13 +77,14 @@ Short outcome summary.
   body, preserve every existing manual-review instruction under its AC in this
   checkbox form. Phrase checkbox text in imperative style.
 -->
-- [ ] Manual test: <imperative operator steps; observed outcome>
+- [ ] Manual test: <imperative operator steps and expected result>
 <!--
   Include every known Test gap that the operator must consciously review. Write
   each gap as an unchecked operator-review checkbox. Phrase checkbox text in
   imperative style.
   Example: - [ ] ⚠️ Test gap: Review <what automated coverage does not verify>
 -->
+- [ ] ⚠️ Test gap: Review <missing coverage or unverified behavior>
 
 ### AC-<issue>-<n>
 
