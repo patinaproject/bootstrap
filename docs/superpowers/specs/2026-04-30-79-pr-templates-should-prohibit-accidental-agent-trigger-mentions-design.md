@@ -5,8 +5,8 @@
 Make the bootstrap PR body contract prevent accidental agent trigger mentions in
 verifier fields while keeping acceptance-criteria reports compact. The template
 should name neutral verifier values, avoid bot-handle examples, keep the `Unit`
-summary column in the `Test coverage` matrix, and omit per-AC unit-test detail
-rows because they add noise without improving review decisions.
+  summary column in the `Test coverage` matrix, and omit per-AC unit-test
+  detail rows because they add noise without improving review decisions.
 
 ## Requirements
 
@@ -16,7 +16,7 @@ rows because they add noise without improving review decisions.
 - R2: Test verifier guidance uses neutral values such as a person, role, or run
   identifier instead of bot handles.
 - R3: The `Test coverage` matrix keeps the `Unit` column and only adds
-  supported platform or project validation columns.
+  supported platform columns.
 - R4: Per-AC test rows are optional and only report meaningful project or
   platform validation.
 - R5: Per-AC reports explicitly forbid unit-test rows and detached `Test:`
@@ -59,7 +59,7 @@ rows because they add noise without improving review decisions.
 - RED baseline: the previous PR template required per-AC unit/platform rows,
   which encouraged noisy AC reports even when unit-test details did not add
   reviewer-useful evidence.
-- GREEN target: the template keeps the `Unit` summary column, platform/project
+- GREEN target: the template keeps the `Unit` summary column, platform
   validation, manual tests, and real test gaps visible while removing unit-test
   detail rows from AC reports.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
@@ -68,7 +68,7 @@ rows because they add noise without improving review decisions.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template instead of
   duplicating all rules.
-- Role ownership: authors decide which platform/project evidence is meaningful;
+- Role ownership: authors decide which platform evidence is meaningful;
   reviewers inspect AC outcomes and gaps; operators see checkboxes only for
   actual pre-merge actions.
 - Stage-gate bypass prevention: root/template parity and traceability checks
@@ -86,7 +86,7 @@ Checked dimensions:
 - Rationalization resistance is present through explicit Unit-summary vs.
   unit-detail-row wording.
 - Matrix status rationalization is closed by the explicit no-word-status rule.
-- Red flags are addressed by preserving platform/project evidence and visible
+- Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the
   template.
