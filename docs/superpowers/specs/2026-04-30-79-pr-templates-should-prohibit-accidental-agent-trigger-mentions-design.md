@@ -23,28 +23,27 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R6: The emitted bootstrap core template, root template, and traceability docs
   describe the same PR-body grammar.
 - R7: `Test coverage` matrix status cells use the template's status symbols.
-- R8: `Manual test:` rows capture every known step the operator needs to
-  perform.
+- R8: `Operator check:` rows capture every known operator action, including
+  product checks and evidence review.
 - R9: Test-gap rows capture every known coverage gap the operator needs to
   review.
-- R10: Manual-review rows, manual-test rows, and test-gap rows are unchecked
-  operator-review checkboxes.
-- R11: When updating an existing PR body, every existing manual-review
-  instruction stays under its AC as the correct unchecked manual-review or
-  manual-test checkbox type.
+- R10: Operator-check rows and test-gap rows are unchecked operator checkboxes.
+- R11: When updating an existing PR body, every existing manual-review or
+  manual-test instruction stays under its AC as an unchecked operator-check
+  checkbox.
 - R12: Checkbox items use imperative style so the operator can act on them
   directly.
 - R13: Matrix status cells contain only the status symbols, with explanatory
   text kept outside the cells.
 - R14: Missing relevant platform validation is reported as a test-gap checkbox.
-- R15: Manual-test checkboxes describe operator steps and expected results
-  without implying the agent has observed the outcome.
-- R16: Per-AC content order is stable: summary, platform evidence rows,
-  test-gap checkboxes, manual-review checkboxes, then manual-test checkboxes.
-- R17: Operator audit or inspection work uses `Manual review:` while product
-  behavior exercises use `Manual test:`.
-- R18: Matrix `➖` means not relevant, not omitted; any shown evidence, gap,
-  manual review, or manual test makes the matching matrix cell non-`➖`.
+- R15: Operator-check checkboxes describe operator actions and expected
+  decisions or results without implying the agent has observed the outcome.
+- R16: Per-AC content order is stable: summary, evidence rows, test-gap
+  checkboxes, then operator-check checkboxes.
+- R17: Evidence rows stay compact, with the verifier or timestamp optional.
+- R18: Matrix `➖` means not relevant, not omitted; shown evidence, gaps, or
+  operator checks make the matching matrix cell non-`➖` only when they clearly
+  map to that matrix column.
 - R19: Unresolved critical or major review findings that affect validation are
   reported as test-gap checkboxes unless they belong in `Do before merging`.
 
@@ -67,36 +66,35 @@ output out of per-AC summaries so reviewers see the decisions they need.
   unit command output out of the per-AC summaries.
 - AC-79-5: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then the template tells them to use the status symbols.
-- AC-79-6: Given an author fills an acceptance-criteria report, when they add a
-  `Manual test:` row, then the template tells them to include every known step
-  the operator needs to perform.
-- AC-79-7: Given an author fills an acceptance-criteria report, when they add a
-  manual-review, manual-test, or test-gap row, then the template shows every
-  known item as an unchecked operator-review checkbox.
+- AC-79-6: Given an author fills an acceptance-criteria report, when they add an
+  `Operator check:` row, then the template tells them to include every known
+  operator action.
+- AC-79-7: Given an author fills an acceptance-criteria report, when they add
+  an operator-check or test-gap row, then the template shows every known item
+  as an unchecked operator checkbox.
 - AC-79-8: Given an author updates an existing PR body, when that body already
-  contains manual-review instructions, then the template preserves each
-  instruction under its AC as the correct unchecked manual-review or
-  manual-test checkbox type.
-- AC-79-9: Given an author adds an operator-review checkbox, when the checkbox
+  contains manual-review or manual-test instructions, then the template
+  preserves each instruction under its AC as an unchecked operator-check
+  checkbox.
+- AC-79-9: Given an author adds an operator checkbox, when the checkbox
   is written, then its text uses imperative style.
 - AC-79-10: Given an author fills the `Test coverage` matrix, when they mark an
   AC status, then each status cell contains only a status symbol.
 - AC-79-11: Given an AC has a relevant supported platform without validation,
   when the author fills that AC report, then the missing validation appears as
   a test-gap checkbox.
-- AC-79-12: Given an author adds a manual-test checkbox, when they describe the
-  operator work, then the checkbox names steps and expected results instead of
-  implying an already observed outcome.
+- AC-79-12: Given an author adds an operator-check checkbox, when they describe
+  the operator work, then the checkbox names an action and expected decision or
+  result instead of implying an already observed outcome.
 - AC-79-13: Given an author fills an AC report, when they include evidence,
-  gaps, and manual tests, then the content follows the template order with
-  manual tests below test gaps.
-- AC-79-14: Given an author adds operator inspection work, when the work reviews
-  diffs, coverage, review findings, deployment evidence, or similar evidence
-  without exercising product behavior, then the checkbox uses the
-  `Manual review:` prefix.
+  gaps, and operator checks, then the content follows the template order with
+  operator checks below test gaps.
+- AC-79-14: Given an author adds operator work, when the work reviews evidence
+  or exercises product behavior, then the checkbox uses the `Operator check:`
+  prefix.
 - AC-79-15: Given an author fills the matrix and per-AC report, when an AC
-  includes evidence, a gap, a manual review item, or a manual test item for a
-  verification type, then the matching matrix cell is not `➖`.
+  includes evidence, a gap, or an operator check that clearly maps to a matrix
+  column, then the matching matrix cell is not `➖`.
 - AC-79-16: Given a critical or major review finding affects validation, when
   the author updates the AC report, then the finding appears as a test-gap
   checkbox unless it belongs in `Do before merging`.
@@ -114,15 +112,13 @@ output out of per-AC summaries so reviewers see the decisions they need.
   which encouraged noisy AC reports even when unit-test details did not add
   reviewer-useful evidence.
 - GREEN target: the template keeps the `Unit` summary column, platform
-  validation, every known operator-needed manual test, and every known test gap
-  visible while distinguishing operator evidence review from product manual
-  testing and keeping detailed unit command output out of AC prose.
+  validation, every known operator action, and every known test gap visible
+  while keeping detailed unit command output out of AC prose.
 - Rationalization resistance: the template explicitly keeps the `Unit` matrix
   column, names symbol-only matrix statuses, requires platform evidence or an
   explicit gap for relevant supported platforms, names platform test row fields,
-  shows manual-review, manual-test, and test-gap rows as unchecked
-  operator-review checkboxes, and prevents `➖` from hiding reported evidence or
-  gaps.
+  shows operator-check and test-gap rows as unchecked operator checkboxes, and
+  prevents `➖` from hiding clearly mapped evidence or gaps.
 - Token efficiency: detailed grammar stays in the PR template comments, while
   `docs/ac-traceability.md` points to the canonical template for the full rule
   set.
@@ -145,28 +141,27 @@ Checked dimensions:
   unit-detail-row wording.
 - Matrix status rationalization is closed by showing the symbolic status set.
 - Matrix status copying is closed by requiring symbol-only cells.
-- Manual-test rationalization is closed by naming operator-needed steps as the
-  included manual-test content.
-- Manual-test result invention is closed by asking for expected results instead
-  of observed outcomes.
-- Test-gap and manual-test checkbox rationalization is closed by showing the
-  unchecked operator-review checkbox form.
+- Operator-check rationalization is closed by naming operator-needed actions as
+  the included operator-check content.
+- Operator result invention is closed by asking for expected decisions or
+  results instead of observed outcomes.
+- Test-gap and operator-check checkbox rationalization is closed by showing the
+  unchecked operator checkbox form.
 - Test-gap omission is closed by showing a visible test-gap checkbox placeholder.
-- Lossy summarization is closed by requiring every known operator-needed manual
-  step and every known test gap to be carried forward.
-- Manual-review ambiguity is closed by separating `Manual review:` from
-  `Manual test:`.
-- Matrix inconsistency is closed by requiring any evidence, gap, manual review,
-  or manual test to make the matching cell non-`➖`.
+- Lossy summarization is closed by requiring every known operator action and
+  every known test gap to be carried forward.
+- Manual-review ambiguity is closed by using one `Operator check:` prefix.
+- Matrix inconsistency is closed by requiring clearly mapped evidence, gaps, or
+  operator checks to make the matching cell non-`➖`.
 - Review-finding loss is closed by requiring validation-affecting critical or
   major findings to appear as test gaps or pre-merge tasks.
 - Platform loss is closed by requiring evidence or a test-gap checkbox for each
   relevant supported platform.
-- PR-update loss is closed by requiring existing manual-review instructions to
-  stay attached to their ACs.
+- PR-update loss is closed by requiring existing manual-review and manual-test
+  instructions to stay attached to their ACs as operator checks.
 - Checkbox ambiguity is closed by requiring imperative operator-facing text.
-- AC section drift is closed by naming the summary, platform evidence,
-  test-gap, manual-review, and manual-test order.
+- AC section drift is closed by naming the summary, evidence, test-gap, and
+  operator-check order.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the
