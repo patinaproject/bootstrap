@@ -38,16 +38,17 @@
 ## Test coverage
 
 <!--
-  Include one row per in-scope AC. Keep the `Unit` column, then add one column
-  per supported platform for this project. Remove unsupported platform columns
-  before opening the PR. Use:
+  Include one row per in-scope AC. Add one column per supported platform or
+  project validation target. Remove unsupported columns before opening the PR.
+  Do not add a `Unit` column; unit-test reporting is unnecessary noise in AC
+  reports. Use:
   ✅ tested
   ❌ required but missing/failing
   ➖ not applicable for this AC
 -->
-| AC | Title | Unit | <Platform> |
-| --- | --- | --- | --- |
-| AC-<issue>-<n> | <short title> | ➖ | ➖ |
+| AC | Title | <Platform-or-project> |
+| --- | --- | --- |
+| AC-<issue>-<n> | <short title> | ➖ |
 
 ## Acceptance criteria
 
@@ -58,15 +59,15 @@
 Short outcome summary.
 
 <!--
-  Test rows: one per covered Unit/platform target. Fields are pipe-separated
-  in fixed order: runner | env | verifier | ISO (UTC timestamp). Omit test
-  rows only for ACs explicitly marked `[platform: none]`. Do not use detached
-  `- Test:` bullets. Use a neutral verifier value, such as a person, role, or
-  run identifier. Do not include `@claude`, `@codex`, or similar agent trigger
-  mentions unless you intentionally want to trigger that agent in a supported
-  GitHub surface.
+  Test rows are optional and only belong here when they report meaningful
+  project or platform validation for this AC. Fields are pipe-separated in
+  fixed order: runner | env | verifier | ISO (UTC timestamp). Do not include
+  unit-test rows or detached `- Test:` bullets. Use a neutral verifier value,
+  such as a person, role, or run identifier. Do not include `@claude`, `@codex`,
+  or similar agent trigger mentions unless you intentionally want to trigger
+  that agent in a supported GitHub surface.
 -->
-- <Unit-or-platform> test – <runner> | <env> | <verifier> | <ISO>
+- <Platform-or-project> test – <runner> | <env> | <verifier> | <ISO>
 <!--
   Manual test row uses the literal prefix `Manual test:` and concrete numbered
   steps. Do not use a checkbox unless the row is an operator action that must be
