@@ -72,13 +72,16 @@ output out of per-AC summaries so reviewers see the decisions they need.
   GitHub already reports checks.
 - R33: Pending required validation is reported as `❌` plus a test-gap checkbox
   until the validation passes.
-- R34: Partial examples shown outside a PR body are labeled as excerpts, while
-  actual PR bodies keep every relevant AC heading.
+- R34: Partial examples shown outside a PR body are labeled as excerpts before
+  the first omitted section or table, while actual PR bodies keep every
+  relevant AC heading.
 - R35: Per-AC summaries state the current reviewer-relevant result, including
   blockers or pending validation when present.
 - R36: Operator checks avoid product retest checkboxes for
   maintainability-only findings unless there is behavior risk the operator can
   validate.
+- R37: CI that must rerun after a fix is reported as a test gap unless an
+  operator must manually trigger or inspect a specific job.
 
 ## Acceptance criteria
 
@@ -172,14 +175,18 @@ output out of per-AC summaries so reviewers see the decisions they need.
   author fills the matrix, then that cell uses `❌` and the AC includes a
   test-gap checkbox until validation passes.
 - AC-79-31: Given an author shows a partial PR-body example outside GitHub,
-  when relevant AC headings are omitted for brevity, then the example is
-  labeled as an excerpt.
+  when relevant sections, rows, or AC headings are omitted for brevity, then
+  the whole example is labeled as an excerpt before the first omitted section
+  or table.
 - AC-79-32: Given an author writes an AC summary, when blockers or pending
   validation are present, then the summary states that current
   reviewer-relevant status.
 - AC-79-33: Given a review finding is maintainability-only, when the author
   records follow-up under an AC, then the PR body does not add product retest
   operator checkboxes unless there is behavior risk the operator can validate.
+- AC-79-34: Given CI must rerun after a fix, when the author records that
+  validation state under an AC, then the rerun is reported as a test gap unless
+  the operator must manually trigger or inspect a specific job.
 
 ## Surfaces
 
@@ -275,9 +282,12 @@ Checked dimensions:
   descriptive test-gap text.
 - AC section drift is closed by naming the summary, evidence, test-gap, and
   operator-check order.
-- Example truncation drift is closed by labeling partial examples as excerpts.
+- Example truncation drift is closed by labeling partial examples before the
+  first omitted section or table.
 - Summary vagueness is closed by asking for the current reviewer-relevant
   result, including blockers or pending validation.
+- CI-rerun checkbox creep is closed by treating reruns after fixes as test gaps
+  unless the operator must manually trigger or inspect a specific job.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

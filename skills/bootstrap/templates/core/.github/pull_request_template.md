@@ -44,6 +44,10 @@
 ## Test coverage
 
 <!--
+  When showing a partial example outside a PR body, label the whole example as
+  an excerpt before the first omitted section or table. Actual PR bodies must
+  not omit relevant AC headings.
+
   Include one row per AC with validation evidence, a required test gap, or an
   operator check. Keep the `Unit` column, then add one column per supported
   platform affected by this PR. Deferred or bookkeeping-only ACs may be
@@ -67,9 +71,7 @@
 
 <!--
   One heading per relevant AC. AC IDs follow the convention in
-  docs/ac-traceability.md. Actual PR bodies must not omit relevant AC headings.
-  When showing a partial example outside a PR body, label it as an excerpt.
-  Under each AC, use this order when present:
+  docs/ac-traceability.md. Under each AC, use this order when present:
   summary, evidence rows, test-gap checkboxes, operator-check checkboxes.
 -->
 
@@ -94,7 +96,9 @@ including unresolved blockers or pending validation when present.
 <!--
   Include every known Test gap that the operator must consciously review. Use
   `Test gap:` to describe missing coverage or an unresolved validation concern,
-  not to duplicate an operator action. Delete unused placeholder checkbox rows.
+  not to duplicate an operator action. Treat CI that must rerun after a fix as
+  a test gap unless the operator must manually trigger or inspect a specific
+  job. Delete unused placeholder checkbox rows.
   Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
 -->
 - [ ] ⚠️ Test gap: <missing coverage or unresolved validation concern>
@@ -108,10 +112,11 @@ including unresolved blockers or pending validation when present.
   unresolved decision. Do not duplicate a test gap as an operator check unless
   the operator action can close or validate the gap. Do not add product retest
   checkboxes for maintainability-only findings unless there is a behavior risk
-  the operator can validate. When updating an existing PR body, preserve every
-  existing manual-review or manual-test instruction under its AC in this
-  checkbox form. Phrase checkbox text in imperative style. Delete unused
-  placeholder checkbox rows.
+  the operator can validate. Do not add CI-rerun operator checks unless the
+  operator must manually trigger or inspect a specific job. When updating an
+  existing PR body, preserve every existing manual-review or manual-test
+  instruction under its AC in this checkbox form. Phrase checkbox text in
+  imperative style. Delete unused placeholder checkbox rows.
 -->
 - [ ] Operator check: <imperative operator action and expected decision or result>
 
