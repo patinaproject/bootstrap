@@ -67,14 +67,16 @@ Short outcome summary.
 <!--
   Include every known manual test step the operator needs to perform. Write
   each one as an unchecked operator-review checkbox using the literal prefix
-  `Manual test:` and concrete numbered steps.
+  `Manual test:` and concrete numbered steps. When updating an existing PR
+  body, preserve every existing manual-review instruction under its AC in this
+  checkbox form. Phrase checkbox text in imperative style.
 -->
-- [ ] Manual test: <concrete numbered steps; observed outcome>
+- [ ] Manual test: <imperative operator steps; observed outcome>
 <!--
   Include every known Test gap that the operator must consciously review. Write
-  each gap as an unchecked
-  operator-review checkbox.
-  Example: - [ ] ⚠️ Test gap: <what automated coverage does not verify>
+  each gap as an unchecked operator-review checkbox. Phrase checkbox text in
+  imperative style.
+  Example: - [ ] ⚠️ Test gap: Review <what automated coverage does not verify>
 -->
 
 ### AC-<issue>-<n>
