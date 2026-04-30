@@ -3,16 +3,15 @@
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Reduce bootstrap CI runner overhead by consolidating compatible PR
-metadata checks and skipping Markdown lint work when Markdown inputs did not
-change.
+metadata checks and running Markdown lint only against changed Markdown files.
 
 **Architecture:** Template-first workflow edits land under
 `skills/bootstrap/templates/core/**`, then root workflow and guidance mirrors
 are realigned to match. `lint-pr.yml` keeps the required
 `Required template checkboxes` status name while moving PR metadata checks into
 named steps. `lint-md.yml` still reports a check on every PR, but a GitHub API
-changed-files step skips the Markdown lint action when no Markdown or Markdown
-lint config files changed.
+changed-files step passes only changed Markdown files to the Markdown lint
+action.
 
 **Tech Stack:** GitHub Actions YAML, GitHub CLI in Actions, PNPM,
 markdownlint-cli2, actionlint.
@@ -24,7 +23,7 @@ markdownlint-cli2, actionlint.
 | File | Responsibility |
 | --- | --- |
 | `skills/bootstrap/templates/core/.github/workflows/lint-pr.yml` | Source template for consolidated PR metadata validation. |
-| `skills/bootstrap/templates/core/.github/workflows/lint-md.yml` | Source template for required-check-safe Markdown lint step skipping. |
+| `skills/bootstrap/templates/core/.github/workflows/lint-md.yml` | Source template for required-check-safe changed-file Markdown linting. |
 | `skills/bootstrap/templates/core/AGENTS.md.tmpl` | Source template for required-check guidance and CI consolidation principle. |
 | `.github/workflows/lint-pr.yml` | Root mirror of the consolidated PR metadata workflow. |
 | `.github/workflows/lint-md.yml` | Root mirror of the Markdown lint workflow. |
@@ -217,7 +216,7 @@ git add skills/bootstrap/templates/core/.github/workflows/lint-pr.yml
 git commit -m "feat: #68 consolidate PR metadata checks"
 ```
 
-## Task 2: Add Required-Check-Safe Markdown Lint Step Skipping
+## Task 2: Add Required-Check-Safe Changed-File Markdown Linting
 
 **Files:**
 
@@ -516,9 +515,10 @@ skills/bootstrap/templates/core/AGENTS.md.tmpl
 - AC-68-4: Task 4 verifies root/template parity for both workflows and guidance.
 - AC-68-5: Task 3 and Task 4 keep `Required template checkboxes` in guidance.
 - AC-68-6: Task 3 adds the CI job-shape guidance.
-- AC-68-7: Task 2 skips only Markdown lint action steps and leaves the workflow
-  successful.
-- AC-68-8: Task 2 runs the Markdown lint action when Markdown inputs change.
+- AC-68-7: Task 2 skips only Markdown lint action steps when no Markdown files
+  changed and leaves the workflow successful.
+- AC-68-8: Task 2 runs the Markdown lint action only against changed Markdown
+  files.
 - AC-68-9: Task 5 records final verification.
 
 ## Planner Self-Review
@@ -526,5 +526,5 @@ skills/bootstrap/templates/core/AGENTS.md.tmpl
 - Spec coverage: every design requirement maps to Tasks 1-5.
 - Placeholder scan: no placeholder task language remains.
 - Type and name consistency: the required check name stays
-  `Required template checkboxes`; the Markdown detection step output is
-  consistently `should_run`.
+  `Required template checkboxes`; the Markdown detection step outputs are
+  consistently `should_run` and `files`.
