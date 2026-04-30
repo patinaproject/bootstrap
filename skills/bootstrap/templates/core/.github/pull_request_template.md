@@ -31,9 +31,7 @@
 
   Keep checklist items concrete and actionable. Do not add this section for
   placeholders such as `None`, `N/A`, or `No work-specific pre-merge operator
-  steps.`
-  Visible unchecked checkboxes are enforced by the `Required template
-  checkboxes` status check. To include an intentionally optional checkbox, put a
+  steps.` To include an intentionally optional checkbox, put a
   `pr-checkbox: optional` HTML comment immediately above that checkbox.
 -->
 
