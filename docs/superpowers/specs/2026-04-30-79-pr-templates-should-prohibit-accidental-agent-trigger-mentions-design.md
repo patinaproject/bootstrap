@@ -39,7 +39,7 @@ output out of per-AC summaries so reviewers see the decisions they need.
 - R15: Manual-test checkboxes describe operator steps and expected results
   without implying the agent has observed the outcome.
 - R16: Per-AC content order is stable: summary, platform evidence rows,
-  manual-test checkboxes, then test-gap checkboxes.
+  test-gap checkboxes, then manual-test checkboxes.
 
 ## Acceptance criteria
 
@@ -80,7 +80,8 @@ output out of per-AC summaries so reviewers see the decisions they need.
   operator work, then the checkbox names steps and expected results instead of
   implying an already observed outcome.
 - AC-79-13: Given an author fills an AC report, when they include evidence,
-  manual tests, and gaps, then the content follows the template order.
+  gaps, and manual tests, then the content follows the template order with
+  manual tests below test gaps.
 
 ## Surfaces
 
@@ -140,7 +141,7 @@ Checked dimensions:
   stay attached to their ACs.
 - Checkbox ambiguity is closed by requiring imperative operator-facing text.
 - AC section drift is closed by naming the summary, platform evidence,
-  manual-test, and test-gap order.
+  test-gap, and manual-test order.
 - Red flags are addressed by preserving platform evidence and visible
   gap reporting.
 - Token efficiency is preserved by avoiding duplicate grammar outside the

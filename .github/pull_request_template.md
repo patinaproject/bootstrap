@@ -54,7 +54,7 @@
 <!--
   One heading per relevant AC. AC IDs follow the convention in
   docs/ac-traceability.md. Under each AC, use this order when present:
-  summary, platform evidence rows, manual-test checkboxes, test-gap checkboxes.
+  summary, platform evidence rows, test-gap checkboxes, manual-test checkboxes.
 -->
 
 ### AC-<issue>-<n>
@@ -71,20 +71,21 @@ Short outcome summary.
 -->
 - <Platform> test – <runner> | <env> | <verifier> | <ISO>
 <!--
-  Include every known manual test step the operator needs to perform. Write
-  each one as an unchecked operator-review checkbox using the literal prefix
-  `Manual test:` and concrete numbered steps. When updating an existing PR
-  body, preserve every existing manual-review instruction under its AC in this
-  checkbox form. Phrase checkbox text in imperative style.
--->
-- [ ] Manual test: <imperative operator steps and expected result>
-<!--
   Include every known Test gap that the operator must consciously review. Write
   each gap as an unchecked operator-review checkbox. Phrase checkbox text in
   imperative style.
   Example: - [ ] ⚠️ Test gap: Review <what automated coverage does not verify>
 -->
 - [ ] ⚠️ Test gap: Review <missing coverage or unverified behavior>
+<!--
+  Include every known manual test step the operator needs to perform below any
+  test-gap checkboxes for this AC. Write each one as an unchecked
+  operator-review checkbox using the literal prefix `Manual test:` and concrete
+  numbered steps. When updating an existing PR body, preserve every existing
+  manual-review instruction under its AC in this checkbox form. Phrase checkbox
+  text in imperative style.
+-->
+- [ ] Manual test: <imperative operator steps and expected result>
 
 ### AC-<issue>-<n>
 
