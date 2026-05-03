@@ -22,7 +22,8 @@ blocking validation visible to reviewers and publish-state checks.
   Operator actions can still require explicit completion before merge.
 - R5: The broad required-checkbox validator must no longer fail canonical
   unchecked `⚠️ Test gap:` rows as though they were ordinary required operator
-  tasks.
+  tasks; unresolved gaps must be handled by a semantic readiness-gap contract
+  with gap-specific failure messages.
 - R6: If implementation keeps a checkbox validator, it must validate only
   checkboxes whose semantics are genuinely "must be checked before merge,"
   such as `Operator check:` rows or explicitly marked required operator rows.
@@ -38,16 +39,21 @@ blocking validation visible to reviewers and publish-state checks.
 - R10: The implementation must include GREEN verification that canonical test
   gaps no longer need prose workarounds, while any retained required
   operator-action checkbox behavior is covered by fixtures.
+- R11: A prose workaround such as `Blocking validation gap:` must not satisfy
+  readiness when the PR body otherwise indicates a warning, unresolved
+  validation concern, or pending/failing check.
 
 ## Acceptance Criteria
 
 - AC-86-1: Given a PR body contains a canonical unchecked `⚠️ Test gap:` row,
   when repository PR validation runs, then the row is preserved as the
-  canonical way to report the unresolved validation gap and is not converted
-  to prose to satisfy the checkbox gate.
+  canonical way to report the unresolved validation gap and any failure names
+  the unresolved validation gap instead of treating it as a generic required
+  checkbox.
 - AC-86-2: Given a PR body contains a real unresolved blocking validation gap,
-  when reviewers inspect PR readiness, then the PR remains visibly not ready
-  until the gap is resolved or explicitly deferred.
+  when reviewers inspect PR readiness or required PR-body validation runs, then
+  the PR remains visibly not ready until the gap is resolved or explicitly
+  deferred.
 - AC-86-3: Given a PR body contains an unchecked operator-action checkbox,
   when any retained checkbox validation runs, then that operator action still
   fails readiness unless it is explicitly optional.
@@ -58,21 +64,31 @@ blocking validation visible to reviewers and publish-state checks.
 ## Recommended Approach
 
 Replace broad "all visible unchecked checkboxes are required" validation with
-semantic validation:
+semantic readiness validation:
 
 1. Treat `⚠️ Test gap:` rows as readiness blockers that must stay visible in
-   the PR body while unresolved, not as checkbox tasks that agents should make
-   green by checking or rewriting.
-2. Retain checkbox enforcement only for operator-action checkboxes whose text
+   the PR body while unresolved. They may fail readiness, but the failure must
+   say the unresolved validation gap is blocking instead of saying a generic
+   required checkbox is unchecked.
+2. Reject prose workarounds when a PR body shows a warning state, pending or
+   failing validation, or a missing test-gap row where the template requires a
+   canonical `⚠️ Test gap:` checkbox.
+3. Retain checkbox enforcement only for operator-action checkboxes whose text
    starts with `Operator check:` or rows explicitly marked with a required
    operator checkbox marker.
-3. Update the PR template comments to state that test-gap checkboxes are
+4. Update the PR template comments to state that test-gap checkboxes are
    intentionally unchecked while unresolved and must not be rewritten as prose.
-4. Update `scripts/check-pr-template-checkboxes.mjs` and its template copy so
-   canonical `⚠️ Test gap:` rows are not reported by that gate.
-5. Add or update fixtures for:
+5. Replace or rename `check-pr-template-checkboxes` if needed so the check name
+   reflects semantic readiness rather than generic checkbox completion.
+6. Update `scripts/check-pr-template-checkboxes.mjs` and its template copy so
+   canonical `⚠️ Test gap:` rows are reported as unresolved validation gaps,
+   not as ordinary required checklist items.
+7. Add or update fixtures for:
    - current failing baseline: unchecked `⚠️ Test gap:` fails the old validator;
-   - green target: unchecked `⚠️ Test gap:` is accepted by the checkbox gate;
+   - green target: unchecked `⚠️ Test gap:` fails, when appropriate, with a
+     gap-specific readiness message rather than a generic checkbox message;
+   - prose workaround: `Blocking validation gap:` does not satisfy canonical
+     test-gap requirements when the matrix or AC summary indicates a warning;
    - retained failure: unchecked `Operator check:` remains a readiness failure;
    - optional checkbox and docs-choice behavior remains covered if retained.
 
@@ -85,15 +101,18 @@ introduced by #64.
 ### Recommended: Narrow the checkbox validator to operator-action semantics
 
 This removes the prose workaround incentive while preserving enforcement for
-the rows that are truly "must be checked before merge." It is the smallest
-behavioral change that addresses the conflict.
+the rows that are truly "must be checked before merge." It is acceptable only
+if a separate semantic readiness-gap rule blocks unresolved test gaps and
+rejects prose substitutes.
 
 ### Simpler: Remove the checkbox validator and workflow step entirely
 
 This fully reverts the misleading gate and is acceptable if implementation
 finds that the validator's remaining operator-action coverage is too coupled
 to the broken assumption. The cost is losing automated enforcement for real
-operator-action checkboxes unless another gate already covers them.
+operator-action checkboxes unless another gate already covers them. It also
+requires a replacement readiness-gap gate; otherwise this approach leaves the
+core issue unsolved.
 
 ### Rejected: Mark every test gap as optional
 
@@ -129,7 +148,10 @@ the same incentive in place.
 ## Verification
 
 - RED baseline: run the current validator against a fixture containing an
-  unchecked canonical `⚠️ Test gap:` and record that it fails.
+  unchecked canonical `⚠️ Test gap:` and record that it fails with the generic
+  required-checkbox message.
+- RED bypass baseline: run or inspect a fixture that rewrites the same gap as
+  prose and record that the current gate lets the prose workaround pass.
 - GREEN fixture tests: run `node --test scripts/check-pr-template-checkboxes.test.mjs`
   after the semantic change.
 - Template parity: compare each edited root file with its corresponding
@@ -164,8 +186,37 @@ misleading incentive.
 ### GREEN Obligation
 
 The green behavior is not "unchecked boxes never fail." The green behavior is
-that test gaps keep their honest unresolved representation while genuine
-operator-action checkboxes keep their completion semantics.
+that test gaps keep their honest unresolved representation, unresolved gaps
+still block readiness through a gap-specific contract, prose substitutes do
+not satisfy the PR body, and genuine operator-action checkboxes keep their
+completion semantics.
+
+### Role Ownership
+
+- Planner owns splitting implementation into separate tasks for readiness-gap
+  semantics, operator-action checkbox semantics, template wording, and
+  template/root parity.
+- Executor owns RED/GREEN fixtures for both the current conflict and the prose
+  workaround bypass before changing validation behavior.
+- Reviewer owns pressure-testing the changed PR-body contract for loopholes,
+  including matrix warning without test-gap detail, prose-only gap reporting,
+  and stale generic checkbox wording.
+- Finisher owns PR-body rendering and publish-state follow-through: an
+  unresolved `⚠️ Test gap:` is a blocker until resolved, explicitly deferred,
+  or represented by an intentionally still-red required check.
+
+### Stage-Gate Bypass Cases
+
+- A PR body with `⚠️` in the matrix but no matching `⚠️ Test gap:` row must not
+  pass readiness.
+- A prose-only `Blocking validation gap:` row must not replace the canonical
+  test-gap checkbox.
+- A checked or deleted test-gap row without replacement evidence must not be
+  treated as resolved.
+- A generic "required checkbox is unchecked" failure for a test-gap row is not
+  enough; the failure must teach that unresolved validation is the blocker.
+- Removing the checkbox validator without adding or preserving semantic gap
+  readiness is a failed implementation.
 
 ### Rationalization Resistance
 
