@@ -13,6 +13,7 @@ const COMMENT_END = /-->\s*$/;
 const AC_HEADING = /^AC-\d+-\d+\b/;
 const TEST_GAP = /^⚠️\s*Test gap:\s*(.+)$/i;
 const OPERATOR_CHECK = /^Operator check:/i;
+const PROSE_GAP = /^\s*(?:[-*]\s*)?Blocking validation gap:/i;
 
 function ensureAc(acMap, acId, section, lineNumber) {
   const entry = acMap.get(acId) ?? {
@@ -87,6 +88,13 @@ export function validatePrBody(body) {
       continue;
     }
 
+    if (PROSE_GAP.test(line)) {
+      errors.push(
+        `line ${lineNumber}: ${section}: use canonical ⚠️ Test gap checkbox instead of prose: ${line.trim()}`,
+      );
+      continue;
+    }
+
     const checkbox = line.match(CHECKBOX);
     if (!checkbox) continue;
 
@@ -100,11 +108,10 @@ export function validatePrBody(body) {
       const acId = activeAc ?? section;
       const ac = ensureAc(acs, acId, section, lineNumber);
       ac.testGaps.push({ checked, lineNumber, text });
-      if (!checked) {
-        errors.push(
-          `line ${lineNumber}: ${section}: unresolved validation gap: ${testGap[1]}`,
-        );
-      }
+      const message = checked
+        ? `test gap checkbox must remain unchecked while unresolved: ${testGap[1]}`
+        : `unresolved validation gap: ${testGap[1]}`;
+      errors.push(`line ${lineNumber}: ${section}: ${message}`);
       continue;
     }
 
@@ -167,7 +174,7 @@ function readBodyFromArgs() {
 
 function emitGithubError(message) {
   const escaped = message.replaceAll('%', '%25').replaceAll('\n', '%0A');
-  console.error(`::error title=Required template checkbox::${escaped}`);
+  console.error(`::error title=PR readiness validation::${escaped}`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
@@ -176,5 +183,5 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
     for (const error of result.errors) emitGithubError(error);
     process.exit(1);
   }
-  console.log('Required template checkboxes are satisfied.');
+  console.log('PR readiness validation passed.');
 }

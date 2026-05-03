@@ -70,6 +70,20 @@ test('fails prose workaround when matrix warning lacks canonical test gap', () =
   assert.match(result.errors.join('\n'), /AC-86-1/);
 });
 
+test('fails checked test gaps because gaps are not completion tasks', () => {
+  const result = validatePrBody(fixture('test-gap-checked.md'));
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /test gap checkbox must remain unchecked/i);
+  assert.match(result.errors.join('\n'), /Linux validation has not rerun/);
+});
+
+test('fails prose workaround even without a matrix warning cell', () => {
+  const result = validatePrBody(fixture('test-gap-prose-no-warning.md'));
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /use canonical ⚠️ Test gap/i);
+  assert.match(result.errors.join('\n'), /Blocking validation gap/);
+});
+
 test('fails manual test row while unchecked', () => {
   const result = validatePrBody(fixture('manual-unchecked.md'));
   assert.equal(result.ok, false);
