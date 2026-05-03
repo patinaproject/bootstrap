@@ -191,9 +191,11 @@ authoring guidance that keeps non-blocking gaps out of required checkbox form.
   already supports `pr-checkbox: optional`, so the main behavior change may be
   template-only.
 - Verify no stale issue-83 wording remains with targeted `rg` checks for
-  `Every \`⚠️\` matrix cell`, `failing/pending state`, and `one or more corresponding`.
+  the literal text `Every ⚠️ matrix cell`, `failing/pending state`, and
+  `one or more corresponding`.
 - Verify no stale reverse-mapping wording remains with a targeted `rg` check
-  for `Every \`⚠️ Test gap:\`` and `corresponding.*⚠️.*matrix`.
+  for the literal text `Every ⚠️ Test gap:` and
+  `corresponding.*⚠️.*matrix`.
 
 ## Self-Review
 
