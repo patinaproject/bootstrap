@@ -23,6 +23,7 @@
 ## Task 1: RED Fixtures For The Current Conflict
 
 **Files:**
+
 - Add: `skills/bootstrap/templates/core/scripts/fixtures/pr-template-checkboxes/test-gap-unchecked.md`
 - Add: `scripts/fixtures/pr-template-checkboxes/test-gap-unchecked.md`
 - Add: `skills/bootstrap/templates/core/scripts/fixtures/pr-template-checkboxes/test-gap-prose-workaround.md`
@@ -118,6 +119,7 @@ Expected: FAIL for the same reasons as the root tests.
 ## Task 2: Semantic Validator Implementation
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/core/scripts/check-pr-template-checkboxes.mjs`
 - Modify: `scripts/check-pr-template-checkboxes.mjs`
 - Modify: `skills/bootstrap/templates/core/scripts/fixtures/pr-template-checkboxes/e2e-gap-unchecked.md`
@@ -206,6 +208,7 @@ Expected: PASS.
 ## Task 3: PR Template Wording
 
 **Files:**
+
 - Modify: `skills/bootstrap/templates/core/.github/pull_request_template.md`
 - Modify: `.github/pull_request_template.md`
 
@@ -242,6 +245,7 @@ Expected: `ok`.
 ## Task 4: Guidance And Search Verification
 
 **Files:**
+
 - Modify only if needed: `docs/ac-traceability.md`
 - Modify only if needed: `AGENTS.md`
 - Modify only if needed: `skills/bootstrap/templates/core/AGENTS.md.tmpl`
@@ -275,6 +279,7 @@ Expected: no output, or only intentional repository-local differences already do
 ## Task 5: Final Verification And Commit
 
 **Files:**
+
 - All changed files from Tasks 1-4.
 
 - [ ] **Step 1: Run root validator tests**
