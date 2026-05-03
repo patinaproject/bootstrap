@@ -103,6 +103,13 @@ export function validatePrBody(body) {
     const marker = pending ?? { kind: 'required', lineNumber };
     pending = null;
 
+    if (PROSE_GAP.test(text)) {
+      errors.push(
+        `line ${lineNumber}: ${section}: use canonical ⚠️ Test gap checkbox instead of prose: ${text}`,
+      );
+      continue;
+    }
+
     const testGap = text.match(TEST_GAP);
     if (testGap) {
       const acId = activeAc ?? section;

@@ -84,6 +84,24 @@ test('fails prose workaround even without a matrix warning cell', () => {
   assert.match(result.errors.join('\n'), /Blocking validation gap/);
 });
 
+test('fails checked checkbox-wrapped prose workaround', () => {
+  const result = validatePrBody(
+    '## Acceptance criteria\n\n### AC-86-1\n\n- [x] Blocking validation gap: Linux validation has not rerun.\n',
+  );
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /use canonical ⚠️ Test gap/i);
+  assert.match(result.errors.join('\n'), /Blocking validation gap/);
+});
+
+test('fails optional checkbox-wrapped prose workaround', () => {
+  const result = validatePrBody(
+    '## Acceptance criteria\n\n### AC-86-1\n\n<!-- pr-checkbox: optional -->\n- [ ] Blocking validation gap: Linux validation has not rerun.\n',
+  );
+  assert.equal(result.ok, false);
+  assert.match(result.errors.join('\n'), /use canonical ⚠️ Test gap/i);
+  assert.match(result.errors.join('\n'), /Blocking validation gap/);
+});
+
 test('fails manual test row while unchecked', () => {
   const result = validatePrBody(fixture('manual-unchecked.md'));
   assert.equal(result.ok, false);
