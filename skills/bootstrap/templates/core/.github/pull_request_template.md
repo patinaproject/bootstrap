@@ -55,13 +55,18 @@
   still needs an AC heading. Each cell summarizes the required-validation state
   for that AC and column. Use only these symbols in status cells:
   ✅ = required validation passed, with no blocking gap for this column
-  ❌ = required validation missing, failing, or blocked by an unresolved gap
+  ❌ = tests that should exist are missing
+  ⚠️ = required validation has an acknowledged gap, warning, unresolved
+       concern, or failing/pending state that needs reviewer attention
   ➖ = not relevant to this AC
 
   Use `➖` only when that verification type is not relevant to the AC. If an AC
   includes evidence, a test gap, or an operator check that clearly maps to a
-  matrix column, that cell must not be `➖`. If required validation is still
-  pending, use `❌` and add a test-gap checkbox until that validation passes.
+  matrix column, that cell must not be `➖`. Every `⚠️` matrix cell must have
+  one or more corresponding `⚠️ Test gap:` checkboxes under that AC. If required
+  validation is failing, pending, blocked by an unresolved concern, or otherwise
+  cannot yet be trusted, use `⚠️` and add a test-gap checkbox until that
+  validation passes.
 -->
 | AC | Title | Unit | <Platform> |
 | --- | --- | --- | --- |
@@ -82,8 +87,9 @@ including unresolved blockers or pending validation when present.
 
 <!--
   For each supported platform that is relevant to this AC, include one evidence
-  row or report the missing validation as a test-gap checkbox. Keep evidence
-  rows compact and use a colon after the evidence label:
+  row, summarize missing tests in the outcome, or report an acknowledged
+  validation gap as a test-gap checkbox. Keep evidence rows compact and use a
+  colon after the evidence label:
   `<Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]`.
   Name the concrete command, workflow job, tool, or harness when known. Use a
   neutral verifier value, such as a person, role, or run identifier. Add a unit
@@ -96,12 +102,15 @@ including unresolved blockers or pending validation when present.
 - <Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]
 <!--
   Include every known Test gap that the operator must consciously review. Use
-  `Test gap:` to describe missing coverage or an unresolved validation concern,
-  not to restate a code-review finding or duplicate an operator action. Test
-  gaps must be about observable behavior, missing coverage, or validation that
-  cannot yet be trusted. Treat CI that must rerun after a fix as a test gap
-  unless the operator must manually trigger or inspect a specific job. Delete
-  unused placeholder checkbox rows.
+  `Test gap:` to describe an acknowledged coverage gap or an unresolved
+  validation concern, not to restate a code-review finding, duplicate an
+  operator action, or explain tests that should exist but are missing. Test gaps
+  must be about observable behavior or validation that cannot yet be trusted.
+  Treat CI that must rerun after a fix as a test gap unless the operator must
+  manually trigger or inspect a specific job. Delete unused placeholder checkbox
+  rows.
+  Every `⚠️ Test gap:` that maps to a matrix column must have a corresponding
+  `⚠️` cell in that AC's matrix row.
   Example: - [ ] ⚠️ Test gap: <observable behavior or validation not verified>
 -->
 - [ ] ⚠️ Test gap: <observable behavior, missing coverage, or unresolved validation concern>
