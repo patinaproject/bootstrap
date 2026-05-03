@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.9.0](https://github.com/patinaproject/bootstrap/compare/v1.8.0...v1.9.0) (2026-05-03)
+
+
+### Features
+
+* [#83](https://github.com/patinaproject/bootstrap/issues/83) clarify PR template test coverage symbols ([#84](https://github.com/patinaproject/bootstrap/issues/84)) ([32e5d9f](https://github.com/patinaproject/bootstrap/commit/32e5d9f45e82b0cb697cc24426ded025f900101f))
+
 ## [1.8.0](https://github.com/patinaproject/bootstrap/compare/v1.7.0...v1.8.0) (2026-04-30)
 
 
