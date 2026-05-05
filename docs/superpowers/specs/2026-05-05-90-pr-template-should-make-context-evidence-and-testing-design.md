@@ -59,15 +59,19 @@ separate issue with explicit contract-migration scope.
   acceptance-criteria IDs from the linked issue, in
   `AC-<issue>-<n>` form"), so a non-author reviewer can interpret
   the column without prior context from `docs/ac-traceability.md`.
-- R4: The `## Acceptance criteria` section opens with a one-line
-  rendered orientation that names the per-AC content and the
-  evidence-row shape, e.g. "Each AC has an outcome summary, evidence
-  rows in the form `<Platform> test: <command>, <environment>[,
-  <link or verifier>]`, and any blocking `Test gap:` /
-  `Operator check:` checkboxes the operator must resolve before
-  merge." The orientation answers QA's "what does evidence mean?"
-  question without retiring the canonical grammar `## What changed`,
-  `docs/ac-traceability.md`, and the CI script depend on.
+- R4: The `## Acceptance criteria` section opens with a brief
+  rendered orientation that names the per-AC content, the
+  evidence-row shape, and where reviewers find manual-test
+  instructions. Example wording (Planner picks final copy): "Each
+  AC has an outcome summary, evidence rows in the form
+  `<Platform> test: <command>, <environment>[, <verifier>]`, and
+  any blocking `Test gap:` / `Operator check:` checkboxes the
+  operator must resolve before merge. Reviewers and QA exercising
+  the change manually follow the `Operator check:` rows." The
+  orientation answers QA's "what does evidence mean?" *and* "how
+  do I test this?" questions without retiring the canonical
+  grammar `docs/ac-traceability.md` and the CI script depend on,
+  and without inventing a parallel top-level section.
 - R5: The change does not retire or rename the existing
   machine-validated per-AC grammar (`Test gap:`,
   `Non-blocking gap:`, `Operator check:`, the colon-style evidence
@@ -88,7 +92,7 @@ separate issue with explicit contract-migration scope.
   template adds no more than roughly 15 rendered lines (excluding
   HTML comments) across R1–R4. Calibration: R1 ≈ 1 line plus a
   bullet-shape change, R2 ≈ 4–6 lines (one per symbol or compact
-  list), R3 ≈ 1 line, R4 ≈ 1–2 lines. Each individual rendered
+  list), R3 ≈ 1 line, R4 ≈ 2–3 lines. Each individual rendered
   prompt is one to three lines.
 - R8: Root `.github/pull_request_template.md` remains
   byte-identical to the bootstrap template source at
@@ -147,11 +151,13 @@ separate issue with explicit contract-migration scope.
   in the rendered body without opening the markdown source.
 - AC-90-3: Given a reviewer opens a rendered PR body, when they
   read the `## Acceptance criteria` section, then the rendered
-  body answers the questions QA could not answer from the previous
-  template — what evidence rows attest to (verifier, environment,
-  command/workflow job/tool/harness) — by rendering a one-line
+  body answers the two questions QA could not answer from the
+  previous template — what evidence rows attest to (verifier,
+  environment, command/workflow job/tool/harness) and where to
+  find manual-test instructions — by rendering a brief
   orientation that points at the canonical colon-style evidence
-  row format the rest of the AC section already uses.
+  row format and at `Operator check:` rows for manual exercise
+  steps.
 - AC-90-4: Given the canonical template under
   `skills/bootstrap/templates/core/.github/pull_request_template.md`
   changes, when the bootstrap skill runs in realignment mode
@@ -210,9 +216,23 @@ separate issue with explicit contract-migration scope.
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Context:'`
     matches at least once.
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F '✅'`
-    matches at least once; analogous checks for `❌`, `⚠️`, `➖`.
-  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'AC-'`
-    matches the rendered `AC` column clarification at least once.
+    matches at least once. Naive per-symbol greps are insufficient
+    for `⚠️` and `➖` because the existing `⚠️ Test gap:` row and
+    the existing `➖` matrix-cell placeholders already match them
+    today; instead, anchor on a phrase the Planner introduces with
+    the legend, e.g.:
+    `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'required validation passed'`
+    matches the rendered legend's `✅` clause at least once
+    (analogous unique-phrase checks for the `❌`, `⚠️`, and `➖`
+    clauses, keyed off whatever exact wording the Planner adopts
+    from #87 — e.g. `non-blocking gap documented` for `⚠️`,
+    `merge-blocked` or `merge-blocking` for `❌`, `not relevant`
+    for `➖`).
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'acceptance-criteria IDs'`
+    matches the rendered `AC` column clarification at least once
+    (a phrase chosen to be unique to the new clarification line so
+    the check does not pass on the existing `AC-<issue>-<n>`
+    matrix placeholder).
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'evidence'`
     matches the rendered AC-section orientation at least once.
 - Machine-validation regression check: run
@@ -311,7 +331,7 @@ HTML-comment content, so loophole exposure is small. Closures:
 - Rendered additions across R1–R4 combined: ~15 lines or fewer in
   the rendered body (HTML comments excluded). Calibration: R1 ≈ 1
   line plus a bullet-shape change, R2 ≈ 4–6 lines, R3 ≈ 1 line,
-  R4 ≈ 1–2 lines. Each individual rendered prompt is one to three
+  R4 ≈ 2–3 lines. Each individual rendered prompt is one to three
   lines.
 - HTML-comment additions are bounded — comments may carry
   illustrative hints but must not balloon to replace contributor
