@@ -42,17 +42,22 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
   comment evidence-row grammar. The rendered definition does not duplicate
   the full grammar; it references the existing colon-style row format.
 - R5: The template adds a new rendered section `## How to verify` between
-  `## Test coverage` and `## Acceptance criteria`. The section contains a
-  short rendered author prompt explaining its purpose (give a reviewer or
-  QA tester the steps to exercise the change for this repo's product
-  surface) and an explicit `Not applicable — <one-line reason>` value the
-  author writes when no manual verification is required.
+  `## What changed` (or `## Do before merging` when present) and
+  `## Test coverage`, so the reading order is *context → how a reviewer
+  exercises the change → what the author already verified*. The section
+  contains a short rendered author prompt explaining its purpose (give a
+  reviewer or QA tester the steps to exercise the change for this repo's
+  product surface) and an explicit `Not applicable — <one-line reason>`
+  value the author writes when no manual verification is required.
+  `## How to verify` is reviewer-facing manual-exercise instructions; it
+  is not a place to duplicate AC evidence rows, which already record the
+  author's completed verification claims.
 - R6: The `## How to verify` section is product-surface-agnostic. Its
-  rendered copy must not bake in mobile-specific or web-specific build
-  acquisition language. Repo-specific examples (native build location, web
-  build URL, CLI install command, library import snippet, infra dry-run
-  command) live in HTML comments as illustrative hints, not in the
-  rendered body.
+  rendered copy must not bake in product-surface-specific
+  build-acquisition language for any surface (mobile, web, CLI, library,
+  infra). Repo-specific examples (native build location, web build URL,
+  CLI install command, library import snippet, infra dry-run command)
+  live in HTML comments as illustrative hints, not in the rendered body.
 - R7: When the author writes `Not applicable — <reason>` in
   `## How to verify`, the section is treated as filled, not as a
   placeholder. A bare `Not applicable` with no reason is a placeholder and
@@ -61,9 +66,10 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
 - R8: The template body's added rendered prose (R1, R2, R3, R4, R5
   combined) stays under a token-efficiency budget so the rendered template
   does not balloon. Target: the diff against the current template adds no
-  more than roughly 60 rendered lines (excluding HTML comments) across all
-  five rendered additions, so a freshly opened PR body remains scannable
-  in one screen on GitHub web.
+  more than roughly 30 rendered lines (excluding HTML comments) across all
+  five rendered additions. Calibration: R1≈1, R2≈4–6, R3≈1, R4≈1,
+  R5≈5–8 ≈ 15–20 lines is the expected landing zone; ~30 is the cap, not
+  a target.
 - R9: Root `.github/pull_request_template.md` remains byte-identical to the
   bootstrap template source at
   `skills/bootstrap/templates/core/.github/pull_request_template.md`. The
@@ -143,9 +149,9 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
    - Add a one-line rendered definition of evidence under
      `## Acceptance criteria` (R4, AC-90-3).
    - Insert a new rendered `## How to verify` section between
-     `## Test coverage` and `## Acceptance criteria` with a short prompt,
-     a placeholder value, and a `Not applicable — <reason>` example
-     (R5, R6, R7, AC-90-4).
+     `## What changed` (or `## Do before merging` when present) and
+     `## Test coverage`, with a short prompt, a placeholder value, and a
+     `Not applicable — <reason>` example (R5, R6, R7, AC-90-4).
    - Keep the rendered additions within the R8 token-efficiency budget.
 2. Run the bootstrap skill in realignment mode against this repo, accept
    the proposed root diff, and commit the template change and the
@@ -166,18 +172,29 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
     the rendered fix is observable.
   - Confirm the root and template files are already byte-identical
     (`cmp -s`) so any later drift is attributable to the change.
-- GREEN-phase rendered checks after the change:
+- GREEN-phase rendered checks after the change. Each rendered-visibility
+  check first strips HTML comment blocks so the assertion is "this
+  string appears in the rendered body", not "this string appears
+  anywhere in the file" — because the existing template already mentions
+  these symbols inside HTML comments and the failure mode this issue
+  fixes is comment-only guidance. Use a portable strip such as:
+  `sed -e '/<!--/,/-->/d' .github/pull_request_template.md` (treat the
+  resulting stream as the rendered body for grep purposes).
   - `cmp -s skills/bootstrap/templates/core/.github/pull_request_template.md .github/pull_request_template.md`
     exits 0.
   - `grep -c '<!--' .github/pull_request_template.md` does not increase
     relative to the count needed to land the new rendered prompts (i.e.
     new author guidance is in the rendered body, not absorbed into HTML
     comments).
-  - `grep -F '✅' .github/pull_request_template.md` shows the symbol in
-    rendered context (outside an HTML comment) at least once.
-  - `grep -F '## How to verify' .github/pull_request_template.md` matches.
-  - `grep -F 'Not applicable' .github/pull_request_template.md` matches
-    the rendered placeholder grammar.
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F '✅'`
+    matches at least once (the symbol is in the rendered body, not only
+    in a comment); analogous checks for `❌`, `⚠️`, and `➖`.
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'AC-'`
+    matches the rendered `AC` column clarification at least once.
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F '## How to verify'`
+    matches.
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Not applicable'`
+    matches the rendered placeholder grammar.
 - Token-efficiency check: `git diff --stat` against the previous
   template shows the rendered additions stay within the R8 budget.
 - Pressure test: open a sample PR body that uses the new template and
@@ -227,6 +244,7 @@ explicitly so authors do not regress to invisible guidance.
 | "Per-bullet rationale will balloon `What changed`." | One rendered line of guidance does not balloon anything. The R8 budget keeps the entire set of rendered additions under roughly 60 lines. |
 | "I'll skip the rendered evidence definition because `docs/ac-traceability.md` already covers it." | The reviewer reading a PR body has not opened `docs/ac-traceability.md` and may not know it exists. A one-line rendered definition is the whole fix. |
 | "`Not applicable` alone is fine; the reason is obvious from context." | If the reason were obvious it would not be the AC failure mode #90 already documented. Require the reason. |
+| "I'll paste the AC evidence rows into `## How to verify` so a reviewer sees them in one place." | `## How to verify` is reviewer-facing manual-exercise instructions ("here's how *you* can run this"). AC evidence rows are author claims of already-completed verification ("here's what *I* ran and where it ran"). Duplicating one into the other doubles the body and erases the distinction. |
 
 ## Red Flags — STOP and reconsider
 
@@ -249,9 +267,10 @@ explicitly so authors do not regress to invisible guidance.
 
 ## Token-Efficiency Targets
 
-- Rendered additions across R1–R5 combined: roughly 60 lines or fewer in
-  the rendered body (HTML comments excluded). Each individual rendered
-  prompt is one to three lines.
+- Rendered additions across R1–R5 combined: ~30 lines or fewer in the
+  rendered body (HTML comments excluded). Expected landing zone is
+  ~15–20 lines (R1≈1, R2≈4–6, R3≈1, R4≈1, R5≈5–8); ~30 is the cap, not
+  a target. Each individual rendered prompt is one to three lines.
 - HTML-comment additions: bounded — comments may carry illustrative
   hints (e.g. example evidence rows, example
   `Not applicable — <reason>` strings) but must not balloon to replace
