@@ -23,9 +23,19 @@
 
 ## What changed
 
--
+Context: <prior PR, prior QA pass, or follow-up issue this PR builds on, or `standalone — <reason>` when there is none>
+
+- <change> — <why>
 
 <!--
+  The rendered `Context:` line and `- <change> — <why>` bullet shape are the
+  structural placeholders this section requires. Replace `<...>` with actual
+  values; do not delete the `Context:` line. When this PR has no prior
+  context, write `Context: standalone — <reason>` (e.g.
+  `Context: standalone — first pass on the new lint rule`). One bullet per
+  change; the `— <why>` half states the rationale (user-visible reason or
+  triggering observation), not a restatement of the change.
+
   Include this section only when PR-level operator steps that do not belong to
   a specific AC must happen after review and before merge:
 
@@ -42,6 +52,15 @@
 -->
 
 ## Test coverage
+
+Legend for status cells:
+
+- ✅ — required validation passed with no known relevant gap for this column.
+- ⚠️ — validation exists and is sufficient to merge with a known non-blocking gap documented under the AC.
+- ❌ — required validation is missing, failing, pending, or merge-blocked.
+- ➖ — not relevant to this AC.
+
+The `AC` column references the acceptance-criteria IDs from the linked issue, in `AC-<issue>-<n>` form.
 
 <!--
   When showing a partial example outside a PR body, label the whole example as
@@ -75,6 +94,10 @@
 | AC-<issue>-<n> | <short title> | ➖ | ➖ |
 
 ## Acceptance criteria
+
+Evidence rows take the form `<Platform> test: <command, workflow job, tool, or harness>, <environment>[, <link, verifier, or ISO>]` — the trailing field is who or what proves the test ran.
+
+Reviewers and QA exercising the change manually follow the `Operator check:` rows under each AC for evidence of manual exercise.
 
 <!--
   One heading per relevant AC. AC IDs follow the convention in
