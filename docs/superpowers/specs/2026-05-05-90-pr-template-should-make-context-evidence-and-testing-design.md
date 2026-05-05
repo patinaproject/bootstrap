@@ -21,11 +21,18 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
 
 ## Requirements
 
-- R1: The `## What changed` section contains a rendered (visible-in-body)
-  one-line author prompt that names the two load-bearing inputs reviewers
-  need: linked prior context (prior PR, prior QA pass, follow-up issue) and
-  a short rationale per bullet. The prompt is concise enough to remain in
-  the rendered body without ballooning the template.
+- R1: The `## What changed` section forces linked prior context (prior
+  PR, prior QA pass, follow-up issue) and per-bullet rationale into the
+  rendered body via the rendered template *structure*, not via rendered
+  instructive prose. Concretely: a rendered `Context:` line the author
+  replaces with the actual context (or `Context: standalone — <reason>`
+  when there is none) and a rendered bullet shape that pairs the change
+  with its rationale (e.g. `- <change> — <why>`). Detailed
+  *instructions* — what counts as "context", how to phrase rationale —
+  remain in HTML comments per PR-template convention. The rendered
+  body's job is to show *filled output*, not to lecture authors. This
+  closes the QA failure mode (bullets without context or rationale)
+  without adding rendered prompt prose that reviewers must skim past.
 - R2: The `## Test coverage` section renders a visible legend defining
   `✅`, `❌`, `⚠️`, `➖` with the same meanings already documented in the
   HTML comments and aligned with the `⚠️` semantics in #87 (validation
@@ -113,9 +120,12 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
 ## Acceptance Criteria
 
 - AC-90-1: Given an author opens the PR template, when they fill the
-  `## What changed` section, then the rendered body — not only an HTML
-  comment — prompts them to surface linked prior context (prior PR, prior
-  QA pass, follow-up issue) and to give each bullet a short rationale.
+  `## What changed` section, then the rendered template structure
+  (a `Context:` line and a bullet shape that pairs each change with a
+  rationale) forces linked prior context and per-bullet rationale into
+  the rendered body. Detailed how-to-phrase instructions may stay in
+  HTML comments per template convention; the *output* in the rendered
+  body must show context and rationale, not lingering template prose.
 - AC-90-2: Given a reviewer opens a rendered PR body, when they read the
   `## Test coverage` matrix, then the symbol legend (`✅ ❌ ⚠️ ➖`) and the
   meaning of the `AC` column are visible in the rendered body without
@@ -140,8 +150,10 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
 ## Implementation Shape
 
 1. Edit `skills/bootstrap/templates/core/.github/pull_request_template.md`:
-   - Add a one-line rendered author prompt under `## What changed`
-     covering linked prior context and per-bullet rationale (R1, AC-90-1).
+   - Restructure `## What changed` so the rendered template carries a
+     `Context:` line and a bullet shape that pairs change with
+     rationale (e.g. `- <change> — <why>`). Keep detailed instructions
+     in HTML comments per template convention (R1, AC-90-1).
    - Add a rendered legend block under `## Test coverage` defining the
      four symbols with the #87-aligned wording (R2, R12, AC-90-2).
    - Add a one-line rendered clarification of the `AC` column in
@@ -186,6 +198,9 @@ fixes that work across mobile, web, CLI, library, and infra consumers.
     relative to the count needed to land the new rendered prompts (i.e.
     new author guidance is in the rendered body, not absorbed into HTML
     comments).
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Context:'`
+    matches at least once (the rendered structural placeholder for R1
+    is in the body, not only in a comment).
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F '✅'`
     matches at least once (the symbol is in the rendered body, not only
     in a comment); analogous checks for `❌`, `⚠️`, and `➖`.
@@ -245,6 +260,7 @@ explicitly so authors do not regress to invisible guidance.
 | "I'll skip the rendered evidence definition because `docs/ac-traceability.md` already covers it." | The reviewer reading a PR body has not opened `docs/ac-traceability.md` and may not know it exists. A one-line rendered definition is the whole fix. |
 | "`Not applicable` alone is fine; the reason is obvious from context." | If the reason were obvious it would not be the AC failure mode #90 already documented. Require the reason. |
 | "I'll paste the AC evidence rows into `## How to verify` so a reviewer sees them in one place." | `## How to verify` is reviewer-facing manual-exercise instructions ("here's how *you* can run this"). AC evidence rows are author claims of already-completed verification ("here's what *I* ran and where it ran"). Duplicating one into the other doubles the body and erases the distinction. |
+| "Author guidance should be rendered too so authors don't ignore it." | PR-template convention puts author instructions in HTML comments. The QA failure mode was about *what the author wrote* (no context, no rationale), not about a missing visible prompt. The fix is rendered structural placeholders the author *replaces* (`Context:` line, `- <change> — <why>` bullets), not rendered prose the reviewer must skim past on every PR. |
 
 ## Red Flags — STOP and reconsider
 
