@@ -59,19 +59,19 @@ separate issue with explicit contract-migration scope.
   acceptance-criteria IDs from the linked issue, in
   `AC-<issue>-<n>` form"), so a non-author reviewer can interpret
   the column without prior context from `docs/ac-traceability.md`.
-- R4: The `## Acceptance criteria` section opens with a brief
-  rendered orientation that names the per-AC content, the
-  evidence-row shape, and where reviewers find manual-test
-  instructions. Example wording (Planner picks final copy): "Each
-  AC has an outcome summary, evidence rows in the form
-  `<Platform> test: <command>, <environment>[, <verifier>]`, and
-  any blocking `Test gap:` / `Operator check:` checkboxes the
-  operator must resolve before merge. Reviewers and QA exercising
-  the change manually follow the `Operator check:` rows." The
-  orientation answers QA's "what does evidence mean?" *and* "how
-  do I test this?" questions without retiring the canonical
-  grammar `docs/ac-traceability.md` and the CI script depend on,
-  and without inventing a parallel top-level section.
+- R4: The `## Acceptance criteria` section opens with two short
+  rendered lines that close the two specific gaps QA reported:
+  what an evidence row attests to, and where reviewers find
+  manual-test steps. Example wording (Planner picks final copy):
+  "Evidence rows take the form `<Platform> test: <command>,
+  <environment>[, <verifier>]` — verifier is who or what proves
+  the test ran. Reviewers and QA exercising the change manually
+  follow the `Operator check:` rows under each AC." The
+  orientation does not enumerate AC structure (outcome,
+  checkboxes) that is already visible from the section's headings
+  and bullets, and does not retire the canonical grammar
+  `docs/ac-traceability.md` and the CI script depend on, and does
+  not invent a parallel top-level section.
 - R5: The change does not retire or rename the existing
   machine-validated per-AC grammar (`Test gap:`,
   `Non-blocking gap:`, `Operator check:`, the colon-style evidence
