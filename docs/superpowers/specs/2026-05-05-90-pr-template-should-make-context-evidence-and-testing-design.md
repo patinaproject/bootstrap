@@ -67,29 +67,38 @@ steps, scoped to the AC's outcome. There is no separate
     label as a placeholder line — the existing colon-grammar
     (`<Platform> test: <command>, <environment>[, <link>]`) is
     retired.
-  - **How a reviewer can confirm:** numbered or bulleted steps a
-    reviewer or QA tester can follow to exercise this AC's outcome,
-    plus an explicit *Expected:* line stating what they should see.
-    These steps absorb the role formerly proposed for a top-level
+  - **Confirm by:** numbered or bulleted steps a reviewer or QA
+    tester can follow to exercise this AC's outcome, plus an
+    explicit *Expected:* line stating what they should see. These
+    steps absorb the role formerly proposed for a top-level
     `## How to verify` section: there is no separate `How to verify`
     block; reviewer-confirm steps live with the AC they verify. When
     no manual confirmation is needed, the author writes
-    `How a reviewer can confirm: not applicable — <one-line reason>`
-    rather than omitting the slot.
+    `Confirm by: not applicable — <one-line reason>` rather than
+    omitting the slot.
   - **Open concerns:** prose listing of unresolved validation
-    concerns, known gaps, or merge-blocking issues, or the literal
-    word `None` when there are none. This replaces the current
-    `Test gap:` checkbox grammar; concerns that block merge are
-    surfaced here in prose, not as a checkbox the operator might
-    miss.
-  - **Before merging:** zero or more checkboxes for AC-scoped
-    operator actions that must be ticked before merge readiness.
-    These replace the current `Operator check:` checkbox label;
-    PR-level pre-merge actions that are not AC-scoped continue to
-    live in the optional `## Do before merging` section.
+    concerns, known gaps, or merge-blocking issues. This replaces
+    the current `Test gap:` checkbox grammar; concerns that block
+    merge are surfaced here in prose, not as a checkbox the
+    operator might miss. The block is optional when there are no
+    open concerns: omit it entirely rather than writing
+    `Open concerns: None`. Reviewers treat absence as "no concerns";
+    Reviewer/Finisher push back when the block is present but
+    empty, contains a placeholder, or omits a known concern they
+    surface.
+
+True pre-merge operator actions that are not scoped to a single AC
+(e.g. "rotate the production secret after deploy") live in the
+optional top-level `## Do before merging` section, as they do today.
+The humanized AC grammar deliberately does not add a per-AC
+`Before merging:` block: AC-scoped reviewer actions are already
+covered by `Confirm by:` plus its `Expected:` line, and a per-AC
+label collides confusingly with the top-level
+`## Do before merging` heading.
+
 - R6: The `## How to verify` section is *not* added. The role it would
   have played (telling a reviewer how to exercise the change) is
-  absorbed into per-AC `How a reviewer can confirm:` blocks under R5,
+  absorbed into per-AC `Confirm by:` blocks under R5,
   scoped to the AC's outcome. This avoids a top-level recipe duplicating
   per-AC gating steps and prevents authors from maintaining the same
   instructions in two places.
@@ -116,16 +125,16 @@ steps, scoped to the AC's outcome. There is no separate
   The edit lands in the template first; the root file is mirrored via
   the bootstrap skill in realignment mode in the same PR.
 - R10: `docs/ac-traceability.md` is updated to reflect the humanized
-  per-AC grammar (prose verification, `How a reviewer can confirm`,
-  `Open concerns`, `Before merging`). The previous colon-grammar
-  evidence-row form is retired and the doc must not present it as
-  canonical. Updates are limited to bringing the doc in sync with the
-  new template; the AC ID convention and Given/When/Then phrasing for
-  issue-side ACs are unchanged.
+  per-AC grammar (prose verification, `Confirm by`, `Open concerns`).
+  The previous colon-grammar evidence-row form, `Test gap:`, and
+  `Operator check:` labels are retired and the doc must not present
+  them as canonical. Updates are limited to bringing the doc in sync
+  with the new template; the AC ID convention and Given/When/Then
+  phrasing for issue-side ACs are unchanged.
 - R11: PR authors and Superteam `Finisher` own filling the rendered
   context placeholder under `## What changed`, choosing matrix cells
   against the rendered legend, writing prose-style verification
-  sentences under each AC, writing `How a reviewer can confirm` steps
+  sentences under each AC, writing `Confirm by` steps
   (or `not applicable — <reason>`), and listing `Open concerns` (or
   `None`). `Reviewer` and `Finisher` own flagging missing or
   placeholder values before publish-state readiness — including a
@@ -169,20 +178,18 @@ steps, scoped to the AC's outcome. There is no separate
   (`✅ ❌ ⚠️ ➖`) and the meaning of the `AC` column are visible in
   the rendered body without opening the markdown source.
 - AC-90-3: Given a reviewer opens a rendered PR body, when they read
-  the `## Acceptance criteria` section, then the section opens with a
-  rendered orientation naming the per-AC blocks (Outcome, Verified
-  by, How a reviewer can confirm, Open concerns, Before merging) so
-  the reader can navigate without prior context from
-  `docs/ac-traceability.md`.
+  the `## Acceptance criteria` section, then the section opens with
+  a rendered orientation naming the per-AC blocks (Outcome, Verified
+  by, Confirm by, Open concerns) so the reader can navigate without
+  prior context from `docs/ac-traceability.md`.
 - AC-90-4: Given a reviewer opens a rendered PR body, when they read
-  any per-AC entry, then the entry has a human-readable heading title
-  (`### AC-<issue>-<n>: <title>`), prose-style "Verified by:"
-  verification (not form-grammar), reviewer-friendly labels (`How a
-  reviewer can confirm`, `Open concerns`, `Before merging` instead of
-  `Operator check:` / `Test gap:`), and reviewer-confirm steps that
-  tell a reviewer or QA tester how to exercise the AC's outcome (or
-  `not applicable — <reason>` when manual confirmation is not
-  needed).
+  any per-AC entry, then the entry has a human-readable heading
+  title (`### AC-<issue>-<n>: <title>`), prose-style "Verified by:"
+  verification (not form-grammar), reviewer-friendly labels (`Confirm
+  by:` and `Open concerns:` instead of `Operator check:` and
+  `Test gap:`), and reviewer-confirm steps that tell a reviewer or
+  QA tester how to exercise the AC's outcome (or `not applicable —
+  <reason>` when manual confirmation is not needed).
 - AC-90-5: Given the canonical template under
   `skills/bootstrap/templates/core/.github/pull_request_template.md`
   changes, when the bootstrap skill runs in realignment mode against
@@ -204,10 +211,11 @@ steps, scoped to the AC's outcome. There is no separate
      naming the per-AC labeled blocks (R4, AC-90-3).
    - Restructure the placeholder AC entry to use the humanized
      grammar: heading title appended to the AC ID; **Outcome:**,
-     **Verified by:**, **How a reviewer can confirm:**, **Open
-     concerns:**, **Before merging:** labeled blocks; retire the
-     colon-grammar evidence row, the `Test gap:` checkbox, and the
-     `Operator check:` checkbox label (R5, AC-90-4).
+     **Verified by:**, **Confirm by:**, **Open concerns:** labeled
+     blocks (Open concerns shown only as commented illustrative
+     example, since real PRs omit it when there are none); retire
+     the colon-grammar evidence row, the `Test gap:` checkbox, and
+     the `Operator check:` checkbox label (R5, AC-90-4).
    - Keep the rendered additions within the R8 token-efficiency
      budget.
 2. Update `docs/ac-traceability.md` to reflect the humanized per-AC
@@ -226,7 +234,7 @@ steps, scoped to the AC's outcome. There is no separate
     stripped) does not contain the four symbol meanings, the `AC`
     column meaning, an orientation for the AC section, AC headings
     with titles, or the **Outcome / Verified by / How a reviewer can
-    confirm / Open concerns / Before merging** labels. Capture this
+    confirm / Open concerns** labels. Capture this
     as the failing baseline so the rendered fix is observable.
   - Confirm the root and template files are already byte-identical
     (`cmp -s`) so any later drift is attributable to the change.
@@ -253,12 +261,14 @@ steps, scoped to the AC's outcome. There is no separate
     matches the rendered `AC` column clarification at least once.
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Verified by:'`
     matches (the humanized verification label is rendered).
-  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'How a reviewer can confirm'`
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Confirm by'`
     matches.
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Open concerns:'`
     matches.
-  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -E 'Before merging:?'`
-    matches the AC-scoped pre-merge label.
+  - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Before merging:'`
+    finds **no** match in any per-AC entry (the per-AC label was
+    deliberately not added to avoid collision with the top-level
+    `## Do before merging` heading).
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F '## How to verify'`
     finds **no** match (the section was deliberately not added).
   - `sed -e '/<!--/,/-->/d' .github/pull_request_template.md | grep -F 'Operator check:'`
@@ -270,10 +280,10 @@ steps, scoped to the AC's outcome. There is no separate
   and verify a reader who has never opened
   `docs/ac-traceability.md` can answer (a) what the four symbols
   mean, (b) what `AC` columns reference, (c) what each per-AC
-  block (Outcome / Verified by / How a reviewer can confirm / Open
-  concerns / Before merging) is for, and (d) how to exercise the
+  block (Outcome / Verified by / Confirm by / Open
+  concerns) is for, and (d) how to exercise the
   change for at least one AC by following its
-  `How a reviewer can confirm` steps.
+  `Confirm by` steps.
 
 ## Loophole Closure
 
@@ -286,13 +296,16 @@ retired form-grammar.
   reads cleaner with the prompt hidden" is not an acceptable
   rationale; HTML-comment-only guidance is exactly the failure mode
   this design fixes.
-- Forbid replacing `How a reviewer can confirm:` with bare `N/A` or
+- Forbid replacing `Confirm by:` with bare `N/A` or
   bare `not applicable` (no reason). The author must write
   `not applicable — <one-line reason>`. A bare placeholder is treated
   as unfilled.
-- Forbid omitting `Open concerns:` from a per-AC entry. When there
-  are none, the author writes `Open concerns: None`. Silent omission
-  is treated as unfilled.
+- Forbid leaving `Open concerns:` empty when concerns exist
+  elsewhere (in review threads, CI failures, or known limitations).
+  Omitting the block when there genuinely are no concerns is
+  acceptable and expected; reviewers treat absence as "no concerns".
+  The forbidden move is surfacing concerns *outside* the AC and
+  hiding them from the per-AC reading.
 - Forbid reintroducing the retired colon-grammar evidence row
   (`<Platform> test: <command>, <environment>[, <link>]`) or the
   retired `Test gap:` / `Operator check:` checkbox labels in either
@@ -301,7 +314,7 @@ retired form-grammar.
 - Forbid adding a top-level `## How to verify` section, or any
   equivalent name (`Testing instructions`, `Verification`, `Manual
   test plan`). Reviewer-confirm steps live per-AC under
-  `How a reviewer can confirm:`. A top-level recipe duplicates
+  `Confirm by:`. A top-level recipe duplicates
   per-AC gating and forces authors to maintain the same content in
   two places.
 - Forbid baking repo-specific build-acquisition copy (native build
@@ -325,13 +338,14 @@ retired form-grammar.
 | "I'll keep the legend in the comment because the symbols are obvious." | They were not obvious; QA literally asked what `AC` and `evidence` meant. Render the legend. |
 | "I'll just add a top-level `## How to verify` because it's tidy." | A top-level recipe duplicates per-AC reviewer-confirm steps. R6 deliberately scopes "how to exercise" to the AC it verifies so authors maintain one source of truth. |
 | "The colon-grammar evidence row is more compact than prose." | The grammar QA could not parse is exactly the form `iOS evidence: ...` — they asked what evidence *meant*. Prose ("Verified on iOS by Ted: ran `pnpm test:e2e` against simulator iPhone 15") trades a few characters for legibility. |
-| "`Operator check:` is precise; renaming to `Before merging:` loses meaning." | "Operator" is internal jargon for the human running the workflow. Reviewers reading a PR body are operators by another name; `Before merging:` says exactly when they act and is reviewer-readable. AC-scoped pre-merge actions live there; PR-level pre-merge actions stay in the optional top-level `## Do before merging`. |
+| "`Operator check:` is precise; we should keep it as a per-AC label." | "Operator" is internal jargon and the label collides confusingly with `## Do before merging`. AC-scoped reviewer actions are already covered by `Confirm by:` plus its `Expected:` line; truly PR-level pre-merge actions stay in the optional top-level `## Do before merging`. There is no per-AC pre-merge label. |
+| "We should add `Before merging:` per AC so reviewers know exactly what gates each AC." | The label collides with the top-level `## Do before merging` heading and duplicates the role of `Confirm by:` + `Expected:`. The simpler design has one home for AC-scoped reviewer actions (`Confirm by:`) and one home for PR-level pre-merge ops (top-level `## Do before merging`). |
+| "Every AC should write `Open concerns: None` so reviewers know the author thought about it." | Mandating the empty-`None` row is bloat for a failure mode QA never reported. The block is omitted when there are no concerns; Reviewer/Finisher push back when concerns are visible elsewhere (review threads, CI failures) but absent from the AC. |
 | "`Test gap:` is the canonical label." | It was. The humanized grammar replaces it with prose `Open concerns:` because gaps are not always test gaps (they may be unresolved review findings, deferred validation, or known limitations) and a prose block surfaces them where a missed checkbox does not. |
-| "I'll just put the iOS / TestFlight / Vercel preview steps in the canonical template." | Repo-specific build-acquisition copy is a non-goal. Put it in the consuming repo's `How a reviewer can confirm` content, not the bootstrap template. |
+| "I'll just put the iOS / TestFlight / Vercel preview steps in the canonical template." | Repo-specific build-acquisition copy is a non-goal. Put it in the consuming repo's `Confirm by` content, not the bootstrap template. |
 | "I'll edit the root template directly and round-trip later." | Round-trip discipline exists because every bootstrapped repo regresses on the next realignment otherwise. Template-first, mirror in the same PR. |
-| "QA asked for a `Verification` section; I'll add one with that exact name." | Adopt the underlying need, not the literal section name. Per-AC `How a reviewer can confirm` covers the underlying problem without colliding with QA's older naming. |
+| "QA asked for a `Verification` section; I'll add one with that exact name." | Adopt the underlying need, not the literal section name. Per-AC `Confirm by` covers the underlying problem without colliding with QA's older naming. |
 | "Per-bullet rationale will balloon `What changed`." | One rendered structural placeholder (`Context:` plus `— <why>` in the bullet shape) does not balloon anything. The R8 budget keeps rendered additions under ~45 lines combined. |
-| "I'll skip `Open concerns: None` because empty means none." | Silent omission and an explicit `None` look identical to a reviewer skimming, but only the explicit `None` is a positive signal that the author thought about it. Require it. |
 | "Author guidance should be rendered too so authors don't ignore it." | PR-template convention puts author instructions in HTML comments. The QA failure mode was about *what the author wrote*, not about a missing visible prompt. The fix is rendered structural placeholders the author *replaces* (`Context:` line, `— <why>` bullets, prose-labeled AC blocks), not rendered prose the reviewer must skim past on every PR. |
 
 ## Red Flags — STOP and reconsider
@@ -354,7 +368,7 @@ retired form-grammar.
   untouched. Stop. Edit the template first, then mirror.
 - You are baking iOS/TestFlight/Vercel/`npm install`/`pip install`/
   `terraform plan` copy into the rendered body of any AC's
-  `How a reviewer can confirm:` placeholder. Stop. That copy is
+  `Confirm by:` placeholder. Stop. That copy is
   repo-specific; the canonical template stays
   product-surface-agnostic.
 - The diff adds substantially more than the R8 budget of rendered
@@ -367,9 +381,10 @@ retired form-grammar.
   fewer in the rendered body (HTML comments excluded). Each
   individual rendered prompt is one to three lines.
 - Rendered additions for the humanized placeholder AC entry (R5):
-  ~15 lines or fewer. The five labeled blocks (Outcome / Verified by
-  / How a reviewer can confirm / Open concerns / Before merging) are
-  one to three lines each in the placeholder.
+  ~12 lines or fewer. The four labeled blocks (Outcome / Verified
+  by / Confirm by / Open concerns) are one to three lines each in
+  the placeholder; Open concerns appears only as a commented
+  illustrative example because real PRs omit it when none.
 - Total rendered cap: ~45 lines. Expected landing zone is ~30.
 - HTML-comment additions are bounded — comments may carry
   illustrative hints (e.g. example prose-style verification
@@ -385,12 +400,14 @@ retired form-grammar.
 - PR authors and Superteam `Finisher` own filling the rendered
   context placeholder under `## What changed`, choosing matrix cells
   against the rendered legend, writing the prose `Verified by:`
-  sentence under each AC, writing `How a reviewer can confirm:`
+  sentence under each AC, writing `Confirm by:`
   steps (or `not applicable — <reason>`), listing `Open concerns:`
-  (or `None`), and ticking AC-scoped `Before merging:` checkboxes.
+  (omitted when there are none), and ticking checkboxes in the
+  optional top-level `## Do before merging` section when PR-level
+  pre-merge actions exist.
 - `Reviewer` and `Finisher` own flagging missing or placeholder
   values before publish-state readiness. Specifically: a bare
-  `not applicable`, an unfilled `How a reviewer can confirm:`,
+  `not applicable`, an unfilled `Confirm by:`,
   silent omission of `Open concerns:`, evidence sentences that do
   not name a verifier/environment/command, or matrix cells that
   contradict the rendered legend.
