@@ -33,6 +33,31 @@ considered and dropped: it requires updating
 demand persists after this PR lands, it can be reopened as a
 separate issue with explicit contract-migration scope.
 
+## Approved Revision: Merge AC Coverage And Add Testing Steps
+
+Post-publication reviewer feedback from Hillary changed the chosen
+shape: the issue should perform the contract migration now. The
+separate `## Acceptance criteria` section is retired from the PR
+template. Its per-AC content moves into `## Test coverage`, where
+each `### AC-<issue>-<n>` subsection contains only tester-useful
+coverage information: what was validated, where it ran, evidence,
+known gaps or caveats, and whether manual testing is still needed.
+No checkboxes are allowed in `## Test coverage`.
+
+A new top-level `## Testing steps` section carries human tester
+actions as checkboxes. The template should encourage authors to add
+steps that cover any `❌` or `⚠️` coverage gaps when a human can
+close or evaluate the gap. This revision intentionally updates the
+PR-readiness validator, fixtures, `docs/ac-traceability.md`, and
+agent PR-body guidance so the new rendered contract is enforceable.
+
+Supersession note: any earlier or later wording in this artifact that
+describes `Test gap:`, `Non-blocking gap:`, or `Operator check:` rows
+as preserved, keeps manual testing under `## Acceptance criteria`, or
+treats validator/docs/fixture updates as out of scope is historical
+context from the pre-Hillary design and is superseded by this approved
+revision.
+
 ## Requirements
 
 - R1: The `## What changed` section forces linked prior context
@@ -107,6 +132,11 @@ separate issue with explicit contract-migration scope.
   rationale, and matrix cells that contradict the rendered legend.
   Per-AC content (evidence rows, `Test gap:`, `Operator check:`)
   remains owned per the existing PR-template grammar.
+- R10: The approved Hillary-feedback revision supersedes R4/R5/R9
+  where they point reviewers at `Operator check:` rows under
+  `## Acceptance criteria`. Per-AC coverage now lives under
+  `## Test coverage` with no checkboxes, and human tester actions
+  live under `## Testing steps` as checkboxes.
 
 ## Non-Goals
 

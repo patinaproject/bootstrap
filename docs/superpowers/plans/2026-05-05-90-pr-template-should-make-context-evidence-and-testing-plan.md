@@ -4,7 +4,20 @@
 
 **Goal:** Make the canonical PR template's `## What changed`, `## Test coverage`, and `## Acceptance criteria` sections legible to a first-time reviewer reading the rendered body, by adding ~10–13 rendered lines (R1–R4 in the design) to the bootstrap template source and round-tripping the change to the repo root template — without touching the machine-validated per-AC grammar.
 
-**Architecture:** Single template-edit PR. Edit the bootstrap template source under `skills/bootstrap/templates/core/.github/pull_request_template.md` first, mirror to the root `.github/pull_request_template.md` so the two files stay byte-identical (round-trip discipline per AGENTS.md and design R8/AC-90-4). The CI script `scripts/check-pr-template-checkboxes.mjs` and its fixtures are out of scope and must keep passing unchanged (design R5 + Verification "Machine-validation regression check"). `docs/ac-traceability.md` is checked for direct contradiction only and edited only if one is found.
+**Approved revision after Hillary feedback:** Expand the implementation into a
+contract migration. Retire the separate `## Acceptance criteria` PR-body section,
+move each `### AC-<issue>-<n>` coverage entry into `## Test coverage`, forbid
+checkboxes in `## Test coverage`, and add a top-level `## Testing steps` section
+whose checkboxes carry human tester actions. Update validator logic, fixtures,
+`docs/ac-traceability.md`, and AGENTS guidance to match.
+
+Supersession note: tasks or out-of-scope bullets below that say the old
+`Test gap:`, `Non-blocking gap:`, or `Operator check:` grammar must be
+preserved unchanged, that `## Acceptance criteria` remains the manual-testing
+location, or that validator/docs/fixture edits are forbidden are pre-Hillary
+plan context and are superseded by this approved revision.
+
+**Architecture:** Template and validator PR. Edit bootstrap template sources under `skills/bootstrap/templates/core/**` first, mirror to the root files so source and emitted baseline stay byte-identical where applicable. The CI script `scripts/check-pr-template-checkboxes.mjs`, its tests/fixtures, `docs/ac-traceability.md`, and `AGENTS.md` are in scope because the approved revision changes where AC coverage and tester actions live.
 
 **Tech Stack:** Markdown, `markdownlint-cli2`, Node.js (existing CI script `scripts/check-pr-template-checkboxes.mjs`), Husky + commitlint, the local `bootstrap` skill in realignment mode.
 
