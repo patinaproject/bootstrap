@@ -1,5 +1,9 @@
 # Bootstrap
 
+> **Archive notice:** Bootstrap now lives in
+> [`patinaproject/skills`](https://github.com/patinaproject/skills). Use that
+> repository for the current plugin, issues, and updates.
+
 Scaffold a new repository – or realign an existing one – to the Patina Project baseline. One invocation, consistent conventions, portable across every major AI coding tool.
 
 Bootstrap is a Claude Code + Codex plugin distributed through the [`patinaproject/skills`](https://github.com/patinaproject/skills) marketplace. It ships a single skill that scaffolds a complete Patina Project baseline repository (commit + PR conventions, PNPM + Husky + markdownlint, agent docs, plugin manifests, release flow, GitHub repo settings) and keeps existing repos aligned with the latest baseline on rerun.
